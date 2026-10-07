@@ -1,11 +1,10 @@
 import { Images } from '@src/utils/images';
 import { PlayerDTO } from '@src/models/PlayerDTO';
 import { DashboardBossDTO } from '@src/models/DashboardBossDTO';
-import { Theme } from '@src/models/Theme';
 import { useMemo } from 'react';
 import { ClassDistribution } from '../Charts/ClassDistribution';
 import { HighestLog } from '../Charts/HighestLog';
-import { ReportLogDTO } from '@src/models/ReportLogDTO';
+import { DashboardLogDTO } from '@src/models/DashboardLogDTO';
 
 interface BossWithLogs extends DashboardBossDTO {
     players: PlayerDTO[];
@@ -16,7 +15,6 @@ interface Props {
     bosses: DashboardBossDTO[];
     maxLevel?: number;
     minimumRaidItemLevel?: number;
-    theme: Theme;
     searchText?: string;
 }
 
@@ -25,13 +23,8 @@ export function Dashboard({
     bosses: dashboardBosses,
     maxLevel,
     minimumRaidItemLevel,
-    theme,
     searchText,
 }: Props): React.ReactNode {
-    const computedStyle = useMemo(() => {
-        return getComputedStyle(document.documentElement);
-    }, [theme]);
-
     const bossesWithHighestDifficultyLogs = useMemo(() => {
         const search = searchText?.trim().toLowerCase();
         const byCharacter = new Map(players.map(player => [`${player.realm}/${player.name}`, player]));
@@ -71,14 +64,9 @@ export function Dashboard({
         return players.reduce((max, p) => (p.healer && p.healer > (max?.healer ?? 0) ? p : max), undefined as PlayerDTO | undefined);
     }, [players]);
 
-    const findLog = (player: PlayerDTO, logs: ReportLogDTO[], selector: (log: ReportLogDTO) => number): number | undefined => {
+    const findLog = (player: PlayerDTO, logs: DashboardLogDTO[]): number | undefined => {
         const log = logs.find(f => f.name === player.name && f.realm === player.realm);
-        return log ? selector(log) : undefined;
-    };
-
-    const calculateRawLog = (player: PlayerDTO, max: number, logs: ReportLogDTO[], selector: (log: ReportLogDTO) => number): number | undefined => {
-        const log = logs.find(f => f.name === player.name && f.realm === player.realm);
-        return log ? selector(log) / max * 100 : undefined;
+        return log?.log;
     };
 
     const statisticsPanelClass = 'dashboard-stat-panel';
@@ -119,39 +107,20 @@ export function Dashboard({
             </div>
             <div className='dashboard-charts'>
                 <ClassDistribution players={players}
-                    computedStyle={computedStyle}
                     maxLevel={maxLevel}
                     minimumRaidItemLevel={minimumRaidItemLevel} />
                 <HighestLog players={players}
-                    computedStyle={computedStyle}
-                    label='Highest logs dps'
+                    label='Top DPS parses'
                     selector={a => a.dps!}
                     max={100}
-                    tooltipLabel='Log'
+                    valueLabel='DPS parse'
                     showOnlyIfFull
                     filterKilledBosses />
                 <HighestLog players={players}
-                    computedStyle={computedStyle}
-                    label='Highest logs healing'
+                    label='Top healing parses'
                     selector={a => a.healer!}
                     max={100}
-                    tooltipLabel='Log'
-                    showOnlyIfFull
-                    filterKilledBosses />
-                <HighestLog players={players}
-                    computedStyle={computedStyle}
-                    label='Highest raw DPS'
-                    selector={a => a.rawDps!}
-                    max={100}
-                    tooltipLabel='Raw DPS'
-                    showOnlyIfFull
-                    filterKilledBosses />
-                <HighestLog players={players}
-                    computedStyle={computedStyle}
-                    label='Highest raw HPS'
-                    selector={a => a.rawHps!}
-                    max={100}
-                    tooltipLabel='Raw HPS'
+                    valueLabel='Healing parse'
                     showOnlyIfFull
                     filterKilledBosses />
             </div>
@@ -160,47 +129,20 @@ export function Dashboard({
                 <div key={boss.id} className='dashboard-boss-row'>
                     <div className='dashboard-boss-title'>
                         <img className='dashboard-boss-icon'
-                            style={{ filter: boss.difficulty === 4 ? undefined : 'grayscale(100%)' }}
                             src={boss.id < 0 ? Images.wowIcon : `https://assets.rpglogs.com/img/warcraft/bosses/${boss.id}-icon.jpg`}
                             alt='Boss' />
                         <h2 className='dashboard-boss-name'>{boss.name}</h2>
                     </div>
                     <HighestLog players={boss.players}
-                        computedStyle={computedStyle}
-                        label='Highest logs dps'
-                        selector={a => findLog(a, boss.dps, log => log.log) || 0}
+                        label='Top DPS parses'
+                        selector={a => findLog(a, boss.dps) || 0}
                         max={100}
-                        tooltipLabel='Log' />
+                        valueLabel='DPS parse' />
                     <HighestLog players={boss.players}
-                        computedStyle={computedStyle}
-                        label='Highest logs healing'
-                        selector={a => findLog(a, boss.healers, log => log.log) || 0}
+                        label='Top healing parses'
+                        selector={a => findLog(a, boss.healers) || 0}
                         max={100}
-                        tooltipLabel='Log' />
-                </div>
-            ))}
-            <h1 className='dashboard-heading'>Raw DPS/HPS Per boss</h1>
-            {bossesWithHighestDifficultyLogs.map(boss => (
-                <div key={boss.id} className='dashboard-boss-row'>
-                    <div className='dashboard-boss-title'>
-                        <img className='dashboard-boss-icon'
-                            style={{ filter: boss.difficulty === 4 ? undefined : 'grayscale(100%)' }}
-                            src={boss.id < 0 ? Images.wowIcon : `https://assets.rpglogs.com/img/warcraft/bosses/${boss.id}-icon.jpg`}
-                            alt='Boss' />
-                        <h2 className='dashboard-boss-name'>{boss.name}</h2>
-                    </div>
-                    <HighestLog players={boss.players}
-                        computedStyle={computedStyle}
-                        label='Highest raw DPS'
-                        selector={a => calculateRawLog(a, boss.maxDps, [...boss.dps, ...boss.tanks], log => log.dps) || 0}
-                        max={100}
-                        tooltipLabel='Raw DPS' />
-                    <HighestLog players={boss.players}
-                        computedStyle={computedStyle}
-                        label='Highest raw HPS'
-                        selector={a => calculateRawLog(a, boss.maxHps, boss.healers, log => log.hps) || 0}
-                        max={100}
-                        tooltipLabel='Raw HPS' />
+                        valueLabel='Healing parse' />
                 </div>
             ))}
         </div>

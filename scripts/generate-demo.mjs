@@ -38,8 +38,7 @@ const bosses = [{ id: -1, name: 'The Reef Guardian (demo)' }, { id: -2, name: 'A
 const zones = [{ id: -1, name: 'Demo raid', bosses }];
 const logs = Object.fromEntries(players.filter(p => p.level === 60).map((p, i) => [`preview-${p.name}`, {
     dps: 55 + i * 2, healer: i % 3 === 1 ? 65 + i : undefined,
-    tank: i % 9 === 0 ? 85 + i / 2 : undefined, rawDps: 60 + i * 2,
-    rawHps: i % 3 === 1 ? 68 + i : undefined, difficulty: 3, killedBosses: 3,
+    tank: i % 9 === 0 ? 85 + i / 2 : undefined, difficulty: 3, killedBosses: 3,
     bosses: bosses.map(b => ({ bossId: b.id, difficulty: 3, dps: 60 + i * 2, healer: i % 3 === 1 ? 65 + i : undefined })),
 }]));
 const reportPlayers = players.filter(p => p.level === 60);
@@ -48,9 +47,9 @@ const reports = [0, 1, 2].map(i => ({
     endTime: epoch - i * 86_400_000, zoneId: -1,
     bosses: bosses.map(b => ({
         id: b.id, difficulty: 3,
-        dps: reportPlayers.filter((_, n) => n % 3 !== 1 && n % 9 !== 0).map((p, n) => ({ name: p.name, realm: p.realm, log: 65 + n * 2, dps: 600 + n * 65, hps: 10 })),
-        tanks: reportPlayers.filter((_, n) => n % 9 === 0).map(p => ({ name: p.name, realm: p.realm, log: 85, dps: 420, hps: 10 })),
-        healers: reportPlayers.filter((_, n) => n % 3 === 1).map((p, n) => ({ name: p.name, realm: p.realm, log: 78 + n * 2, dps: 80, hps: 850 + n * 50 })),
+        dps: reportPlayers.filter((_, n) => n % 3 !== 1 && n % 9 !== 0).map((p, n) => ({ name: p.name, realm: p.realm, log: 65 + n * 2 })),
+        tanks: reportPlayers.filter((_, n) => n % 9 === 0).map(p => ({ name: p.name, realm: p.realm, log: 85 })),
+        healers: reportPlayers.filter((_, n) => n % 3 === 1).map((p, n) => ({ name: p.name, realm: p.realm, log: 78 + n * 2 })),
     })),
 }));
 const slots = ['HEAD', 'NECK', 'SHOULDER', 'BACK', 'CHEST', 'WRIST', 'HANDS', 'WAIST', 'LEGS', 'FEET', 'FINGER_1', 'FINGER_2', 'TRINKET_1', 'TRINKET_2', 'MAIN_HAND', 'OFF_HAND'];

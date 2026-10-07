@@ -1,17 +1,23 @@
-.class-distribution {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.375rem;
+.class-distribution-filters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 8px;
+  padding-top: 9px;
+  border-top: 1px solid #72552b;
 }
 
-.class-distribution-title {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
+.forever-button.class-distribution-filter {
+  width: 100%;
+  min-width: 0;
+  min-height: 27px;
+  padding-inline: 0;
+  border-width: 0 10px;
+  border-image-width: 0 10px;
+  font-size: 12px;
 }
 
-.class-distribution-chart {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.forever-button.class-distribution-filter:focus-visible {
+  outline: 1px solid #f0c56b;
+  outline-offset: 1px;
 }

@@ -10,9 +10,7 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
-        "apexcharts": "7.8.0",
         "react": "19.3.0",
-        "react-apexcharts": "2.1.1",
         "react-dom": "19.3.0",
         "react-merge-refs": "3.0.2",
         "react-virtuoso": "4.18.16"

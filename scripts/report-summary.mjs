@@ -5,11 +5,9 @@ function bestLogs(bosses, select) {
             const key = `${log.realm}/${log.name}`;
             const current = byCharacter.get(key);
             if (!current) {
-                byCharacter.set(key, { ...log });
+                byCharacter.set(key, { name: log.name, realm: log.realm, log: log.log });
             } else {
                 current.log = Math.max(current.log, log.log);
-                current.dps = Math.max(current.dps, log.dps);
-                current.hps = Math.max(current.hps, log.hps);
             }
         }
     }
@@ -33,8 +31,6 @@ export function summarizeReports(reports, zones) {
         const healers = bestLogs(kills, boss => boss.healers);
         return {
             id, name: names.get(id) ?? 'Unknown', difficulty,
-            maxDps: Math.max(0, ...dps.map(log => log.dps), ...tanks.map(log => log.dps)),
-            maxHps: Math.max(0, ...healers.map(log => log.hps)),
             dps, tanks, healers,
         };
     });

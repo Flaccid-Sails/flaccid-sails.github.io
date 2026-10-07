@@ -161,25 +161,25 @@ export function Leaderboard({
                 <div className='leaderboard-search'>
                     <TextInput placeholder='Search' text={searchQuery} onInput={search} />
                 </div>
-                {selectedTab === 'PLAYERS' && (
-                    <div className='leaderboard-sort-controls'>
-                        <p className='leaderboard-sort-label'>Sort by</p>
-                        {Object.keys(sortComparers).map(key => (
-                            <Button key={key}
-                                className='leaderboard-sort-button'
-                                selected={key === sortedCriteria}
-                                onClick={() => sortClicked(key as keyof typeof sortComparers)}
-                            >
-                                {key}
-                                {key === sortedCriteria && (
-                                    <img className={`leaderboard-sort-arrow${sortDirection === 'ASC' ? ' ascending' : ''}`}
-                                        src={Images.sortArrow}
-                                        alt={sortDirection === 'ASC' ? 'Ascending' : 'Descending'} />
-                                )}
-                            </Button>
-                        ))}
-                    </div>
-                )}
+                <div className={`leaderboard-sort-controls${selectedTab === 'PLAYERS' ? '' : ' leaderboard-sort-controls-hidden'}`}
+                    aria-hidden={selectedTab !== 'PLAYERS'}>
+                    <p className='leaderboard-sort-label'>Sort by</p>
+                    {Object.keys(sortComparers).map(key => (
+                        <Button key={key}
+                            className='leaderboard-sort-button'
+                            selected={key === sortedCriteria}
+                            disabled={selectedTab !== 'PLAYERS'}
+                            onClick={() => sortClicked(key as keyof typeof sortComparers)}
+                        >
+                            {key}
+                            {key === sortedCriteria && (
+                                <img className={`leaderboard-sort-arrow${sortDirection === 'ASC' ? ' ascending' : ''}`}
+                                    src={Images.sortArrow}
+                                    alt={sortDirection === 'ASC' ? 'Ascending' : 'Descending'} />
+                            )}
+                        </Button>
+                    ))}
+                </div>
             </div>
             <Frame theme={theme} className='leaderboard-frame' contentClassName='leaderboard-frame-content'
                 style={{ backgroundImage: frameBackground }}>
@@ -221,7 +221,7 @@ export function Leaderboard({
                             <h1 className='leaderboard-message'>{loadError ? 'Dashboard is unavailable.' : 'Loading...'}</h1>
                         )}
                         {dashboardBosses && globalPlayers && (
-                            <Suspense fallback={<p className='leaderboard-dashboard-loading'>Loading dashboard...</p>}><Dashboard theme={theme}
+                            <Suspense fallback={<p className='leaderboard-dashboard-loading'>Loading dashboard...</p>}><Dashboard
                                 maxLevel={maxLevel}
                                 minimumRaidItemLevel={minimumRaidItemLevel}
                                 players={globalPlayers}

@@ -1,108 +1,48 @@
 import { PlayerDTO } from '@src/models/PlayerDTO';
-import { ReactNode, useMemo, useState } from 'react';
-import ReactApexChart from 'react-apexcharts/core';
-import 'apexcharts/polarArea';
+import { useMemo, useState } from 'react';
 import { Button } from '../Button/Button';
-import { ApexOptions } from 'apexcharts';
+import { ChartBar } from './ChartBar';
 
 const classes = ['Warrior', 'Mage', 'Rogue', 'Priest', 'Hunter', 'Warlock', 'Druid', 'Paladin', 'Shaman'];
+const filters = ['ALL', 'MAX LEVEL', 'RAID READY'] as const;
+type Filter = typeof filters[number];
 
 interface Props {
     players: PlayerDTO[];
     maxLevel?: number;
     minimumRaidItemLevel?: number;
-    computedStyle: CSSStyleDeclaration;
 }
 
-export function ClassDistribution({ players, maxLevel, minimumRaidItemLevel, computedStyle }: Props): ReactNode {
-    const [filterCriteria, setFilterCriteria] = useState<string>('ALL');
+export function ClassDistribution({ players, maxLevel, minimumRaidItemLevel }: Props) {
+    const [filter, setFilter] = useState<Filter>('ALL');
+    const filteredPlayers = useMemo(() => players.filter(player => {
+        if (filter === 'MAX LEVEL') return player.level === maxLevel;
+        if (filter === 'RAID READY') return player.itemLevel >= (minimumRaidItemLevel ?? 0);
+        return true;
+    }), [players, filter, maxLevel, minimumRaidItemLevel]);
 
-    const filterComparers = useMemo(() => ({
-        'ALL': () => true,
-        'MAX LEVEL': (f: PlayerDTO) => f.level === maxLevel,
-        'RAID READY': (f: PlayerDTO) => f.itemLevel >= (minimumRaidItemLevel ?? 0),
-    } as Record<string, (f: PlayerDTO) => boolean>), [maxLevel, minimumRaidItemLevel]);
+    const distribution = useMemo(() => {
+        const counts = new Map<string, number>();
+        for (const player of filteredPlayers) counts.set(player.class, (counts.get(player.class) ?? 0) + 1);
+        return classes.map(name => ({ name, count: counts.get(name) ?? 0 }))
+            .sort((a, b) => b.count - a.count || classes.indexOf(a.name) - classes.indexOf(b.name));
+    }, [filteredPlayers]);
+    const highestCount = Math.max(1, ...distribution.map(entry => entry.count));
 
-    const filteredPlayers = useMemo(
-        () => players.slice().filter(filterComparers[filterCriteria]),
-        [players, filterCriteria, filterComparers]
-    );
-
-    const chartData = useMemo(() => {
-        const classDistributions = classes.map(label => {
-            const classSlug = label.toLowerCase().replaceAll(' ', '-');
-            return {
-                label,
-                count: filteredPlayers.filter(f => f.class === label).length,
-                color: computedStyle.getPropertyValue(`--${classSlug}-color`)
-            };
-        }).sort((a, b) => b.count - a.count);
-
-        return {
-            options: {
-                chart: {
-                    type: 'polarArea',
-                    background: 'transparent'
-                },
-                labels: classDistributions.map(f => f.label),
-                colors: classDistributions.map(f => f.color),
-                legend: {
-                    show: false,
-                },
-                tooltip: {
-                    custom(options) {
-                        return `<div class="chart-tooltip">
-                            <p class="chart-tooltip-title" style="color: ${options.w.globals.colors[options.seriesIndex]}">
-                                ${options.w.globals.labels[options.seriesIndex]}
-                            </p>
-                            <p>Players: ${options.series[options.seriesIndex]}</p>
-                        </div>`;
-                    },
-                },
-                theme: {
-                    mode: 'dark'
-                },
-                plotOptions: {
-                    polarArea: {
-                        spokes: {
-                            strokeWidth: 0
-                        },
-                        rings: {
-                            strokeWidth: 0
-                        }
-                    }
-                }
-            } as ApexOptions,
-            series: classDistributions.map(f => f.count),
-        };
-    }, [computedStyle, filteredPlayers]);
-
-    const sortClicked = (criteria: string): void => {
-        if (!players || filterCriteria === criteria) {
-            return;
-        }
-        setFilterCriteria(criteria);
-    };
-
-    return (
-        <div className='class-distribution'>
-            <p className='class-distribution-title'>Class distribution</p>
-            <ReactApexChart
-                type='polarArea'
-                series={chartData.series}
-                options={chartData.options}
-                height={350}
-            />
-            <div className='class-distribution-chart'>
-                {Object.keys(filterComparers).map(key => (
-                    <Button key={key}
-                        selected={key === filterCriteria}
-                        onClick={() => sortClicked(key)}
-                    >
-                        {key}
-                    </Button>
-                ))}
-            </div>
+    return <section className='wow-chart-panel class-distribution' aria-label='Class distribution'>
+        <div className='wow-chart-heading'>
+            <h2>Class distribution</h2>
+            <span>{filteredPlayers.length} players</span>
         </div>
-    );
-};
+        <div className='wow-chart-rows'>
+            {distribution.map(entry => <ChartBar key={entry.name}
+                characterClass={entry.name} label={entry.name} value={entry.count}
+                max={highestCount} displayValue={String(entry.count)}
+                valueLabel='players relative to the largest class' />)}
+        </div>
+        <div className='class-distribution-filters' aria-label='Filter class distribution'>
+            {filters.map(option => <Button key={option} className='class-distribution-filter'
+                selected={option === filter} onClick={() => setFilter(option)}>{option}</Button>)}
+        </div>
+    </section>;
+}

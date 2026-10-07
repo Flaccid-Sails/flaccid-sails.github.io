@@ -32,7 +32,6 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
     const classSlug = player.class.toLowerCase().replaceAll(' ', '-');
     const realmSlug = player.realm.toLowerCase().replaceAll(' ', '-');
     const href = player.realm === 'Preview' ? undefined : `https://classic.warcraftlogs.com/character/eu/${realmSlug}/${player.name.toLowerCase()}`;
-    const isHeroic = player.difficulty === 4;
 
     const title = useMemo(() => player.rank === 0 ? 'Guild master' : player.rank <= 2 ? 'Captain' : player.class, [player]);
 
@@ -87,11 +86,10 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
                     return playerBoss && log !== undefined && (
                         <div key={boss.id} className='player-log-row'>
                             <img className='player-log-icon'
-                                style={{ filter: playerBoss.difficulty === 4 ? undefined : 'grayscale(100%)' }}
                                 src={boss.id < 0 ? Images.wowIcon : `https://assets.rpglogs.com/img/warcraft/bosses/${boss.id}-icon.jpg`}
                                 alt='Boss' />
                             <p className='player-log-name'>{boss.name}</p>
-                            <p className={`${colorParse(log ?? 0, false)} player-log-score`}>
+                            <p className={`${colorParse(log ?? 0)} player-log-score`}>
                                 {log && log !== -1 ? log.toFixed(0) : '-'}
                             </p>
                         </div>
@@ -131,7 +129,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
             title: 'DPS',
             style: { width: 70 },
             content: (
-                <HoverElement className={colorParse(player.dps, isHeroic)}
+                <HoverElement className={colorParse(player.dps)}
                     side='LEFT'
                     content={() => tooltip('DPS')}
                 >
@@ -143,7 +141,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
             title: 'HEAL',
             style: { width: 70 },
             content: (
-                <HoverElement className={colorParse(player.healer, isHeroic)}
+                <HoverElement className={colorParse(player.healer)}
                     side='LEFT'
                     content={() => tooltip('HEAL')}
                 >
@@ -155,7 +153,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
             title: 'TANK DPS',
             style: { width: 70 },
             content: (
-                <HoverElement className={colorParse(player.tank, isHeroic)}
+                <HoverElement className={colorParse(player.tank)}
                     side='LEFT'
                     content={() => tooltip('TANK')}
                 >

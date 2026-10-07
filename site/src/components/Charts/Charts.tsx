@@ -17,10 +17,6 @@ interface Props {
 export function Charts({ players, maxLevel, minimumRaidItemLevel, theme }: Props): ReactNode {
     const image = useMemo(() => themeToBackgroundImage(theme), [theme]);
 
-    const computedStyle = useMemo(() => {
-        return getComputedStyle(document.documentElement);
-    }, [theme]);
-
     return (
         <Frame theme={theme} className='charts-frame'>
             <aside style={{ backgroundImage: `url(${image})` }}>
@@ -28,39 +24,20 @@ export function Charts({ players, maxLevel, minimumRaidItemLevel, theme }: Props
                     <div className='charts-content'>
                         {players && <>
                             <ClassDistribution players={players}
-                                computedStyle={computedStyle}
                                 maxLevel={maxLevel}
                                 minimumRaidItemLevel={minimumRaidItemLevel} />
                             <HighestLog players={players}
-                                computedStyle={computedStyle}
-                                label='Highest logs dps'
+                                label='Top DPS parses'
                                 selector={a => a.dps!}
                                 max={100}
-                                tooltipLabel='Log'
+                                valueLabel='DPS parse'
                                 showOnlyIfFull
                                 filterKilledBosses />
                             <HighestLog players={players}
-                                computedStyle={computedStyle}
-                                label='Highest logs healing'
+                                label='Top healing parses'
                                 selector={a => a.healer!}
                                 max={100}
-                                tooltipLabel='Log'
-                                showOnlyIfFull
-                                filterKilledBosses />
-                            <HighestLog players={players}
-                                computedStyle={computedStyle}
-                                label='Highest raw DPS'
-                                selector={a => a.rawDps!}
-                                max={100}
-                                tooltipLabel='Raw DPS'
-                                showOnlyIfFull
-                                filterKilledBosses />
-                            <HighestLog players={players}
-                                computedStyle={computedStyle}
-                                label='Highest raw HPS'
-                                selector={a => a.rawHps!}
-                                max={100}
-                                tooltipLabel='Raw HPS'
+                                valueLabel='Healing parse'
                                 showOnlyIfFull
                                 filterKilledBosses />
                         </>}

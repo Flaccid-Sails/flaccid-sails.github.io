@@ -89,11 +89,10 @@ export function Reports({ scrollParent, players: globalPlayers, reports: globalR
                         return (
                             <div key={boss.id} className='report-log-boss'>
                                 <img className='report-log-icon'
-                                    style={{ filter: boss.difficulty === 4 ? undefined : 'grayscale(100%)' }}
                                     src={boss.id < 0 ? Images.wowIcon : `https://assets.rpglogs.com/img/warcraft/bosses/${boss.id}-icon.jpg`}
                                     alt='Boss' />
                                 {result.map((log, i) => (
-                                    <p key={i} className={colorParse(log?.log ?? 0, false)}>
+                                    <p key={i} className={colorParse(log?.log ?? 0)}>
                                         {log && log.log !== -1 ? log.log.toFixed(0) : '-'}
                                     </p>
                                 ))}
@@ -146,7 +145,6 @@ export function Reports({ scrollParent, players: globalPlayers, reports: globalR
                                 {report.bosses.map(f => (
                                     <img key={f.id}
                                         className='reports-boss-icon'
-                                        style={{ filter: f.difficulty === 4 ? undefined : 'grayscale(100%)' }}
                                         src={f.id < 0 ? Images.wowIcon : `https://assets.rpglogs.com/img/warcraft/bosses/${f.id}-icon.jpg`}
                                         alt='Boss' />
                                 ))}

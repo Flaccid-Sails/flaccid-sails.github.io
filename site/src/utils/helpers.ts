@@ -41,7 +41,7 @@ export function transformParse(parse: number | undefined): string {
     }
 }
 
-export function colorParse(parse: number | undefined, isHeroic: boolean): string {
+export function colorParse(parse: number | undefined): string {
     if (parse === undefined || parse === null || Number.isNaN(parse) || parse === -1) {
         return 'text-muted';
     }
@@ -55,16 +55,16 @@ export function colorParse(parse: number | undefined, isHeroic: boolean): string
         return 'blue-parse';
     }
     else if (parse < 95) {
-        return isHeroic ? 'gradient-text purple-parse' : 'purple-normal-parse';
+        return 'purple-normal-parse';
     }
     else if (parse < 99) {
-        return isHeroic ? 'gradient-text orange-parse' : 'orange-normal-parse';
+        return 'orange-normal-parse';
     }
     else if (parse < 100) {
-        return isHeroic ? 'gradient-text pink-parse' : 'pink-normal-parse';
+        return 'pink-normal-parse';
     }
     else {
-        return isHeroic ? 'gradient-text yellow-parse' : 'yellow-normal-parse';
+        return 'yellow-normal-parse';
     }
 }
 

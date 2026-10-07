@@ -139,6 +139,10 @@
 }
 
 .character-equipment-empty .character-equipment-icon {
+  inset: 11%;
+  width: 78%;
+  height: 78%;
+  clip-path: inset(8%);
   opacity: 0.8;
 }
 
