@@ -1,0 +1,11 @@
+{
+    "minimumDetailedLevel": 60,
+    "detailsRefreshHours": 6,
+    "inactiveAfterDays": 14,
+    "inactiveRefreshHours": 168,
+    "maxCharactersPerRun": 40,
+    "maxReportsPerRun": 8,
+    "blizzardRequestIntervalMs": 500,
+    "warcraftLogsRequestIntervalMs": 1000,
+    "maxRetries": 3
+}

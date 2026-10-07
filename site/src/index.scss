@@ -1,0 +1,260 @@
+@use "./components/app-layout";
+@use "./components/Character/characteritem-layout";
+@use "./components/Charts/charts-layout";
+@use "./components/Charts/classdistribution-layout";
+@use "./components/Charts/highestlog-layout";
+@use "./components/Frame/frame-layout";
+@use "./components/Header/header-layout";
+@use "./components/JoinInfo/joininfo-layout";
+@use "./components/Leaderboard/dashboard-layout";
+@use "./components/Leaderboard/leaderboard-layout";
+@use "./components/Leaderboard/player-layout";
+@use "./components/Leaderboard/playersection-layout";
+@use "./components/Leaderboard/reports-layout";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color-scheme: dark;
+  cursor: default;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  cursor: var(--cursor), auto;
+}
+
+:root {
+  --foreground-color: #f0f0f0;
+  --muted-color: #aaa;
+  --muted-color-alt: #666;
+  --title-color: #f9b818;
+
+  --character-background-color: #0d0d0d;
+  --character-background-panel-color: black;
+  --character-panel-color: #182229;
+  --character-title-color: #ffd100;
+  --character-attribute-color: #19ff19;
+  --character-info-color: #c4a12b;
+  --character-transmog-color: #e875e5;
+  --character-preview-color: rgba(0, 0, 0, 0.9);
+  --character-talent-info-color: #71d5ff;
+
+  --gray-parse-color: #666666;
+  --green-parse-color: #1eff00;
+  --blue-parse-color: #0070ff;
+  --purple-parse-color: 163, 53, 238;
+  --orange-parse-color: 255, 128, 0;
+  --pink-parse-color: 226, 104, 168;
+  --pink-parse-alt-color: 255, 125, 193;
+  --yellow-parse-color: 229, 204, 128;
+  --yellow-parse-alt-color: 255, 210, 74;
+
+  --death-knight-color: #e34a63;
+  --priest-color: #e8e6e3;
+  --mage-color: #4bc9eb;
+  --paladin-color: #f380b3;
+  --druid-color: #ff8821;
+  --shaman-color: #2f84c9;
+  --warlock-color: #9a5af4;
+  --rogue-color: #fff462;
+  --hunter-color: #acd475;
+  --warrior-color: #c69b6d;
+  --monk-color: #00ffb0;
+
+  --rank-0-color: #ff3b30;
+  --rank-1-color: #ff9500;
+  --rank-2-color: #ffcc00;
+  --rank-3-color: #ffcc00;
+  --rank-4-color: #ffcc00;
+  --rank-5-color: #ff7dc1;
+  --rank-6-color: #34c759;
+  --rank-7-color: #3395fd;
+  --rank-8-color: #f0f0f0;
+  --rank-9-color: #aaa;
+
+  --quality-poor-color: #0070dd;
+  --quality-common-color: white;
+  --quality-uncommon-color: #1efa01;
+  --quality-rare-color: #006fdb;
+  --quality-epic-color: #862dc7;
+  --quality-legendary-color: #ec7702;
+  --quality-heirloom-color: #e1c87e;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--foreground-color);
+  font-size: 16px;
+}
+
+a {
+  cursor: pointer;
+  cursor: var(--flight-cursor), auto;
+  text-decoration: none;
+  color: var(--foreground-color);
+}
+
+a * {
+  cursor: pointer;
+  cursor: var(--flight-cursor), auto;
+}
+
+.text-input {
+  width: 130px;
+  padding: 0.375rem 0.75rem;
+  background: transparent;
+  color: var(--foreground-color);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 10%),
+    0 2px 4px -2px rgb(0 0 0 / 10%);
+  border: 0;
+  cursor: text;
+  cursor: var(--char-cursor), auto;
+
+  &:focus {
+    outline: none;
+    border: 0;
+  }
+}
+
+.button {
+  position: relative;
+  display: flex;
+  color: var(--foreground-color);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 10%),
+    0 2px 4px -2px rgb(0 0 0 / 10%);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  cursor: var(--engi-cursor), auto;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button * {
+  cursor: pointer;
+  cursor: var(--engi-cursor), auto;
+}
+
+.apexcharts-canvas .apexcharts-tooltip.apexcharts-theme-dark {
+  --apx-tt-bg: var(--character-background-color);
+  background: var(--character-background-color);
+  color: var(--foreground-color);
+}
+
+.chart-tooltip {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.chart-tooltip-title {
+  font-weight: 700;
+}
+
+.highest-log-chart .apexcharts-gridline {
+  display: none;
+}
+
+.highest-log-chart .apexcharts-grid-borders {
+  display: none;
+}
+
+.gradient-text {
+  font-weight: bold;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  animation: gradient-animation 4s linear infinite;
+}
+
+.gray-parse {
+  color: var(--gray-parse-color);
+}
+
+.green-parse {
+  color: var(--green-parse-color);
+}
+
+.blue-parse {
+  color: var(--blue-parse-color);
+}
+
+.purple-parse {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--purple-parse-color), 100%) 0%,
+    rgba(var(--purple-parse-color), 60%) 25%,
+    rgba(var(--purple-parse-color), 80%) 50%,
+    rgba(var(--purple-parse-color), 60%) 75%,
+    rgba(var(--purple-parse-color), 100%) 100%
+  );
+}
+
+.purple-normal-parse {
+  color: rgb(var(--purple-parse-color));
+}
+
+.orange-parse {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--orange-parse-color), 100%) 0%,
+    rgba(var(--orange-parse-color), 70%) 25%,
+    rgba(var(--orange-parse-color), 80%) 50%,
+    rgba(var(--orange-parse-color), 70%) 75%,
+    rgba(var(--orange-parse-color), 100%) 100%
+  );
+}
+
+.orange-normal-parse {
+  color: rgb(var(--orange-parse-color));
+}
+
+.pink-parse {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--pink-parse-color), 100%) 0%,
+    rgba(var(--pink-parse-alt-color), 70%) 25%,
+    rgba(var(--pink-parse-color), 80%) 50%,
+    rgba(var(--pink-parse-color), 70%) 75%,
+    rgba(var(--pink-parse-alt-color), 100%) 100%
+  );
+}
+
+.pink-normal-parse {
+  color: rgb(var(--pink-parse-color));
+}
+
+.yellow-parse {
+  background: linear-gradient(
+    90deg,
+    rgba(var(--yellow-parse-color), 100%) 0%,
+    rgba(var(--yellow-parse-alt-color), 70%) 25%,
+    rgba(var(--yellow-parse-color), 80%) 50%,
+    rgba(var(--yellow-parse-color), 70%) 75%,
+    rgba(var(--yellow-parse-alt-color), 100%) 100%
+  );
+}
+
+.yellow-normal-parse {
+  color: rgb(var(--yellow-parse-color));
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+button:disabled {
+  opacity: 0.35;
+  cursor: var(--cursor), auto;
+}

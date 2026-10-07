@@ -1,0 +1,7 @@
+node_modules/
+site/node_modules/
+site/dist/
+site/public/data/
+.env
+.env.*
+!.env.example

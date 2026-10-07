@@ -1,0 +1,28 @@
+.charts-frame {
+  display: none !important;
+  width: 380px;
+  min-width: 380px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  @media (width >= 80rem) {
+    display: grid !important;
+  }
+}
+
+.charts-scroll {
+  height: calc(100dvh - 143px);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.charts-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-inline: 0.25rem;
+  padding-block: 0.75rem;
+}

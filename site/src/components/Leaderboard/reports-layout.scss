@@ -1,0 +1,167 @@
+.report-tooltip {
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  border-radius: 0.25rem;
+  border-width: 2px;
+  border-style: solid;
+  border-style: solid;
+  border-color: #262626;
+  background-color: var(--character-preview-color);
+  padding: 0.5rem;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.report-log-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.report-log-grid {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.report-log-names {
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+}
+
+.report-log-heading {
+  height: 1.5rem;
+}
+
+.report-log-empty {
+  width: 7rem;
+  color: #737373;
+}
+
+.report-log-boss {
+  display: flex;
+  flex-direction: column;
+}
+
+.report-log-icon {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.report-log-missing {
+  color: #737373;
+}
+
+.report-tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.reports-list {
+  margin-inline: 1rem;
+}
+
+.reports-header {
+  display: none;
+  flex-direction: row;
+  padding-inline: 1rem;
+  @media (width >= 48rem) {
+    display: flex;
+  }
+}
+
+.reports-heading-title {
+  width: 25%;
+  padding-block: 0.75rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.reports-heading-ended {
+  width: 25%;
+  padding-block: 0.75rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.reports-heading-bosses {
+  width: 50%;
+  padding-block: 0.75rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.reports-heading-logs {
+  width: 42px;
+  padding-block: 0.75rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+}
+
+.reports-cell-title {
+  display: flex;
+  align-items: center;
+  padding-block: 0.75rem;
+  @media (width >= 48rem) {
+    width: 25%;
+  }
+}
+
+.reports-cell-ended {
+  display: flex;
+  align-items: center;
+  padding-block: 0.75rem;
+  @media (width >= 48rem) {
+    width: 25%;
+  }
+}
+
+.reports-cell-bosses {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  padding-block: 0.75rem;
+  @media (width >= 48rem) {
+    width: 50%;
+  }
+}
+
+.reports-boss-icon {
+  height: 2rem;
+  width: 2rem;
+}
+
+.reports-cell-logs {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  padding-block: 0.75rem;
+  @media (width >= 48rem) {
+    width: 42px;
+  }
+}
+
+.reports-empty {
+  display: flex;
+  height: 6rem;
+  align-items: center;
+  justify-content: center;
+}
+.reports-row {
+  display: flex;
+  flex-direction: column;
+  padding-inline: 1rem;
+
+  @media (width >= 48rem) {
+    flex-direction: row;
+  }
+}
+
+.reports-row-striped {
+  background-color: rgb(0 0 0 / 50%);
+}

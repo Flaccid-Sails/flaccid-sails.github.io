@@ -1,0 +1,79 @@
+.viewport {
+  position: absolute;
+  inset: 0;
+  overflow-y: scroll;
+  padding-right: 16px;
+  scrollbar-gutter: stable;
+}
+
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.viewport {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 26px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+}
+
+.scrollbar .arrow {
+  width: 26px;
+  height: 26px;
+  background: transparent center/contain no-repeat;
+  border: 0;
+  padding: 0;
+  background-size: 36px;
+  background-position: -4px -4px;
+}
+
+.scrollbar .arrow:active {
+  filter: brightness(0.9);
+}
+
+.scrollbar .track {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  margin: -6px 0 -8px 0;
+}
+
+.scrollbar .thumb {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 10px;
+  background-size: 36px;
+  background-position: -4px -4px;
+}
+
+.scrollbar .thumb:hover,
+.scrollbar .track:hover {
+  filter: brightness(1.05);
+}
+
+@media (pointer: coarse) {
+  .scrollbar {
+    display: none;
+  }
+
+  .viewport {
+    padding-right: 0;
+  }
+}
+.scrollview {
+  position: relative;
+}

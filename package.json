@@ -1,0 +1,21 @@
+{
+    "name": "flaccid-sails",
+    "version": "3.0.0",
+    "private": true,
+    "type": "module",
+    "workspaces": [
+        "site"
+    ],
+    "engines": {
+        "node": ">=24"
+    },
+    "scripts": {
+        "dev": "npm run data:demo && npm run dev --workspace site",
+        "data:demo": "node scripts/generate-demo.mjs",
+        "data:refresh": "node scripts/refresh-talents.mjs && node scripts/refresh-icons.mjs",
+        "build": "npm run data:demo && npm run build --workspace site",
+        "preview": "npm run preview --workspace site",
+        "test": "node --test scripts/*.test.mjs",
+        "typecheck": "npm run typecheck --workspace site"
+    }
+}

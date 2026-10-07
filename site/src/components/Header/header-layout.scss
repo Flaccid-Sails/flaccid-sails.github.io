@@ -1,0 +1,195 @@
+.header-theme-choice {
+  position: relative;
+  height: 66px;
+  width: 260px;
+}
+
+.header-theme-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.header-theme-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.header-theme-label {
+  position: absolute;
+  display: flex;
+  height: 66px;
+  width: 260px;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.header-theme-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem;
+  border-radius: 0.25rem;
+  border-width: 2px;
+  border-style: solid;
+  border-style: solid;
+  border-color: #262626;
+  background-color: var(--character-preview-color);
+  padding: 0.25rem;
+}
+
+.site-header {
+  position: relative;
+  height: 66px;
+}
+
+.header-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 66px;
+  width: 100%;
+}
+
+.header-left-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 66px;
+  width: 153px;
+}
+
+.header-right-decoration {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 66px;
+  width: 153px;
+}
+
+.header-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 2rem;
+}
+
+.header-theme-choice,
+.header-theme-left,
+.header-theme-right,
+.header-theme-label,
+.header-theme-trigger {
+  cursor: pointer;
+  cursor: var(--engi-cursor), auto;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-logo {
+  position: relative;
+  height: 40px;
+  width: 40px;
+}
+
+.header-logo-image {
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  border-radius: 9999px;
+}
+
+.header-logo-border {
+  position: absolute;
+  top: -14px;
+  left: -15px;
+  height: 70px;
+  width: 70px;
+}
+
+.header-title {
+  color: var(--title-color);
+  @media (width < 48rem) {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+.header-tools {
+  display: flex;
+  gap: 0.75rem;
+  user-select: none;
+}
+
+.header-theme-trigger {
+  position: relative;
+  margin-right: 1.5rem;
+  display: block;
+  width: 5rem;
+  @media (width < 48rem) {
+    top: -0.75rem;
+  }
+}
+
+.header-theme-icon {
+  pointer-events: none;
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  height: 80px;
+}
+
+.header-theme-caption {
+  pointer-events: none;
+  position: absolute;
+  top: 0.25rem;
+  left: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.header-guild-info {
+  margin-right: 1.5rem;
+  display: none;
+  text-align: center;
+  @media (width >= 48rem) {
+    display: block;
+  }
+}
+
+.header-guild-name {
+  color: var(--title-color);
+}
+
+.header-guild-subtitle {
+  font-size: 0.8rem;
+  color: var(--muted-color);
+}
+
+.header-time-info {
+  margin-right: 0.5rem;
+  display: none;
+  text-align: center;
+  @media (width >= 48rem) {
+    display: block;
+  }
+}
+
+.header-time {
+  color: var(--title-color);
+}
+
+.header-time-caption {
+  font-size: 0.8rem;
+  color: var(--muted-color);
+}

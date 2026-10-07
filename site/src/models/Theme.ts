@@ -1,0 +1,10 @@
+export type Theme = 'ALLIANCE'
+    | 'HORDE'
+    | 'KYRIAN'
+    | 'MARINE'
+    | 'MECHAGON'
+    | 'NECROLORD'
+    | 'NEUTRAL'
+    | 'NIGHT_FAE'
+    | 'VENTHYR'
+    | 'ORIBOS';

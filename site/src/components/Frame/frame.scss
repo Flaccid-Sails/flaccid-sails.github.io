@@ -1,0 +1,35 @@
+.frame {
+  display: grid;
+  grid-template-columns: var(--size) 1fr var(--size);
+  grid-template-rows: var(--size) 1fr var(--size);
+  position: relative;
+}
+
+.frame-left {
+  grid-column: 1;
+  grid-row: 2;
+  width: var(--size);
+}
+
+.frame-right {
+  grid-column: 3;
+  grid-row: 2;
+  width: var(--size);
+}
+
+.frame-top {
+  grid-column: 2;
+  grid-row: 1;
+  height: var(--size);
+}
+
+.frame-bottom {
+  grid-column: 2;
+  grid-row: 3;
+  height: var(--size);
+}
+
+.frame-content {
+  grid-column: 2;
+  grid-row: 2;
+}

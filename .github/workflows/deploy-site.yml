@@ -1,0 +1,65 @@
+name: Refresh data and deploy site
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: read
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: main
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - name: Recheck Forever talents
+        run: npm run data:refresh
+      - name: Verify the data pipeline
+        run: npm test
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@v6.0.0
+      - name: Build the preview with static JSON
+        run: npm run build
+        env:
+          SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+      - name: Commit the successful talent check to main
+        shell: bash
+        run: bash scripts/save-talents.sh
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: site/dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5.0.1
