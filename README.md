@@ -10,12 +10,6 @@ Use Node 24 or newer.
 npm run dev
 ```
 
-The dev server serves the site at `/`; use the local URL printed by Vite.
-
-Site styles are maintained in `site/src` as SCSS.
-
-The first request loads only roster summaries, logs, zones, and file references from `data/snapshot.json`. Reports use a small index and load full report details when hovered. The dashboard loads a precomputed summary. Equipment, statistics, and talent builds live in per-character files; the talent catalog loads when the talent window opens. GitHub Pages serves these static JSON files without a server-side API.
-
 Other commands:
 
 ```sh
