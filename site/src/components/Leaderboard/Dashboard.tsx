@@ -124,27 +124,32 @@ export function Dashboard({
                     showOnlyIfFull
                     filterKilledBosses />
             </div>
-            <h1 className='dashboard-heading'>Logs Per boss</h1>
-            {bossesWithHighestDifficultyLogs.map(boss => (
-                <div key={boss.id} className='dashboard-boss-row'>
-                    <div className='dashboard-boss-title'>
-                        <img className='dashboard-boss-icon'
-                            src={boss.id < 0 ? Images.wowIcon : `https://assets.rpglogs.com/img/warcraft/bosses/${boss.id}-icon.jpg`}
-                            alt='Boss' />
-                        <h2 className='dashboard-boss-name'>{boss.name}</h2>
-                    </div>
-                    <HighestLog players={boss.players}
-                        label='Top DPS parses'
-                        selector={a => findLog(a, boss.dps) || 0}
-                        max={100}
-                        valueLabel='DPS parse' />
-                    <HighestLog players={boss.players}
-                        label='Top healing parses'
-                        selector={a => findLog(a, boss.healers) || 0}
-                        max={100}
-                        valueLabel='Healing parse' />
-                </div>
-            ))}
+            <h1 className='dashboard-heading'>Boss Parses</h1>
+            <div className='dashboard-boss-list'>
+                {bossesWithHighestDifficultyLogs.map(boss => (
+                    <section key={boss.id} className='dashboard-boss-panel' aria-labelledby={`dashboard-boss-${boss.id}`}>
+                        <header className='dashboard-boss-title'>
+                            <img className='dashboard-boss-icon'
+                                src={boss.id < 0 ? Images.wowIcon : `https://assets.rpglogs.com/img/warcraft/bosses/${boss.id}-icon.jpg`}
+                                alt='' />
+                            <h2 id={`dashboard-boss-${boss.id}`} className='dashboard-boss-name'>{boss.name}</h2>
+                        </header>
+                        <div className='dashboard-boss-logs'>
+                            <HighestLog players={boss.players}
+                                label='Top DPS parses'
+                                selector={a => findLog(a, boss.dps) || 0}
+                                max={100}
+                                valueLabel='DPS parse' />
+                            <HighestLog players={boss.players}
+                                label='Top healing parses'
+                                selector={a => findLog(a, boss.healers) || 0}
+                                max={100}
+                                valueLabel='Healing parse' />
+                        </div>
+                    </section>
+                ))}
+                {bossesWithHighestDifficultyLogs.length === 0 && <p className='dashboard-empty'>No boss parses yet</p>}
+            </div>
         </div>
     );
 }

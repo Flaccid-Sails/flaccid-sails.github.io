@@ -1,44 +1,58 @@
 .dashboard-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    padding-inline: 0.25rem;
-    padding-block: 0.75rem;
+    align-items: stretch;
+    gap: 16px;
+    padding: 12px 10px 20px;
 }
 
 .dashboard-summary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 205px), 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
-    width: min(100%, 960px);
+    width: min(100%, 1040px);
+    margin-inline: auto;
 }
 
 .dashboard-stat-panel {
     position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
     min-width: 0;
-    min-height: 124px;
-    padding: 7px 10px;
-    border: 13px solid transparent;
-    border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp") 26 / 13px stretch;
-    background: linear-gradient(180deg, #21170fee, #100b08f2);
-    box-shadow: inset 0 0 18px #000b;
+    min-height: 100px;
+    padding: 14px 22px 16px;
+    background: url("/assets/UIFrame-Neutral-Background.webp") left top / 256px 256px repeat;
+    box-shadow: inset 0 0 22px #0009;
     text-align: center;
 }
 
-.dashboard-stat-panel::after {
+.dashboard-stat-panel::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border: 24px solid transparent;
+    border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp") 106 / 24px stretch;
     content: "";
+    pointer-events: none;
+}
+
+.dashboard-stat-panel::after {
     position: absolute;
     top: 50%;
-    right: 10px;
-    left: 10px;
+    right: 22px;
+    left: 22px;
+    z-index: 1;
     height: 1px;
     background: #72552b;
     box-shadow: 0 1px 0 #0b0805;
+    content: "";
     pointer-events: none;
+}
+
+.dashboard-stat-panel>* {
+    position: relative;
+    z-index: 1;
 }
 
 .dashboard-stat-label,
@@ -52,7 +66,7 @@
 
 .dashboard-stat-label {
     color: #f4d78f;
-    font-size: 17px;
+    font-size: 15px;
     line-height: 1.2;
     text-shadow: 1px 2px 2px #000;
 }
@@ -60,10 +74,16 @@
 .dashboard-stat-value {
     overflow: hidden;
     color: #f1deb2;
-    font-size: 23px;
+    font-size: 22px;
     line-height: 1.2;
     text-overflow: ellipsis;
     text-shadow: 1px 2px 2px #000;
+    white-space: nowrap;
+}
+
+.dashboard-stat-value>span {
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 }
 
@@ -72,45 +92,186 @@
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
     gap: 12px;
     width: 100%;
+}
 
-    @media (width >=80rem) {
-        display: none;
-    }
+.dashboard-charts .wow-chart-panel {
+    position: relative;
+    isolation: isolate;
+    padding: 18px 22px;
+    border: 0;
+    border-image: none;
+    background: url("/assets/UIFrame-Neutral-Background.webp") left top / 256px 256px repeat;
+    box-shadow: inset 0 0 22px #0009;
+}
+
+.dashboard-charts .wow-chart-panel::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border: 24px solid transparent;
+    border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp") 106 / 24px stretch;
+    content: "";
+    pointer-events: none;
+}
+
+.dashboard-charts .wow-chart-panel>* {
+    position: relative;
+    z-index: 1;
 }
 
 .dashboard-heading {
-    margin: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 2px 12px 0;
+    color: #f4d78f;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.2;
+    text-shadow: 1px 2px 3px #000;
 }
 
-.dashboard-boss-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-items: center;
-    gap: 12px;
-    width: 100%;
+.dashboard-heading::after {
+    flex: 1;
+    height: 1px;
+    background: #7f6239;
+    box-shadow: 0 1px 0 #0b0805;
+    content: "";
+}
 
-    @media (width >=48rem) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+.dashboard-boss-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dashboard-boss-panel {
+    position: relative;
+    isolation: isolate;
+    min-width: 0;
+    padding: 16px 24px 18px;
+    background: url("/assets/UIFrame-Neutral-Background.webp") left top / 256px 256px repeat;
+    box-shadow: inset 0 0 22px #0009;
+}
+
+.dashboard-boss-panel::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border: 24px solid transparent;
+    border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp") 106 / 24px stretch;
+    content: "";
+    pointer-events: none;
+}
+
+.dashboard-boss-panel>* {
+    position: relative;
+    z-index: 1;
 }
 
 .dashboard-boss-title {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-
-    @media (width >=48rem) {
-        grid-column: 1 / -1;
-    }
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #7f623947;
 }
 
 .dashboard-boss-icon {
-    height: 3rem;
-    width: 3rem;
-    border-radius: 0.25rem;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
     filter: drop-shadow(0 2px 3px #000e) drop-shadow(0 4px 5px #0009);
 }
 
 .dashboard-boss-name {
+    min-width: 0;
     color: var(--title-color);
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 1.15;
+    text-shadow: 1px 2px 3px #000;
+}
+
+.dashboard-boss-logs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dashboard-boss-logs .wow-chart-panel {
+    padding: 0;
+    border: 0;
+    border-image: none;
+    background: none;
+    box-shadow: none;
+}
+
+.dashboard-boss-logs .wow-chart-panel+.wow-chart-panel {
+    padding-left: 18px;
+    border-left: 1px solid #7f623947;
+}
+
+.dashboard-boss-logs .wow-chart-heading h2 {
+    font-size: 16px;
+}
+
+.dashboard-boss-logs .wow-chart-row {
+    min-height: 28px;
+}
+
+.dashboard-empty {
+    padding: 24px;
+    color: #b7a887;
+    text-align: center;
+}
+
+@media (width >=80rem) {
+    .dashboard-charts {
+        display: none;
+    }
+}
+
+@media (width < 900px) {
+    .dashboard-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (width < 780px) {
+    .dashboard-boss-logs {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .dashboard-boss-logs .wow-chart-panel+.wow-chart-panel {
+        padding-top: 12px;
+        padding-left: 0;
+        border-top: 1px solid #7f623947;
+        border-left: 0;
+    }
+}
+
+@media (width < 480px) {
+    .dashboard-content {
+        padding-inline: 4px;
+    }
+
+    .dashboard-summary {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dashboard-boss-panel {
+        padding: 14px 18px 16px;
+    }
+
+    .dashboard-boss-panel::before {
+        border-width: 18px;
+        border-image-width: 18px;
+    }
+
+    .dashboard-boss-name {
+        font-size: 21px;
+    }
 }
