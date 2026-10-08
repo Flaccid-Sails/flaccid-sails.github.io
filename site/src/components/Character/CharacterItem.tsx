@@ -39,7 +39,7 @@ export function CharacterItem({ item, slot, side }: Props) {
         style={{ '--item-quality': `var(--quality-${item?.quality.toLowerCase() ?? 'common'}-color, #fff)` } as CSSProperties}>
         {item && <span className='character-equipment-quality' aria-hidden='true' />}
         <img className='character-equipment-icon'
-            src={item ? item.media || Images.wowIcon : characterAsset(`empty-slots/ui-paperdoll-slot-${slot.emptyIcon}.png`)} alt='' />
+            src={item ? item.media || Images.wowIcon : characterAsset(`empty-slots/ui-paperdoll-slot-${slot.emptyIcon}.webp`)} alt='' />
     </div>;
 
     return <div className={`character-equipment-slot character-equipment-info-${side.toLowerCase()}`}>

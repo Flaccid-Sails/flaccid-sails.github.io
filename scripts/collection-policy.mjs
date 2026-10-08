@@ -1,7 +1,7 @@
 export function planCharacterRefresh(roster, cache, policy, now = Date.now()) {
     const hours = 3_600_000;
     return roster.filter(player => {
-        if (player.level < policy.minimumDetailedLevel) return false;
+        if (player.level !== policy.detailedLevel) return false;
         const saved = cache[`${player.realm}/${player.name}`];
         if (!saved) return true;
         const inactive = saved.lastLogin < now - policy.inactiveAfterDays * 24 * hours;

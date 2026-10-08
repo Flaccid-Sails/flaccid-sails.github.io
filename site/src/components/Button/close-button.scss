@@ -4,7 +4,7 @@
   flex: 0 0 32px;
   padding: 0;
   border: 0;
-  background: url("/assets/talent-window/window-frame/redbutton-exit-c60-2x.png")
+  background: url("/assets/talent-window/window-frame/redbutton-exit-c60-2x.webp")
     center / contain no-repeat;
   cursor: var(--engi-cursor), pointer;
 }
@@ -20,5 +20,5 @@
 }
 
 .wow-close-button:active {
-  background-image: url("/assets/talent-window/window-frame/redbutton-exit-pressed-c60-2x.png");
+  background-image: url("/assets/talent-window/window-frame/redbutton-exit-pressed-c60-2x.webp");
 }

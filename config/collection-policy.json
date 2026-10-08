@@ -1,5 +1,5 @@
 {
-    "minimumDetailedLevel": 60,
+    "detailedLevel": 60,
     "detailsRefreshHours": 6,
     "inactiveAfterDays": 14,
     "inactiveRefreshHours": 168,

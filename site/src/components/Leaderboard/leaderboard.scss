@@ -43,7 +43,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: url("/assets/talent-window/tabs/talents-tabs-c60-2x.png") center /
+  background: url("/assets/talent-window/tabs/talents-tabs-c60-2x.webp") center /
     100% 100% no-repeat;
   transform: rotate(180deg);
   pointer-events: none;
@@ -54,7 +54,7 @@
 }
 
 .leaderboard-bottom-tab.active::before {
-  background-image: url("/assets/talent-window/tabs/talents-tabs-glow-c60-2x.png");
+  background-image: url("/assets/talent-window/tabs/talents-tabs-glow-c60-2x.webp");
 }
 
 .leaderboard-bottom-tab:hover:not(.active) {

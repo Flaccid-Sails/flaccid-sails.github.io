@@ -22,16 +22,15 @@ const players = names.map((name, i) => ({
     rank: i === 0 ? 0 : i < 4 ? 2 : i < 18 ? 4 : 7,
     equippedItemLevel: i < 18 ? 60 + i % 12 : -1, itemLevel: i < 18 ? 63 + i % 12 : -1,
     achievementPoints: 0, lastLogin: epoch - i * 3_600_000,
-    image: `icons/${catalog.classes[classes[i % classes.length]].icon}.jpg`,
+    image: `icons/${catalog.classes[classes[i % classes.length]].icon}.webp`,
 }));
 const characterBuilds = new Map();
 for (const [index, player] of players.entries()) {
+    if (player.level !== 60) continue;
     const primaryTree = Math.floor(index / classes.length) % 3;
     const builds = [createDemoTalentBuild(catalog.classes[player.class], player.level, primaryTree)];
-    if (player.level === 60) {
-        const secondary = createDemoTalentBuild(catalog.classes[player.class], player.level, (primaryTree + 1) % 3);
-        builds.push({ ...secondary, name: 'Secondary' });
-    }
+    const secondary = createDemoTalentBuild(catalog.classes[player.class], player.level, (primaryTree + 1) % 3);
+    builds.push({ ...secondary, name: 'Secondary' });
     characterBuilds.set(`${player.realm}/${player.name}`, builds);
 }
 const bosses = [{ id: -1, name: 'The Reef Guardian (demo)' }, { id: -2, name: 'Admiral Blackwake (demo)' }, { id: -3, name: 'The Drowned King (demo)' }];
@@ -56,27 +55,26 @@ const slots = ['HEAD', 'NECK', 'SHOULDER', 'BACK', 'CHEST', 'WRIST', 'HANDS', 'W
 const icons = ['inv_helmet_03', 'inv_jewelry_necklace_01', 'inv_shoulder_01', 'inv_misc_cape_01', 'inv_chest_plate01', 'inv_bracer_01', 'inv_gauntlets_01', 'inv_belt_01', 'inv_pants_01', 'inv_boots_01', 'inv_jewelry_ring_01', 'inv_jewelry_ring_02', 'inv_misc_gem_pearl_01', 'inv_misc_gem_pearl_02', 'inv_sword_04', 'inv_shield_04'];
 const characterFiles = {};
 for (const [i, player] of players.entries()) {
+    if (player.level !== 60) continue;
     const profile = { talentBuilds: characterBuilds.get(`${player.realm}/${player.name}`) };
-    if (player.level >= 60) {
-        profile.statistics = {
-            health: 4200 + i * 70,
-            power: ['Warrior', 'Rogue'].includes(player.class) ? 100 : 3100,
-            powerType: player.class === 'Warrior' ? 'Rage' : player.class === 'Rogue' ? 'Energy' : 'Mana',
-            movementSpeed: 100, strength: 180, agility: 140,
-            intellect: 210, stamina: 220, meleeCrit: 12, meleeHaste: 0, mastery: 0, bonusArmor: 0,
-            attackPower: 450, mainHandDamageMin: 100, mainHandDamageMax: 180, mainHandSpeed: 2.6,
-            mainHandDps: 54, offHandDamageMin: 0, offHandDamageMax: 0, offHandSpeed: 0, offHandDps: 0,
-            spellPower: 320, spellPenetration: 0, spellCrit: 14, manaRegen: 80, manaRegenCombat: 30,
-            armor: 1700, dodge: 6, parry: 5, block: 5, rangedCrit: 10, rangedHaste: 0, spellHaste: 0, spirit: 130,
-        };
-        profile.equipment = slots.map((slot, n) => ({
-            id: -(n + 1), name: `Sailor's ${slot.toLowerCase().replaceAll('_', ' ')} (demo)`, slot,
-            quality: n % 3 === 0 ? 'EPIC' : 'RARE', armor: 120, itemClass: 'Armor', itemSubclass: 'Demo equipment',
-            inventoryType: slot, stats: ['+15 Stamina', '+12 Intellect'], bonusStats: [],
-            requirements: ['Requires Level 60'], spells: [], sockets: [], itemLevel: player.equippedItemLevel,
-            media: `icons/${icons[n]}.jpg`,
-        }));
-    }
+    profile.statistics = {
+        health: 4200 + i * 70,
+        power: ['Warrior', 'Rogue'].includes(player.class) ? 100 : 3100,
+        powerType: player.class === 'Warrior' ? 'Rage' : player.class === 'Rogue' ? 'Energy' : 'Mana',
+        movementSpeed: 100, strength: 180, agility: 140,
+        intellect: 210, stamina: 220, meleeCrit: 12, meleeHaste: 0, mastery: 0, bonusArmor: 0,
+        attackPower: 450, mainHandDamageMin: 100, mainHandDamageMax: 180, mainHandSpeed: 2.6,
+        mainHandDps: 54, offHandDamageMin: 0, offHandDamageMax: 0, offHandSpeed: 0, offHandDps: 0,
+        spellPower: 320, spellPenetration: 0, spellCrit: 14, manaRegen: 80, manaRegenCombat: 30,
+        armor: 1700, dodge: 6, parry: 5, block: 5, rangedCrit: 10, rangedHaste: 0, spellHaste: 0, spirit: 130,
+    };
+    profile.equipment = slots.map((slot, n) => ({
+        id: -(n + 1), name: `Sailor's ${slot.toLowerCase().replaceAll('_', ' ')} (demo)`, slot,
+        quality: n % 3 === 0 ? 'EPIC' : 'RARE', armor: 120, itemClass: 'Armor', itemSubclass: 'Demo equipment',
+        inventoryType: slot, stats: ['+15 Stamina', '+12 Intellect'], bonusStats: [],
+        requirements: ['Requires Level 60'], spells: [], sockets: [], itemLevel: player.equippedItemLevel,
+        media: `icons/${icons[n]}.webp`,
+    }));
     characterFiles[`${player.realm}/${player.name}`] = await writeDataset('characters', profile);
 }
 const reportIndex = [];

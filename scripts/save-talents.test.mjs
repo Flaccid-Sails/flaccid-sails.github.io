@@ -27,7 +27,7 @@ async function fixture(t) {
     await mkdir(join(checkout, 'site/public/icons'), { recursive: true });
     await writeFile(join(checkout, 'README.md'), 'Original source\n');
     await writeFile(join(checkout, 'data/talents.json'), '{"checkedAt":"old"}\n');
-    await writeFile(join(checkout, 'site/public/icons/existing.jpg'), 'Existing icon');
+    await writeFile(join(checkout, 'site/public/icons/existing.webp'), 'Existing icon');
     git(checkout, 'add', '.');
     git(checkout, 'commit', '-m', 'Initial source');
     git(checkout, 'push', 'origin', 'main');
@@ -38,7 +38,7 @@ test('talent commit updates main while preserving source files and unrelated sta
     const { remote, checkout } = await fixture(t);
     const parent = git(checkout, 'rev-parse', 'HEAD');
     await writeFile(join(checkout, 'data/talents.json'), '{"checkedAt":"new"}\n');
-    await writeFile(join(checkout, 'site/public/icons/new.jpg'), 'New icon');
+    await writeFile(join(checkout, 'site/public/icons/new.webp'), 'New icon');
     await writeFile(join(checkout, 'site/public/icons/private.txt'), 'Do not publish');
     await writeFile(join(checkout, 'README.md'), 'Unrelated staged change\n');
     git(checkout, 'add', 'README.md', 'site/public/icons/private.txt');
@@ -49,10 +49,10 @@ test('talent commit updates main while preserving source files and unrelated sta
     assert.equal(git(remote, 'rev-parse', 'main^'), parent);
     assert.equal(git(remote, 'show', 'main:data/talents.json'), '{"checkedAt":"new"}');
     assert.equal(git(remote, 'show', 'main:README.md'), 'Original source');
-    assert.equal(git(remote, 'show', 'main:site/public/icons/existing.jpg'), 'Existing icon');
-    assert.equal(git(remote, 'show', 'main:site/public/icons/new.jpg'), 'New icon');
+    assert.equal(git(remote, 'show', 'main:site/public/icons/existing.webp'), 'Existing icon');
+    assert.equal(git(remote, 'show', 'main:site/public/icons/new.webp'), 'New icon');
     assert.deepEqual(git(remote, 'diff-tree', '--no-commit-id', '--name-only', '-r', 'main').split('\n'), [
-        'data/talents.json', 'site/public/icons/new.jpg',
+        'data/talents.json', 'site/public/icons/new.webp',
     ]);
     assert.equal(git(remote, 'branch', '--format=%(refname:short)'), 'main');
     assert.equal(git(checkout, 'rev-parse', 'HEAD'), parent);

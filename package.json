@@ -17,5 +17,8 @@
         "preview": "npm run preview --workspace site",
         "test": "node --test scripts/*.test.mjs",
         "typecheck": "npm run typecheck --workspace site"
+    },
+    "devDependencies": {
+        "sharp": "^0.35.5"
     }
 }

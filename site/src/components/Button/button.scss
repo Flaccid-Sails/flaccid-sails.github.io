@@ -6,7 +6,7 @@
   padding: 0 4px;
   border: solid transparent;
   border-width: 0 20px;
-  border-image: url("/assets/forever-panel/normal.png") 0 114 0 114 fill / 0
+  border-image: url("/assets/forever-panel/normal.webp") 0 114 0 114 fill / 0
     20px 0 20px stretch;
   color: #f7e8d2;
   white-space: nowrap;
@@ -15,7 +15,7 @@
 
 .forever-button.is-selected,
 .forever-button:active:not(:disabled) {
-  border-image-source: url("/assets/forever-panel/pressed.png");
+  border-image-source: url("/assets/forever-panel/pressed.webp");
 }
 
 .forever-button:hover:not(:disabled):not(:active)::after {
@@ -23,13 +23,13 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: url("/assets/forever-panel/hover-overlay.png") center / 100% 100%
+  background: url("/assets/forever-panel/hover-overlay.webp") center / 100% 100%
     no-repeat;
   pointer-events: none;
 }
 
 .forever-button:disabled {
-  border-image-source: url("/assets/forever-panel/disabled.png");
+  border-image-source: url("/assets/forever-panel/disabled.webp");
   opacity: 1;
 }
 

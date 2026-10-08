@@ -51,7 +51,7 @@
 .character-paperdoll {
   position: relative;
   background: #070605
-    url("/assets/character-window/backgrounds/ui-character-info-general-bg-c60-2x.png")
+    url("/assets/character-window/backgrounds/ui-character-info-general-bg-c60-2x.webp")
     center / 100% 100% no-repeat;
 }
 
@@ -115,7 +115,7 @@
   display: block;
   padding: 0;
   border: 0;
-  background: url("/assets/character-window/equipment-frames/ui-character-info-gearslot-c60-2x.png")
+  background: url("/assets/character-window/equipment-frames/ui-character-info-gearslot-c60-2x.webp")
     center / contain no-repeat;
 }
 
@@ -133,7 +133,7 @@
   inset: calc(17.25% - 3px);
   z-index: 0;
   background: var(--item-quality);
-  mask: url("/assets/character-window/equipment-frames/whiteiconframe.png")
+  mask: url("/assets/character-window/equipment-frames/whiteiconframe.webp")
     center / 100% 100% no-repeat;
   pointer-events: none;
 }
@@ -240,7 +240,7 @@
   pointer-events: none;
   border: solid transparent;
   border-width: 12px 0;
-  border-image: url("/assets/character-window/stats-panel/common-framedivider-c60-2x.png")
+  border-image: url("/assets/character-window/stats-panel/common-framedivider-c60-2x.webp")
     24 0 24 0 fill / 12px 0 stretch;
 }
 
@@ -253,7 +253,7 @@
   flex: 0 0 120px;
   gap: 5px;
   padding: 7px 10px 15px;
-  background: url("/assets/character-window/backgrounds/ui-character-info-stat-stonebg-c60-2x.png")
+  background: url("/assets/character-window/backgrounds/ui-character-info-stat-stonebg-c60-2x.webp")
     center / 100% 100% no-repeat;
 }
 
@@ -284,7 +284,7 @@
   font-size: 23px;
   line-height: 30px;
   white-space: nowrap;
-  background: url("/assets/character-window/character-details/ui-character-info-itemlevel-bounce-c60-2x.png")
+  background: url("/assets/character-window/character-details/ui-character-info-itemlevel-bounce-c60-2x.webp")
     center / 100% 100% no-repeat;
   text-shadow: 1px 2px 2px #000;
 }
@@ -323,27 +323,27 @@
 }
 
 .character-stat-scroll .arrow:first-child {
-  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-top-c60.png");
+  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-top-c60.webp");
 }
 
 .character-stat-scroll .arrow:first-child:hover:enabled {
-  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-top-over-c60.png");
+  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-top-over-c60.webp");
 }
 
 .character-stat-scroll .arrow:first-child:active:enabled {
-  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbarl-arrow-top-down-c60.png");
+  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbarl-arrow-top-down-c60.webp");
 }
 
 .character-stat-scroll .arrow:last-child {
-  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-bottom-c60.png");
+  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-bottom-c60.webp");
 }
 
 .character-stat-scroll .arrow:last-child:hover:enabled {
-  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-bottom-over-c60.png");
+  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-bottom-over-c60.webp");
 }
 
 .character-stat-scroll .arrow:last-child:active:enabled {
-  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-bottom-down-c60.png");
+  --arrow-image: url("/assets/character-window/scrollbar/minimal-scrollbar-arrow-bottom-down-c60.webp");
 }
 
 .character-stat-scroll .arrow:disabled {
@@ -354,7 +354,7 @@
   width: 8px;
   margin: 8px 0;
   padding: 8px 0;
-  background: url("/assets/character-window/scrollbar/!minimal-scrollbar-track-middle-c60.png")
+  background: url("/assets/character-window/scrollbar/!minimal-scrollbar-track-middle-c60.webp")
     center / 8px 1px repeat-y content-box;
   filter: none;
 }
@@ -376,18 +376,18 @@
 
 .character-stat-scroll .track::before {
   top: 0;
-  background-image: url("/assets/character-window/scrollbar/minimal-scrollbar-track-top-c60.png");
+  background-image: url("/assets/character-window/scrollbar/minimal-scrollbar-track-top-c60.webp");
 }
 
 .character-stat-scroll .track::after {
   bottom: 0;
-  background-image: url("/assets/character-window/scrollbar/minimal-scrollbar-track-bottom-c60.png");
+  background-image: url("/assets/character-window/scrollbar/minimal-scrollbar-track-bottom-c60.webp");
 }
 
 .character-stat-scroll .thumb {
-  --thumb-top: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-top-c60.png");
-  --thumb-middle: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-middle-c60.png");
-  --thumb-bottom: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-bottom-c60.png");
+  --thumb-top: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-top-c60.webp");
+  --thumb-middle: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-middle-c60.webp");
+  --thumb-bottom: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-bottom-c60.webp");
   width: 8px;
   padding: 8px 0;
   z-index: 1;
@@ -397,15 +397,15 @@
 }
 
 .character-stat-scroll .thumb:hover {
-  --thumb-top: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-top-over-c60.png");
-  --thumb-middle: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-middle-over-c60.png");
-  --thumb-bottom: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-bottom-over-c60.png");
+  --thumb-top: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-top-over-c60.webp");
+  --thumb-middle: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-middle-over-c60.webp");
+  --thumb-bottom: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-bottom-over-c60.webp");
 }
 
 .character-stat-scroll .thumb:active {
-  --thumb-top: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-top-down-c60.png");
-  --thumb-middle: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-middle-down-c60.png");
-  --thumb-bottom: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-bottom-down-c60.png");
+  --thumb-top: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-top-down-c60.webp");
+  --thumb-middle: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-middle-down-c60.webp");
+  --thumb-bottom: url("/assets/character-window/scrollbar/minimal-scrollbar-small-thumb-bottom-down-c60.webp");
 }
 
 .character-stat-scroll .thumb::before {
@@ -424,7 +424,7 @@
   pointer-events: none;
   z-index: 2;
   border: 53px solid transparent;
-  border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.png")
+  border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp")
     106 / 53px stretch;
 }
 
@@ -438,7 +438,7 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 5px;
-  background: url("/assets/character-window/character-details/ui-character-info-title-c60-2x.png")
+  background: url("/assets/character-window/character-details/ui-character-info-title-c60-2x.webp")
     center / 100% 100% no-repeat;
   font-size: 19px;
   font-weight: normal;

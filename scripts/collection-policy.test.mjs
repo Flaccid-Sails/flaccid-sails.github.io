@@ -7,8 +7,8 @@ const now = Date.parse('2026-10-07T12:00:00Z');
 const hour = 3_600_000;
 const player = (name, level = 60) => ({ name, realm: 'Preview', level });
 
-test('level 59 players never get detailed requests, new level 60 players do', () => {
-    assert.deepEqual(planCharacterRefresh([player('Low', 59), player('Ready')], {}, policy, now), [player('Ready')]);
+test('only level 60 players get detailed requests', () => {
+    assert.deepEqual(planCharacterRefresh([player('Low', 59), player('Ready'), player('High', 61)], {}, policy, now), [player('Ready')]);
 });
 
 test('fresh and inactive profiles are deferred while overdue profiles are queued', () => {

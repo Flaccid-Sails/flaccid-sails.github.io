@@ -15,7 +15,7 @@ git update-index --add --cacheinfo "100644,$blob,data/talents.json"
 while IFS= read -r -d '' file; do
   blob=$(git hash-object -w "$file")
   git update-index --add --cacheinfo "100644,$blob,$file"
-done < <(find site/public/icons -type f -name '*.jpg' -print0)
+done < <(find site/public/icons -type f -name '*.webp' -print0)
 tree=$(git write-tree)
 if [[ "$tree" == "$(git rev-parse "$parent^{tree}")" ]]; then
   echo 'Talent catalogue and icons are already up to date.'

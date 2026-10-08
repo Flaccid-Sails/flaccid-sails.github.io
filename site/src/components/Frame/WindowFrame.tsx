@@ -1,7 +1,7 @@
 import './window-frame.scss';
 
 export const classPortrait = (characterClass: string) =>
-    `${import.meta.env.BASE_URL}assets/talent-window/headers/class-icons/${characterClass.toLowerCase()}.png`;
+    `${import.meta.env.BASE_URL}assets/talent-window/headers/class-icons/${characterClass.toLowerCase()}.webp`;
 
 export function WindowFrame({ portrait }: { portrait: string }) {
     return <div className='wow-window-decoration' aria-hidden='true'>

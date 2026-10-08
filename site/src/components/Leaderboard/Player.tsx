@@ -70,6 +70,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
     };
 
     const openPlayerTalents = (): void => {
+        if (player.level !== 60) return;
         EventEmitter.emit('OPEN_SPECIALIZATIONS_DIALOG', player);
     };
 
@@ -180,7 +181,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
                     <button className='player-talents-button'
                         style={{ backgroundImage: `url(${Images.talentsIcon})`, backgroundSize: 20, left: width + 144 }}
                         title='Check talents'
-                        onClick={openPlayerTalents} aria-label={`View ${player.class} talents`} />
+                        onClick={openPlayerTalents} aria-label={`View ${player.class} talents`} disabled={player.level !== 60} />
 
                     <div className='player-frame-left'
                         style={{ backgroundImage: `url(${Images.frame})`, backgroundSize: 210 }} />

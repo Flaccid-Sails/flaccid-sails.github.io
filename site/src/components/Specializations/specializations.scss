@@ -62,12 +62,12 @@
   color: #9a9894;
   font-size: 17px;
   border: 0;
-  background: url("/assets/talent-window/tabs/talents-tabs-c60-2x.png") center /
+  background: url("/assets/talent-window/tabs/talents-tabs-c60-2x.webp") center /
     100% 100% no-repeat;
 }
 
 .talents-build-tab.active {
-  background-image: url("/assets/talent-window/tabs/talents-tabs-glow-c60-2x.png");
+  background-image: url("/assets/talent-window/tabs/talents-tabs-glow-c60-2x.webp");
   color: #fff4d5;
   text-shadow: 1px 1px 2px #000;
 }
@@ -97,7 +97,7 @@
   width: 14px;
   height: 14px;
   pointer-events: none;
-  background: url("/assets/talent-window/search/common-search-magnifyingglass.png")
+  background: url("/assets/talent-window/search/common-search-magnifyingglass.webp")
     center / contain no-repeat;
 }
 
@@ -111,9 +111,9 @@
   background-color: #100e0c;
   border-radius: 5px;
   background-image:
-    url("/assets/talent-window/search/common-search-border-left-c60.png"),
-    url("/assets/talent-window/search/common-search-border-right-c60.png"),
-    url("/assets/talent-window/search/common-search-border-middle-c60.png");
+    url("/assets/talent-window/search/common-search-border-left-c60.webp"),
+    url("/assets/talent-window/search/common-search-border-right-c60.webp"),
+    url("/assets/talent-window/search/common-search-border-middle-c60.webp");
   background-position:
     left center,
     right center,
@@ -159,8 +159,8 @@
   z-index: -1;
   pointer-events: none;
   background-image:
-    url("/assets/talent-window/borders/talents-divider-left-c60-2x.png"),
-    url("/assets/talent-window/borders/talents-divider-right-c60-2x.png");
+    url("/assets/talent-window/borders/talents-divider-left-c60-2x.webp"),
+    url("/assets/talent-window/borders/talents-divider-right-c60-2x.webp");
   background-position:
     left bottom,
     right bottom;
@@ -239,7 +239,7 @@
   inset: 0 auto 0 0;
   width: 2px;
   opacity: 0.65;
-  background: url("/assets/talent-window/borders/talents-divider-vertical-c60-2x.png")
+  background: url("/assets/talent-window/borders/talents-divider-vertical-c60-2x.webp")
     center / 100% 100% no-repeat;
 }
 
@@ -265,7 +265,7 @@
   right: 5%;
   height: 42px;
   pointer-events: none;
-  background: url("/assets/talent-window/headers/talents-small-divider-c60-2x.png")
+  background: url("/assets/talent-window/headers/talents-small-divider-c60-2x.webp")
     center / 100% 100% no-repeat;
 }
 
@@ -301,7 +301,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url("/assets/talent-window/headers/talents-main-ring-box-c60-2x.png")
+  background: url("/assets/talent-window/headers/talents-main-ring-box-c60-2x.webp")
     center / 100% 100% no-repeat;
   color: #ffd100;
   font-size: 16px;
@@ -425,7 +425,7 @@
   z-index: 2;
   pointer-events: none;
   border: 18px solid transparent;
-  border-image: url("/assets/talent-window/borders/talents-inner-frame-c60-2x.png")
+  border-image: url("/assets/talent-window/borders/talents-inner-frame-c60-2x.webp")
     80 / 18px stretch;
 }
 

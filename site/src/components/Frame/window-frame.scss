@@ -13,28 +13,28 @@
 .wow-window-top {
   inset: 0 94px auto;
   height: 95px;
-  background: url("/assets/talent-window/window-frame/_ui-frame-metal-edgetop-c60-2x.png")
+  background: url("/assets/talent-window/window-frame/_ui-frame-metal-edgetop-c60-2x.webp")
     left top / 128px 95px repeat-x;
 }
 
 .wow-window-bottom {
   inset: auto 94px 0;
   height: 100px;
-  background: url("/assets/talent-window/window-frame/_ui-frame-metal-edgebottom-c60-2x.png")
+  background: url("/assets/talent-window/window-frame/_ui-frame-metal-edgebottom-c60-2x.webp")
     left bottom / 128px 100px repeat-x;
 }
 
 .wow-window-left {
   inset: 94px auto 99px 0;
   width: 95px;
-  background: url("/assets/talent-window/window-frame/!ui-frame-metal-edgeleft-c60-2x.png")
+  background: url("/assets/talent-window/window-frame/!ui-frame-metal-edgeleft-c60-2x.webp")
     left top / 95px 128px repeat-y;
 }
 
 .wow-window-right {
   inset: 94px 0 99px auto;
   width: 95px;
-  background: url("/assets/talent-window/window-frame/!ui-frame-metal-edgeright-c60-2x.png")
+  background: url("/assets/talent-window/window-frame/!ui-frame-metal-edgeright-c60-2x.webp")
     right top / 95px 128px repeat-y;
 }
 
@@ -43,7 +43,7 @@
   left: 0;
   width: 95px;
   height: 95px;
-  background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornertopleft-c60-2x.png");
+  background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornertopleft-c60-2x.webp");
   background-size: contain;
 }
 
@@ -52,7 +52,7 @@
   right: 0;
   width: 95px;
   height: 95px;
-  background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornertopright-c60-2x.png");
+  background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornertopright-c60-2x.webp");
   background-size: contain;
 }
 
@@ -61,7 +61,7 @@
   left: 0;
   width: 95px;
   height: 100px;
-  background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornerbottomleft-c60-2x.png");
+  background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornerbottomleft-c60-2x.webp");
   background-size: contain;
 }
 
@@ -70,7 +70,7 @@
   right: 0;
   width: 95px;
   height: 100px;
-  background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornerbottomright-c60-2x.png");
+  background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornerbottomright-c60-2x.webp");
   background-size: contain;
 }
 
@@ -90,7 +90,7 @@
   left: 0;
   width: 95px;
   height: 95px;
-  background: url("/assets/talent-window/window-frame/ui-frame-portraitmetal-cornertopleft-c60-2x.png")
+  background: url("/assets/talent-window/window-frame/ui-frame-portraitmetal-cornertopleft-c60-2x.webp")
     center / contain no-repeat;
 }
 

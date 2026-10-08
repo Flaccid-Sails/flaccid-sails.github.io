@@ -11,7 +11,7 @@ import './specializations.scss';
 
 interface Props { players?: PlayerApiDTO[] }
 const asset = (path: string) => `${import.meta.env.BASE_URL}assets/talent-window/${path}`;
-const iconUrl = (name: string) => `${import.meta.env.BASE_URL}icons/${name}.jpg`;
+const iconUrl = (name: string) => `${import.meta.env.BASE_URL}icons/${name}.webp`;
 const rankKey = (tree: TalentTree, talent: Talent) => `${tree.name}/${talent.name}`;
 
 function TalentDescription({ tree, talent, rank, allRanks = false }: {
@@ -86,7 +86,7 @@ function PrerequisiteArrows({ tree, ranks }: { tree: TalentTree; ranks: Record<s
             return <g key={talent.name}>
                 <path d={path} stroke='#000' strokeWidth='5' fill='none' vectorEffect='non-scaling-stroke' opacity='.7' />
                 <path d={path} stroke={active ? '#b2973b' : '#33352f'} strokeWidth='2' fill='none' vectorEffect='non-scaling-stroke' />
-                <image href={asset(`arrows/talents-arrow-head-${active ? 'yellow' : 'locked'}.png`)}
+                <image href={asset(`arrows/talents-arrow-head-${active ? 'yellow' : 'locked'}.webp`)}
                     x={endX - 7} y={endY - 12} width='14' height='12'
                     transform={horizontal ? `rotate(${-direction * 90} ${endX} ${endY})` : undefined} />
             </g>;
@@ -132,7 +132,7 @@ export function SpecializationsDialog({ players }: Props) {
             }).catch(() => {
                 if (request === requestRef.current) setCatalogFailed(true);
             });
-            if (next) {
+            if (next?.level === 60) {
                 void readData<TalentBuild[]>(`/talentBuilds/${next.realm}/${next.name}`).then(data => {
                     if (request === requestRef.current) setBuilds(data);
                 }).catch(() => { });
@@ -191,8 +191,8 @@ export function SpecializationsDialog({ players }: Props) {
                             onClick={() => { EventEmitter.emit('CLOSE_POPUPS'); setActiveBuild(index); setInspected(undefined); }}>
                             {index === 0 ? 'Primary' : 'Secondary'}
                             {activeBuild === index
-                                ? <img src={asset('tabs/talents-checkmark-c60-2x.png')} alt='' />
-                                : !builds?.[index] && <img src={asset('tabs/talents-lock-c60-2x.png')} alt='' />}
+                                ? <img src={asset('tabs/talents-checkmark-c60-2x.webp')} alt='' />
+                                : !builds?.[index] && <img src={asset('tabs/talents-lock-c60-2x.webp')} alt='' />}
                         </button>)}
                     </div>
                     <div className='talents-search'>
@@ -208,14 +208,14 @@ export function SpecializationsDialog({ players }: Props) {
                     {!catalog && <p className='talents-loading'>{catalogFailed ? 'Talents are unavailable.' : 'Loading talents…'}</p>}
                     {current && <div className='talents-tree-panel'>
                         <div className='talents-tree-scroll' aria-label='Talent trees'>
-                            <div className='talents-trees' style={{ backgroundImage: `url(${asset(`backgrounds/talent-background-${classSlug}.png`)})` }}>
+                            <div className='talents-trees' style={{ backgroundImage: `url(${asset(`backgrounds/talent-background-${classSlug}.webp`)})` }}>
                                 {current.trees.map((tree, treeIndex) => {
                                     const spent = tree.talents.reduce((sum, talent) => sum + (ranks[rankKey(tree, talent)] ?? 0), 0);
                                     const rows = Math.max(7, ...tree.talents.map(talent => talent.row));
                                     return <section key={tree.name} className='talent-tree' aria-label={`${tree.name} talents`}>
                                         <h2><span className='talent-tree-emblem'>
                                             <img className='talent-tree-icon' src={iconUrl(tree.icon)} alt='' />
-                                            <img className='talent-tree-ring' src={asset('headers/talents-main-ring-c60-2x.png')} alt='' />
+                                            <img className='talent-tree-ring' src={asset('headers/talents-main-ring-c60-2x.webp')} alt='' />
                                             <span className='talent-tree-points'>{spent}</span>
                                         </span>{tree.name}</h2>
                                         <div className='talent-grid' style={{ '--talent-rows': rows } as CSSProperties}>
@@ -239,7 +239,7 @@ export function SpecializationsDialog({ players }: Props) {
                                                             setInspected(inspected?.talent === talent ? undefined : { tree, talent });
                                                         }}>
                                                         <img className='talent-icon' src={iconUrl(talent.icon)} alt='' />
-                                                        <img className='talent-node-frame' src={asset(`talent-frames/talents-node-square-${state}.png`)} alt='' />
+                                                        <img className='talent-node-frame' src={asset(`talent-frames/talents-node-square-${state}.webp`)} alt='' />
                                                         {rank > 0 && <span className='talent-ranks'>{rank}</span>}
                                                     </button>
                                                 </HoverElement>;
