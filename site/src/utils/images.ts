@@ -12,17 +12,13 @@ export class Images {
     public static readonly background = import.meta.env.BASE_URL + 'assets/UI-Background-Marble.webp';
     public static readonly theme = import.meta.env.BASE_URL + 'assets/UI-Barbershop-Banner.webp';
     public static readonly searchBorder = import.meta.env.BASE_URL + 'assets/UI-Class-Trainer-Filter-Border.webp';
-    public static readonly specialRankBorder = import.meta.env.BASE_URL + 'assets/UI-Dialog-Box-Gold-Dragon.webp';
     public static readonly gearIcon = import.meta.env.BASE_URL + 'assets/UI-Gear-Manager-Button.webp';
     public static readonly talentsIcon = import.meta.env.BASE_URL + 'assets/UI-Micro-Button-Talents-Up.webp';
     public static readonly scrollKnob = import.meta.env.BASE_URL + 'assets/UI-Scroll-Bar-Knob.webp';
     public static readonly scrollDown = import.meta.env.BASE_URL + 'assets/UI-Scroll-Bar-Scroll-Down-Button-Up.webp';
     public static readonly scrollUp = import.meta.env.BASE_URL + 'assets/UI-Scroll-Bar-Scroll-Up-Button-Up.webp';
-    public static readonly frameLines = import.meta.env.BASE_URL + 'assets/UIFrame-Hi-Res-Horizontal.webp';
-    public static readonly frame = import.meta.env.BASE_URL + 'assets/UIFrame-Hi-Res.webp';
     public static readonly panelButtonUp = import.meta.env.BASE_URL + 'assets/UI-Panel-Bigger-Button-Up.webp';
     public static readonly panelButtonDown = import.meta.env.BASE_URL + 'assets/UI-Panel-Smaller-Button-Up.webp';
-    public static readonly alertButton = import.meta.env.BASE_URL + 'assets/Adventure-Guide-Microbutton-Alert.webp';
 
     public static readonly themeAlliance = import.meta.env.BASE_URL + 'assets/UIFrame-Alliance.webp';
     public static readonly themeAllianceVertical = import.meta.env.BASE_URL + 'assets/UIFrame-Alliance-Vertical.webp';
