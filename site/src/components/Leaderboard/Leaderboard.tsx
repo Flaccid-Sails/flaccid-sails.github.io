@@ -207,7 +207,7 @@ export function Leaderboard({
                             <h1 className='leaderboard-message'>{loadError ? 'Reports are unavailable.' : 'Loading...'}</h1>
                         )}
                         {reports && scrollParent && (
-                            <Reports scrollParent={scrollParent} reports={reports} players={globalPlayers ?? []} />
+                            <Reports scrollParent={scrollParent} reports={reports} players={globalPlayers ?? []} zones={zones} />
                         )}
                     </>}
                     {selectedTab === 'DASHBOARD' && <>
