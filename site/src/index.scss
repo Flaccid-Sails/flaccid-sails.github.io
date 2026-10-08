@@ -9,162 +9,161 @@
 @use "./components/Leaderboard/dashboard-layout";
 @use "./components/Leaderboard/leaderboard-layout";
 @use "./components/Leaderboard/player-layout";
-@use "./components/Leaderboard/playersection-layout";
 @use "./components/Leaderboard/reports-layout";
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  color-scheme: dark;
-  cursor: default;
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-  cursor: var(--cursor), auto;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color-scheme: dark;
+    cursor: default;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    cursor: var(--cursor), auto;
 }
 
 :root {
-  --foreground-color: #f0f0f0;
-  --muted-color: #aaa;
-  --muted-color-alt: #666;
-  --title-color: #f9b818;
+    --foreground-color: #f0f0f0;
+    --muted-color: #aaa;
+    --muted-color-alt: #666;
+    --title-color: #f9b818;
 
-  --character-background-color: #0d0d0d;
-  --character-background-panel-color: black;
-  --character-panel-color: #182229;
-  --character-title-color: #ffd100;
-  --character-attribute-color: #19ff19;
-  --character-info-color: #c4a12b;
-  --character-transmog-color: #e875e5;
-  --character-preview-color: rgba(0, 0, 0, 0.9);
-  --character-talent-info-color: #71d5ff;
+    --character-background-color: #0d0d0d;
+    --character-background-panel-color: black;
+    --character-panel-color: #182229;
+    --character-title-color: #ffd100;
+    --character-attribute-color: #19ff19;
+    --character-info-color: #c4a12b;
+    --character-transmog-color: #e875e5;
+    --character-preview-color: rgba(0, 0, 0, 0.9);
+    --character-talent-info-color: #71d5ff;
 
-  --gray-parse-color: #666666;
-  --green-parse-color: #1eff00;
-  --blue-parse-color: #0070ff;
-  --purple-parse-color: 163, 53, 238;
-  --orange-parse-color: 255, 128, 0;
-  --pink-parse-color: 226, 104, 168;
-  --yellow-parse-color: 229, 204, 128;
+    --gray-parse-color: #666666;
+    --green-parse-color: #1eff00;
+    --blue-parse-color: #0070ff;
+    --purple-parse-color: 163, 53, 238;
+    --orange-parse-color: 255, 128, 0;
+    --pink-parse-color: 226, 104, 168;
+    --yellow-parse-color: 229, 204, 128;
 
-  --death-knight-color: #e34a63;
-  --priest-color: #e8e6e3;
-  --mage-color: #4bc9eb;
-  --paladin-color: #f380b3;
-  --druid-color: #ff8821;
-  --shaman-color: #2f84c9;
-  --warlock-color: #9a5af4;
-  --rogue-color: #fff462;
-  --hunter-color: #acd475;
-  --warrior-color: #c69b6d;
-  --monk-color: #00ffb0;
+    --death-knight-color: #e34a63;
+    --priest-color: #e8e6e3;
+    --mage-color: #4bc9eb;
+    --paladin-color: #f380b3;
+    --druid-color: #ff8821;
+    --shaman-color: #2f84c9;
+    --warlock-color: #9a5af4;
+    --rogue-color: #fff462;
+    --hunter-color: #acd475;
+    --warrior-color: #c69b6d;
+    --monk-color: #00ffb0;
 
-  --rank-0-color: #ff3b30;
-  --rank-1-color: #ff9500;
-  --rank-2-color: #ffcc00;
-  --rank-3-color: #ffcc00;
-  --rank-4-color: #ffcc00;
-  --rank-5-color: #ff7dc1;
-  --rank-6-color: #34c759;
-  --rank-7-color: #3395fd;
-  --rank-8-color: #f0f0f0;
-  --rank-9-color: #aaa;
+    --rank-0-color: #ff3b30;
+    --rank-1-color: #ff9500;
+    --rank-2-color: #ffcc00;
+    --rank-3-color: #ffcc00;
+    --rank-4-color: #ffcc00;
+    --rank-5-color: #ff7dc1;
+    --rank-6-color: #34c759;
+    --rank-7-color: #3395fd;
+    --rank-8-color: #f0f0f0;
+    --rank-9-color: #aaa;
 
-  --quality-poor-color: #0070dd;
-  --quality-common-color: white;
-  --quality-uncommon-color: #1efa01;
-  --quality-rare-color: #006fdb;
-  --quality-epic-color: #862dc7;
-  --quality-legendary-color: #ec7702;
-  --quality-heirloom-color: #e1c87e;
+    --quality-poor-color: #0070dd;
+    --quality-common-color: white;
+    --quality-uncommon-color: #1efa01;
+    --quality-rare-color: #006fdb;
+    --quality-epic-color: #862dc7;
+    --quality-legendary-color: #ec7702;
+    --quality-heirloom-color: #e1c87e;
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: var(--foreground-color);
-  font-size: 16px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--foreground-color);
+    font-size: 16px;
 }
 
 a {
-  cursor: pointer;
-  cursor: var(--flight-cursor), auto;
-  text-decoration: none;
-  color: var(--foreground-color);
+    cursor: pointer;
+    cursor: var(--flight-cursor), auto;
+    text-decoration: none;
+    color: var(--foreground-color);
 }
 
 a * {
-  cursor: pointer;
-  cursor: var(--flight-cursor), auto;
+    cursor: pointer;
+    cursor: var(--flight-cursor), auto;
 }
 
 .text-input {
-  width: 130px;
-  padding: 0.375rem 0.75rem;
-  background: transparent;
-  color: var(--foreground-color);
-  box-shadow:
-    0 4px 6px -1px rgb(0 0 0 / 10%),
-    0 2px 4px -2px rgb(0 0 0 / 10%);
-  border: 0;
-  cursor: text;
-  cursor: var(--char-cursor), auto;
-
-  &:focus {
-    outline: none;
+    width: 130px;
+    padding: 0.375rem 0.75rem;
+    background: transparent;
+    color: var(--foreground-color);
+    box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 10%),
+        0 2px 4px -2px rgb(0 0 0 / 10%);
     border: 0;
-  }
+    cursor: text;
+    cursor: var(--char-cursor), auto;
+
+    &:focus {
+        outline: none;
+        border: 0;
+    }
 }
 
 .button {
-  position: relative;
-  display: flex;
-  color: var(--foreground-color);
-  box-shadow:
-    0 4px 6px -1px rgb(0 0 0 / 10%),
-    0 2px 4px -2px rgb(0 0 0 / 10%);
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  cursor: var(--engi-cursor), auto;
+    position: relative;
+    display: flex;
+    color: var(--foreground-color);
+    box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 10%),
+        0 2px 4px -2px rgb(0 0 0 / 10%);
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    cursor: var(--engi-cursor), auto;
 }
 
 .button:focus {
-  outline: none;
+    outline: none;
 }
 
 .button * {
-  cursor: pointer;
-  cursor: var(--engi-cursor), auto;
+    cursor: pointer;
+    cursor: var(--engi-cursor), auto;
 }
 
 .gray-parse {
-  color: var(--gray-parse-color);
+    color: var(--gray-parse-color);
 }
 
 .green-parse {
-  color: var(--green-parse-color);
+    color: var(--green-parse-color);
 }
 
 .blue-parse {
-  color: var(--blue-parse-color);
+    color: var(--blue-parse-color);
 }
 
 .purple-normal-parse {
-  color: rgb(var(--purple-parse-color));
+    color: rgb(var(--purple-parse-color));
 }
 
 .orange-normal-parse {
-  color: rgb(var(--orange-parse-color));
+    color: rgb(var(--orange-parse-color));
 }
 
 .pink-normal-parse {
-  color: rgb(var(--pink-parse-color));
+    color: rgb(var(--pink-parse-color));
 }
 
 .yellow-normal-parse {
-  color: rgb(var(--yellow-parse-color));
+    color: rgb(var(--yellow-parse-color));
 }
 
 button:disabled {
-  opacity: 0.35;
-  cursor: var(--cursor), auto;
+    opacity: 0.35;
+    cursor: var(--cursor), auto;
 }

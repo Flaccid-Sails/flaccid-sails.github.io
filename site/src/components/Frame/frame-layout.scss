@@ -1,43 +1,43 @@
 .frame-left {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 .frame-right {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 .frame-top {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 .frame-bottom {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 .frame-corner-top-left {
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  left: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .frame-corner-top-right {
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  right: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 .frame-corner-bottom-left {
-  pointer-events: none;
-  position: absolute;
-  bottom: 0;
-  left: 0;
+    pointer-events: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .frame-corner-bottom-right {
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  bottom: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    bottom: 0;
 }

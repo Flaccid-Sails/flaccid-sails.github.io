@@ -151,15 +151,12 @@ export function Leaderboard({
 
     };
 
-    const frameBackground = selectedTab === 'DASHBOARD'
-        ? `url(${backgroundImage})`
-        : `url(${Images.background})`;
-
     return (
         <section className='leaderboard-root'>
             <div className='leaderboard-toolbar'>
                 <div className='leaderboard-search'>
                     <TextInput placeholder='Search' text={searchQuery} onInput={search} />
+
                 </div>
                 <div className={`leaderboard-sort-controls${selectedTab === 'PLAYERS' ? '' : ' leaderboard-sort-controls-hidden'}`}
                     aria-hidden={selectedTab !== 'PLAYERS'}>
@@ -182,7 +179,7 @@ export function Leaderboard({
                 </div>
             </div>
             <Frame theme={theme} className='leaderboard-frame' contentClassName='leaderboard-frame-content'
-                style={{ backgroundImage: frameBackground }}>
+                style={{ backgroundImage: `url(${backgroundImage})` }}>
                 <ScrollView ref={setScrollParent} className='leaderboard-scroll'>
                     {selectedTab === 'PLAYERS' && <>
                         {!players && (
@@ -190,17 +187,14 @@ export function Leaderboard({
                         )}
                         {players && scrollParent && (
                             <Virtuoso customScrollParent={scrollParent}
-                                totalCount={players.length}
-                                defaultItemHeight={123}
+                                totalCount={Math.ceil(players.length / 2)}
                                 itemContent={(index) => {
-                                    const player = players[index];
-                                    return (
-                                        <Player key={player.name}
-                                            player={player}
-                                            maxLevel={maxLevel}
-                                            sortedCriteria={sortedCriteria}
-                                            zones={zones} />
-                                    );
+                                    const pair = players.slice(index * 2, index * 2 + 2);
+                                    return <div className='player-roster-pair'>
+                                        {pair.map(player => <Player key={`${player.realm}/${player.name}`}
+                                            player={player} maxLevel={maxLevel}
+                                            sortedCriteria={sortedCriteria} zones={zones} />)}
+                                    </div>;
                                 }}
                             />
                         )}

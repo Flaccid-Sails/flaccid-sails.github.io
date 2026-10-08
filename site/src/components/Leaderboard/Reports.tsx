@@ -125,12 +125,11 @@ export function Reports({ scrollParent, players: globalPlayers, reports: globalR
             </div>
             <Virtuoso customScrollParent={scrollParent}
                 totalCount={reports.length}
-                defaultItemHeight={56}
                 itemContent={(index) => {
                     const report = reports[index];
                     return (
                         <a key={report.code}
-                            className={'reports-row' + (index % 2 === 0 ? ' reports-row-striped' : '')}
+                            className='reports-row'
                             href={report.code.startsWith('demo-') ? undefined : `https://classic.warcraftlogs.com/reports/${report.code}`}
                             target='_blank'
                             rel="noreferrer"
@@ -154,7 +153,7 @@ export function Reports({ scrollParent, players: globalPlayers, reports: globalR
                                 hoverWithin={true}
                                 content={() => tooltip(report)}
                             >
-                                <img src={Images.alertButton} alt='alert' />
+                                <img src={Images.alertButton} alt='View report logs' />
                             </HoverElement>
                         </a>
                     );

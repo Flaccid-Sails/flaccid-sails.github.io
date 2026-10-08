@@ -1,234 +1,280 @@
 .player-log-tooltip {
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
-  border-radius: 0.25rem;
-  border-width: 2px;
-  border-style: solid;
-  border-style: solid;
-  border-color: #262626;
-  background-color: var(--character-preview-color);
-  padding: 0.5rem;
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    border: 2px solid #262626;
+    border-radius: 4px;
+    padding: 8px;
+    background: var(--character-preview-color);
+    box-shadow: 0 4px 8px #0007;
 }
 
 .player-log-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .player-log-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .player-log-icon {
-  height: 1.5rem;
-  width: 1.5rem;
+    width: 24px;
+    height: 24px;
 }
 
 .player-log-name {
-  flex: 1 1 0%;
+    flex: 1;
+}
+
+.player-log-score {
+    font-weight: 700;
+}
+
+.player-roster-pair {
+    display: grid;
+    gap: 8px;
+    padding: 5px 8px;
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .player-card {
-  display: flex;
-  flex-direction: column;
-  padding: 0.625rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) auto;
+    grid-template-areas:
+        "avatar identity actions"
+        "avatar metrics metrics";
+    align-content: center;
+    column-gap: 12px;
+    min-width: 0;
+    min-height: 110px;
+    padding: 14px 28px 16px;
+    background: url("/assets/UIFrame-Neutral-Background.webp") left top / 256px 256px repeat;
+    box-shadow: inset 0 0 22px #0009;
 }
 
-.player-card-layout {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  @media (width >= 48rem) {
-    flex-direction: row;
-  }
+.player-card::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border: 24px solid transparent;
+    border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp") 106 / 24px stretch;
+    content: "";
+    pointer-events: none;
 }
 
-.player-card-artwork {
-  display: none;
-  @media (width >= 48rem) {
-    display: contents;
-  }
+.player-card>* {
+    position: relative;
+    z-index: 1;
 }
 
-.player-equipment-button {
-  position: absolute;
-  top: 28px;
-  height: 23px;
-  width: 23px;
-  border-width: 0;
-  background-color: transparent;
-  cursor: pointer;
-  cursor: var(--engi-cursor), auto;
-}
-
-.player-talents-button {
-  position: absolute;
-  top: 13px;
-  height: 40px;
-  width: 20px;
-  border-width: 0;
-  background-color: transparent;
-  cursor: pointer;
-  cursor: var(--engi-cursor), auto;
-}
-
-.player-frame-left {
-  pointer-events: none;
-  position: absolute;
-  top: 12.14px;
-  left: 12px;
-  height: 80px;
-  width: 96px;
-}
-
-.player-frame-top {
-  pointer-events: none;
-  position: absolute;
-  top: 26.2px;
-  left: 108px;
-  height: 30px;
-}
-
-.player-frame-right-outer {
-  pointer-events: none;
-  position: absolute;
-  top: 26px;
-  height: 100px;
-  width: 44px;
-}
-
-.player-frame-right-middle {
-  pointer-events: none;
-  position: absolute;
-  top: 26px;
-  height: 100px;
-  width: 40px;
-}
-
-.player-frame-right-inner {
-  pointer-events: none;
-  position: absolute;
-  top: 26px;
-  height: 100px;
-  width: 20px;
-}
-
-.player-frame-bottom {
-  pointer-events: none;
-  position: absolute;
-  top: 94.5px;
-  left: 40px;
-  height: 5px;
-}
-
-.player-frame-lower-right {
-  pointer-events: none;
-  position: absolute;
-  top: 80px;
-  height: 100px;
-  width: 20px;
-}
-
-.player-frame-lower-left {
-  pointer-events: none;
-  position: absolute;
-  top: 80px;
-  height: 100px;
-  width: 20px;
-}
-
-.player-rank-border {
-  pointer-events: none;
-  position: absolute;
-  left: -0.5rem;
-  height: 100px;
-  width: 90px;
-}
-
-.player-rank-border-muted {
-  pointer-events: none;
-  position: absolute;
-  left: -0.5rem;
-  height: 100px;
-  width: 90px;
-  filter: grayscale(1);
-}
-
-.player-rank-glow {
-  pointer-events: none;
-  position: absolute;
-  height: 0.25rem;
-  width: 0.25rem;
-  border-radius: 9999px;
-  opacity: 0.8;
+.player-avatar-column {
+    grid-area: avatar;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    width: 64px;
 }
 
 .player-avatar-link {
-  margin: 0.625rem;
-  display: flex;
-  height: 83px;
-  width: 83px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    background: url("/assets/talent-window/headers/talents-main-ring-c60-2x.webp") center / 100% 100% no-repeat;
+}
+
+.player-avatar-link:focus-visible {
+    outline: 2px solid #ffd267;
+    outline-offset: 2px;
 }
 
 .player-avatar {
-  height: 76px;
-  width: 76px;
-  border-radius: 9999px;
-  border-width: 4px;
-  border-style: solid;
-  border-style: solid;
-  border-color: black;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .player-identity {
-  position: absolute;
-  top: 2rem;
-  left: 100px;
-  font-size: 1.5rem;
-  line-height: 2rem;
-  @media (width >= 48rem) {
-    top: -0.25rem;
-    left: 90px;
-  }
+    grid-area: identity;
+    align-self: end;
+    min-width: 0;
+}
+
+.player-name-line {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 3px 8px;
+    min-width: 0;
+}
+
+.player-name {
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 1.1;
+    text-overflow: ellipsis;
+    text-shadow: 1px 2px 3px #000;
+    white-space: nowrap;
 }
 
 .player-realm {
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  color: var(--muted-color);
+    color: #aaa098;
+    font-size: 13px;
+}
+
+.player-avatar-rank {
+    font-size: 12px;
+    line-height: 1.1;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.player-actions {
+    grid-area: actions;
+    display: flex;
+    align-self: end;
+    gap: 5px;
+}
+
+.player-action {
+    width: 30px;
+    height: 30px;
+    border: 0;
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: var(--engi-cursor), pointer;
+}
+
+.player-equipment-button {
+    background-size: 24px 25px;
+}
+
+.player-talents-button {
+    background-position: center -15px;
+    background-size: 22px auto;
+}
+
+.player-action:hover:not(:disabled),
+.player-action:focus-visible {
+    filter: brightness(1.25) drop-shadow(0 0 3px #d7a548);
+}
+
+.player-action:focus-visible {
+    outline: 1px solid #ffe6a2;
+    outline-offset: 2px;
 }
 
 .player-metrics {
-  margin-top: 25px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.25rem;
+    grid-area: metrics;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    min-width: 0;
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid #7f623947;
 }
 
-.player-sections {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: 0.75rem;
-  @media (width >= 48rem) {
-    gap: 0.75rem;
-  }
-}
-.player-log-score {
-  font-weight: 700;
+.player-stat {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    white-space: nowrap;
 }
 
-.player-rank {
-  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+.player-stat-label {
+    color: #b6a783;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.player-stat-value {
+    color: #f1eee8;
+    font-size: 17px;
+    line-height: 1.15;
+    text-shadow: 1px 1px 2px #000;
+}
+
+.player-score {
+    cursor: var(--flight-cursor), pointer;
+}
+
+@media (width >=1600px) {
+    .player-roster-pair {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (width < 600px) {
+    .player-roster-pair {
+        padding: 4px;
+    }
+
+    .player-card {
+        grid-template-columns: 52px minmax(0, 1fr) auto;
+        column-gap: 7px;
+        min-height: 94px;
+        padding: 8px 20px 9px;
+    }
+
+    .player-card::before {
+        border-width: 18px;
+        border-image-width: 18px;
+    }
+
+    .player-avatar-link {
+        width: 52px;
+        height: 52px;
+    }
+
+    .player-avatar-column {
+        width: 52px;
+    }
+
+    .player-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .player-name {
+        font-size: 19px;
+    }
+
+    .player-action {
+        width: 30px;
+        height: 30px;
+    }
+
+    .player-equipment-button {
+        background-size: 22px 22px;
+    }
+
+    .player-talents-button {
+        background-position: center -12px;
+        background-size: 20px auto;
+    }
+
+    .player-metrics {
+        gap: 3px 10px;
+        padding-top: 5px;
+    }
+
+    .player-stat-label {
+        font-size: 10px;
+    }
+
+    .player-stat-value {
+        font-size: 15px;
+    }
 }

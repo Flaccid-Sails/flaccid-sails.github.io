@@ -1,150 +1,147 @@
 .charts-frame {
-  display: none !important;
-  width: 380px;
-  min-width: 380px;
+    display: none !important;
+    width: 380px;
+    min-width: 380px;
 
-  @media (width >= 80rem) {
-    display: grid !important;
-  }
+    @media (width >=80rem) {
+        display: grid !important;
+    }
 }
 
 .charts-scroll {
-  height: calc(100dvh - 143px);
+    height: calc(100dvh - 143px);
 }
 
 .charts-content {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 10px;
 }
 
 .wow-chart-panel {
-  width: 100%;
-  min-width: 0;
-  padding: 5px 3px 7px;
-  border: 13px solid transparent;
-  border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp")
-    26 / 13px stretch;
-  background: linear-gradient(180deg, #21170fee, #100b08f2);
-  box-shadow: inset 0 0 18px #000b;
+    width: 100%;
+    min-width: 0;
+    padding: 5px 3px 7px;
+    border: 13px solid transparent;
+    border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp") 26 / 13px stretch;
+    background: linear-gradient(180deg, #21170fee, #100b08f2);
+    box-shadow: inset 0 0 18px #000b;
 }
 
 .wow-chart-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 6px;
-  padding: 0 4px 7px;
-  border-bottom: 1px solid #72552b;
-  box-shadow: 0 1px 0 #0b0805;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 0 4px 7px;
+    border-bottom: 1px solid #72552b;
+    box-shadow: 0 1px 0 #0b0805;
 }
 
 .wow-chart-heading h2 {
-  min-width: 0;
-  color: #f4d78f;
-  font-size: 18px;
-  font-weight: normal;
-  line-height: 1.2;
-  text-shadow: 1px 2px 2px #000;
+    min-width: 0;
+    color: #f4d78f;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: 1.2;
+    text-shadow: 1px 2px 2px #000;
 }
 
 .wow-chart-heading span {
-  flex: none;
-  color: #c1ad87;
-  font-size: 12px;
-  white-space: nowrap;
+    flex: none;
+    color: #c1ad87;
+    font-size: 12px;
+    white-space: nowrap;
 }
 
 .wow-chart-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding-top: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding-top: 7px;
 }
 
 .wow-chart-row {
-  display: grid;
-  grid-template-columns: 25px minmax(62px, 86px) minmax(30px, 1fr) minmax(22px, auto);
-  align-items: center;
-  gap: 5px;
-  min-height: 30px;
-  padding: 2px 3px;
+    display: grid;
+    grid-template-columns: 25px minmax(62px, 86px) minmax(30px, 1fr) minmax(22px, auto);
+    align-items: center;
+    gap: 5px;
+    min-height: 30px;
+    padding: 2px 3px;
 }
 
 .wow-chart-row:hover {
-  background: #a67d3029;
+    background: #a67d3029;
 }
 
 .wow-chart-row-empty {
-  opacity: 0.45;
+    opacity: 0.45;
 }
 
 .wow-chart-icon {
-  display: block;
-  width: 25px;
-  height: 25px;
-  filter: drop-shadow(0 1px 2px #000);
+    display: block;
+    width: 25px;
+    height: 25px;
+    filter: drop-shadow(0 1px 2px #000);
 }
 
 .wow-chart-label {
-  overflow: hidden;
-  color: var(--chart-color);
-  font-size: 14px;
-  text-overflow: ellipsis;
-  text-shadow: 1px 1px 2px #000;
-  white-space: nowrap;
+    overflow: hidden;
+    color: var(--chart-color);
+    font-size: 14px;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 2px #000;
+    white-space: nowrap;
 }
 
 .wow-chart-track {
-  height: 13px;
-  overflow: hidden;
-  border: 1px solid #645036;
-  border-radius: 2px;
-  background: linear-gradient(#050403, #261a10 50%, #100b07);
-  box-shadow: inset 0 1px 3px #000, 0 1px 0 #4c3720;
+    height: 13px;
+    overflow: hidden;
+    border: 1px solid #645036;
+    border-radius: 2px;
+    background: linear-gradient(#050403, #261a10 50%, #100b07);
+    box-shadow: inset 0 1px 3px #000, 0 1px 0 #4c3720;
 }
 
 .wow-chart-row:hover .wow-chart-track {
-  border-color: #b38c4c;
+    border-color: #b38c4c;
 }
 
 .wow-chart-fill {
-  position: relative;
-  isolation: isolate;
-  display: block;
-  height: 100%;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--chart-color) 68%, white),
-    var(--chart-color) 45%,
-    color-mix(in srgb, var(--chart-color) 55%, black)
-  );
-  box-shadow: inset 0 1px #ffffff55, 0 0 5px var(--chart-color);
+    position: relative;
+    isolation: isolate;
+    display: block;
+    height: 100%;
+    background: linear-gradient(180deg,
+            color-mix(in srgb, var(--chart-color) 68%, white),
+            var(--chart-color) 45%,
+            color-mix(in srgb, var(--chart-color) 55%, black));
+    box-shadow: inset 0 1px #ffffff55, 0 0 5px var(--chart-color);
 }
 
 .wow-chart-fill::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url("/assets/UI-Background-Marble.webp") center / 96px 96px, #777;
-  background-blend-mode: screen;
-  mix-blend-mode: overlay;
-  filter: contrast(1.5);
-  pointer-events: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("/assets/UI-Background-Marble.webp") center / 96px 96px, #777;
+    background-blend-mode: screen;
+    mix-blend-mode: overlay;
+    filter: contrast(1.5);
+    pointer-events: none;
 }
 
 .wow-chart-value {
-  color: #f1deb2;
-  font-size: 14px;
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-  text-shadow: 1px 1px 2px #000;
+    color: #f1deb2;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    text-shadow: 1px 1px 2px #000;
 }
 
 .wow-chart-empty {
-  padding: 10px 4px;
-  color: #b7a887;
-  font-size: 14px;
-  text-align: center;
+    padding: 10px 4px;
+    color: #b7a887;
+    font-size: 14px;
+    text-align: center;
 }

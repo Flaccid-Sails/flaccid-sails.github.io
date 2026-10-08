@@ -1,114 +1,116 @@
 .dashboard-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding-inline: 0.25rem;
-  padding-block: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding-inline: 0.25rem;
+    padding-block: 0.75rem;
 }
 
 .dashboard-summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 205px), 1fr));
-  gap: 10px;
-  width: min(100%, 960px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 205px), 1fr));
+    gap: 10px;
+    width: min(100%, 960px);
 }
 
 .dashboard-stat-panel {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  min-height: 124px;
-  padding: 7px 10px;
-  border: 13px solid transparent;
-  border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp")
-    26 / 13px stretch;
-  background: linear-gradient(180deg, #21170fee, #100b08f2);
-  box-shadow: inset 0 0 18px #000b;
-  text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 124px;
+    padding: 7px 10px;
+    border: 13px solid transparent;
+    border-image: url("/assets/character-window/stats-panel/common-insideframe-c60-2x.webp") 26 / 13px stretch;
+    background: linear-gradient(180deg, #21170fee, #100b08f2);
+    box-shadow: inset 0 0 18px #000b;
+    text-align: center;
 }
 
 .dashboard-stat-panel::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  left: 10px;
-  height: 1px;
-  background: #72552b;
-  box-shadow: 0 1px 0 #0b0805;
-  pointer-events: none;
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    left: 10px;
+    height: 1px;
+    background: #72552b;
+    box-shadow: 0 1px 0 #0b0805;
+    pointer-events: none;
 }
 
 .dashboard-stat-label,
 .dashboard-stat-value {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  min-height: 0;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
 }
 
 .dashboard-stat-label {
-  color: #f4d78f;
-  font-size: 17px;
-  line-height: 1.2;
-  text-shadow: 1px 2px 2px #000;
+    color: #f4d78f;
+    font-size: 17px;
+    line-height: 1.2;
+    text-shadow: 1px 2px 2px #000;
 }
 
 .dashboard-stat-value {
-  overflow: hidden;
-  color: #f1deb2;
-  font-size: 23px;
-  line-height: 1.2;
-  text-overflow: ellipsis;
-  text-shadow: 1px 2px 2px #000;
-  white-space: nowrap;
+    overflow: hidden;
+    color: #f1deb2;
+    font-size: 23px;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    text-shadow: 1px 2px 2px #000;
+    white-space: nowrap;
 }
 
 .dashboard-charts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
-  gap: 12px;
-  width: 100%;
-  @media (width >= 80rem) {
-    display: none;
-  }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+    gap: 12px;
+    width: 100%;
+
+    @media (width >=80rem) {
+        display: none;
+    }
 }
 
 .dashboard-heading {
-  margin: 0.5rem;
+    margin: 0.5rem;
 }
 
 .dashboard-boss-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  @media (width >= 48rem) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+
+    @media (width >=48rem) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 .dashboard-boss-title {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  @media (width >= 48rem) {
-    grid-column: 1 / -1;
-  }
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    @media (width >=48rem) {
+        grid-column: 1 / -1;
+    }
 }
 
 .dashboard-boss-icon {
-  height: 3rem;
-  width: 3rem;
-  border-radius: 0.25rem;
-  filter: drop-shadow(0 2px 3px #000e) drop-shadow(0 4px 5px #0009);
+    height: 3rem;
+    width: 3rem;
+    border-radius: 0.25rem;
+    filter: drop-shadow(0 2px 3px #000e) drop-shadow(0 4px 5px #0009);
 }
 
 .dashboard-boss-name {
-  color: var(--title-color);
+    color: var(--title-color);
 }

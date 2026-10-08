@@ -1,81 +1,80 @@
 .leaderboard-sort-button {
-  min-width: 90px;
+    min-width: 90px;
 }
 
 .leaderboard-sort-arrow {
-  position: absolute;
-  top: 50%;
-  right: -14px;
-  width: 8px;
-  height: 8px;
-  object-fit: none;
-  object-position: left center;
-  transform: translateY(-50%);
+    position: absolute;
+    top: 50%;
+    right: -14px;
+    width: 8px;
+    height: 8px;
+    object-fit: none;
+    object-position: left center;
+    transform: translateY(-50%);
 }
 
 .leaderboard-sort-arrow.ascending {
-  transform: translateY(-50%) rotate(180deg);
+    transform: translateY(-50%) rotate(180deg);
 }
 
 .leaderboard-bottom-tabs {
-  display: flex;
-  gap: 6px;
-  margin: -1px 0 0 clamp(8px, 4vw, 32px);
+    display: flex;
+    gap: 6px;
+    margin: -1px 0 0 clamp(8px, 4vw, 32px);
 }
 
 .leaderboard-bottom-tab {
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(86px, 28vw, 116px);
-  height: 30px;
-  padding: 0 5px 2px;
-  border: 0;
-  color: #aca69b;
-  font-size: 16px;
-  text-shadow: 1px 1px 2px #000;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(86px, 28vw, 116px);
+    height: 30px;
+    padding: 0 5px 2px;
+    border: 0;
+    color: #aca69b;
+    font-size: 16px;
+    text-shadow: 1px 1px 2px #000;
 }
 
 .leaderboard-bottom-tab::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: url("/assets/talent-window/tabs/talents-tabs-c60-2x.webp") center /
-    100% 100% no-repeat;
-  transform: rotate(180deg);
-  pointer-events: none;
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: url("/assets/talent-window/tabs/talents-tabs-c60-2x.webp") center / 100% 100% no-repeat;
+    transform: rotate(180deg);
+    pointer-events: none;
 }
 
 .leaderboard-bottom-tab.active {
-  color: #fff4d5;
+    color: #fff4d5;
 }
 
 .leaderboard-bottom-tab.active::before {
-  background-image: url("/assets/talent-window/tabs/talents-tabs-glow-c60-2x.webp");
+    background-image: url("/assets/talent-window/tabs/talents-tabs-glow-c60-2x.webp");
 }
 
 .leaderboard-bottom-tab:hover:not(.active) {
-  color: #fff4d5;
+    color: #fff4d5;
 }
 
 @media (max-width: 450px) {
-  .leaderboard-sort-controls {
-    gap: 4px;
-  }
+    .leaderboard-sort-controls {
+        gap: 4px;
+    }
 
-  .leaderboard-bottom-tab {
-    width: clamp(82px, 25vw, 100px);
-    font-size: 14px;
-  }
+    .leaderboard-bottom-tab {
+        width: clamp(82px, 25vw, 100px);
+        font-size: 14px;
+    }
 
-  .leaderboard-sort-button {
-    min-width: 76px;
-    padding-inline: 0;
-    border-width: 0 12px;
-    border-image-width: 0 12px;
-    font-size: 13px;
-  }
+    .leaderboard-sort-button {
+        min-width: 76px;
+        padding-inline: 0;
+        border-width: 0 12px;
+        border-image-width: 0 12px;
+        font-size: 13px;
+    }
 }

@@ -53,10 +53,10 @@ export function App() {
     }, []);
 
     useEffect(() => {
-        try { setTheme((localStorage.getItem('flaccid-sails:theme') as Theme) || 'HORDE'); } catch {}
+        try { setTheme((localStorage.getItem('flaccid-sails:theme') as Theme) || 'HORDE'); } catch { }
         return EventEmitter.subscribe('CHANGE_THEME', theme => {
             setTheme(theme);
-            try { localStorage.setItem('flaccid-sails:theme', theme); } catch {}
+            try { localStorage.setItem('flaccid-sails:theme', theme); } catch { }
         });
     }, []);
 

@@ -1,19 +1,10 @@
 import { PlayerDTO } from '@src/models/PlayerDTO';
+import { ZoneDTO } from '@src/models/ZoneDTO';
 import { calculateTimeDifference, colorParse, sortComparers, toRoman, transformParse } from '@src/utils/helpers';
 import { Images } from '@src/utils/images';
-import { CSSProperties, ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { PlayerSection } from './PlayerSection';
+import { ReactNode } from 'react';
 import { EventEmitter } from '@src/utils/event-emitter';
 import { HoverElement } from '../Popups/HoverElement';
-import { ZoneDTO } from '@src/models/ZoneDTO';
-
-export interface Section {
-    title: string;
-    style: CSSProperties;
-    className?: string;
-    content: ReactNode;
-    hideIntermediate?: boolean;
-}
 
 interface Props {
     player: PlayerDTO;
@@ -23,74 +14,44 @@ interface Props {
 }
 
 export function Player({ player, maxLevel, sortedCriteria, zones }: Props): ReactNode {
-    const [width, setWidth] = useState<number>(0);
-
-    const sectionsRef = useRef<HTMLDivElement>(null);
-    const resizeTimeout = useRef<NodeJS.Timeout>(undefined);
-
     const lastLogin = calculateTimeDifference(player.lastLogin, true);
     const classSlug = player.class.toLowerCase().replaceAll(' ', '-');
     const realmSlug = player.realm.toLowerCase().replaceAll(' ', '-');
     const href = player.realm === 'Preview' ? undefined : `https://classic.warcraftlogs.com/character/eu/${realmSlug}/${player.name.toLowerCase()}`;
-
-    const title = useMemo(() => player.rank === 0 ? 'Guild master' : player.rank <= 2 ? 'Captain' : player.class, [player]);
-
-    useEffect(() => {
-        function resize(): void {
-            if (resizeTimeout.current) {
-                clearTimeout(resizeTimeout.current);
-                resizeTimeout.current = undefined;
-            }
-
-            resizeTimeout.current = setTimeout(() => {
-                resizeTimeout.current = undefined;
-                if (sectionsRef.current) {
-                    setWidth(sectionsRef.current.clientWidth);
-                }
-            }, 100);
-        }
-
-        if (sectionsRef.current) {
-            setWidth(sectionsRef.current.clientWidth);
-            const observer = new ResizeObserver(resize);
-            observer.observe(sectionsRef.current);
-            return () => observer.disconnect();
-        }
-
-        return () => { };
-    }, []);
+    const rankTitle = player.rank === 0 ? 'Guild master' : player.rank <= 2 ? 'Captain' : player.class;
+    const scores = [
+        { type: 'DPS' as const, label: 'DPS', value: player.dps },
+        { type: 'HEAL' as const, label: 'Heal', value: player.healer },
+        { type: 'TANK' as const, label: 'Tank DPS', value: player.tank },
+    ].filter(score => player.level === maxLevel && score.value !== undefined && score.value !== -1 && score.value !== 0);
+    const showLastLogin = player.itemLevel !== -1 && lastLogin !== 'Today' && (sortedCriteria === 'LOGGED IN' || !scores.length);
+    const showProgress = player.level === maxLevel && player.difficulty !== undefined && player.difficulty !== -1 && scores.length > 0;
+    const canViewEquipment = player.level === maxLevel;
+    const canViewTalents = player.level === 60;
 
     const openPlayerCharacter = (): void => {
-        if (player.level !== maxLevel) {
-            alert('Only available for max level players');
-            return;
-        }
-
+        if (!canViewEquipment) return;
         EventEmitter.emit('OPEN_CHARACTER_DIALOG', player);
     };
 
     const openPlayerTalents = (): void => {
-        if (player.level !== 60) return;
+        if (!canViewTalents) return;
         EventEmitter.emit('OPEN_SPECIALIZATIONS_DIALOG', player);
     };
 
-    const tooltip = (type: 'DPS' | 'HEAL' | 'TANK'): React.ReactNode => (
+    const tooltip = (type: 'DPS' | 'HEAL' | 'TANK'): ReactNode => (
         <div className='player-log-tooltip'>
             <div className='player-log-list'>
-                {zones?.flatMap(f => f.bosses).map(boss => {
-                    const playerBoss = player.bosses?.find(b => b.bossId === boss.id);
-                    const log = type === 'DPS' ? playerBoss?.dps
-                        : type === 'HEAL'
-                            ? playerBoss?.healer
-                            : playerBoss?.tank;
-
+                {zones?.flatMap(zone => zone.bosses).map(boss => {
+                    const playerBoss = player.bosses?.find(log => log.bossId === boss.id);
+                    const log = type === 'DPS' ? playerBoss?.dps : type === 'HEAL' ? playerBoss?.healer : playerBoss?.tank;
                     return playerBoss && log !== undefined && (
                         <div key={boss.id} className='player-log-row'>
                             <img className='player-log-icon'
                                 src={boss.id < 0 ? Images.wowIcon : `https://assets.rpglogs.com/img/warcraft/bosses/${boss.id}-icon.jpg`}
-                                alt='Boss' />
+                                alt='' />
                             <p className='player-log-name'>{boss.name}</p>
-                            <p className={`${colorParse(log ?? 0)} player-log-score`}>
+                            <p className={`${colorParse(log)} player-log-score`}>
                                 {log && log !== -1 ? log.toFixed(0) : '-'}
                             </p>
                         </div>
@@ -100,157 +61,63 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
         </div>
     );
 
-    const anyLogs = (player.dps && player.dps !== -1)
-        || (player.healer && player.healer !== -1)
-        || (player.tank && player.tank !== -1);
-
-    const sections: (boolean | number | null | undefined | Section)[] = [
-        {
-            title: 'RANK',
-            style: { color: `var(--rank-${player.rank}-color)`, width: 40 },
-            className: 'player-rank',
-            content: toRoman(player.rank),
-        },
-        player.level !== maxLevel && {
-            title: 'LEVEL',
-            style: { width: 45 },
-            content: player.level,
-        },
-        player.itemLevel !== -1 && {
-            title: 'ITEM LEVEL',
-            style: { width: 60 },
-            content: player.itemLevel,
-        },
-        player.itemLevel !== -1 && lastLogin !== 'Today' && (sortedCriteria === 'LOGGED IN' || !anyLogs) && {
-            title: 'LAST LOGIN',
-            style: { width: 100 },
-            content: lastLogin,
-        },
-        player.level === maxLevel && player.dps && player.dps !== -1 && {
-            title: 'DPS',
-            style: { width: 70 },
-            content: (
-                <HoverElement className={colorParse(player.dps)}
-                    side='LEFT'
-                    content={() => tooltip('DPS')}
-                >
-                    {transformParse(player.dps)}
-                </HoverElement>
-            ),
-        },
-        player.level === maxLevel && player.healer && player.healer !== -1 && {
-            title: 'HEAL',
-            style: { width: 70 },
-            content: (
-                <HoverElement className={colorParse(player.healer)}
-                    side='LEFT'
-                    content={() => tooltip('HEAL')}
-                >
-                    {transformParse(player.healer)}
-                </HoverElement>
-            ),
-        },
-        player.level === maxLevel && player.tank && player.tank !== -1 && {
-            title: 'TANK DPS',
-            style: { width: 70 },
-            content: (
-                <HoverElement className={colorParse(player.tank)}
-                    side='LEFT'
-                    content={() => tooltip('TANK')}
-                >
-                    {transformParse(player.tank)}
-                </HoverElement>
-            ),
-        },
-        player.level === maxLevel && player.difficulty && player.difficulty !== -1 && Math.max(player.dps ?? -1, player.healer ?? -1, player.tank ?? -1) !== -1 && {
-            title: 'PROGRESS',
-            style: { width: 80 },
-            content: `${player.killedBosses ?? 0} Bosses`,
-        }
-    ];
+    const portrait = <img className='player-avatar' src={player.image || Images.wowIcon} alt={`${player.class} portrait`} />;
 
     return (
-        <div className='player-card'>
-            <div className='player-card-layout'>
-                <div className='player-card-artwork'>
-                    <button className='player-equipment-button'
-                        style={{ backgroundImage: `url(${Images.gearIcon})`, backgroundSize: 23, left: width + 120 }}
-                        title='Check equipment'
-                        onClick={openPlayerCharacter} aria-label={`View ${player.name}'s gear`} disabled={player.level !== maxLevel} />
+        <article className='player-card'>
+            <div className='player-avatar-column'>
+                {href ? (
+                    <a className='player-avatar-link' href={href} target='_blank' rel='noreferrer'
+                        aria-label={`View ${player.name} on Warcraft Logs`}>{portrait}</a>
+                ) : <span className='player-avatar-link'>{portrait}</span>}
+                <span className='player-avatar-rank' style={{ color: `var(--rank-${player.rank}-color)` }}>
+                    Rank {toRoman(player.rank)}
+                </span>
+            </div>
 
-                    <button className='player-talents-button'
-                        style={{ backgroundImage: `url(${Images.talentsIcon})`, backgroundSize: 20, left: width + 144 }}
-                        title='Check talents'
-                        onClick={openPlayerTalents} aria-label={`View ${player.class} talents`} disabled={player.level !== 60} />
-
-                    <div className='player-frame-left'
-                        style={{ backgroundImage: `url(${Images.frame})`, backgroundSize: 210 }} />
-                    <div className='player-frame-top'
-                        style={{ backgroundImage: `url(${Images.frameLines})`, backgroundSize: 210, width: width }} />
-                    <div className='player-frame-right-outer'
-                        style={{ backgroundImage: `url(${Images.frame})`, backgroundSize: 210, backgroundPositionX: 100, left: width + 96 }} />
-                    <div className='player-frame-right-middle'
-                        style={{ backgroundImage: `url(${Images.frame})`, backgroundSize: 210, backgroundPositionX: 96, left: width + 123 }} />
-                    <div className='player-frame-right-inner'
-                        style={{ backgroundImage: `url(${Images.frame})`, backgroundSize: 210, backgroundPositionX: 68, left: width + 148 }} />
-
-                    <div className='player-frame-bottom'
-                        style={{ backgroundImage: `url(${Images.frameLines})`, backgroundSize: 210, backgroundPositionY: 22, width: width + 110 }} />
-                    <div className='player-frame-lower-right'
-                        style={{ backgroundImage: `url(${Images.frame})`, backgroundSize: 210, backgroundPositionX: 49, left: width + 147 }} />
-                    <div className='player-frame-lower-left'
-                        style={{ backgroundImage: `url(${Images.frame})`, backgroundSize: 210, backgroundPositionX: 29, left: 20 }} />
-
-                    {player.rank <= 5 && (
-                        <div className='player-rank-border'
-                            style={{ backgroundImage: `url(${Images.specialRankBorder})`, backgroundSize: 110 }} />
-                    )}
-
-                    {player.rank >= 6 && player.rank <= 7 && (
-                        <div className='player-rank-border-muted'
-                            style={{ backgroundImage: `url(${Images.specialRankBorder})`, backgroundSize: 110 }} />
-                    )}
-
-                    {player.rank <= 4 && (
-                        <div className='player-rank-glow'
-                            style={{
-                                top: 16.4,
-                                left: 72,
-                                background: 'radial-gradient(circle at 35% 35%, #ffe6f7, #ff66cc 55%, #b3006b)',
-                                boxShadow: '0 0 6px 2px rgba(255, 102, 204, 0.8)',
-                            }} />
-                    )}
-                </div>
-
-                <a className='player-avatar-link'
-                    title='Open WC logs for user'
-                    href={href}
-                    target='_blank'
-                    rel="noreferrer"
-                >
-                    <img className='player-avatar' src={player.image || Images.wowIcon} alt='test' />
-                </a>
-                <p style={{ color: `var(--${classSlug}-color)` }}
-                    className='player-identity'
-                    title={title}
-                >
-                    {player.name}
-                    {' '}
-                    <span className='player-realm'>
-                        {player.realm}
-                    </span>
-                </p>
-                <div className='player-metrics'>
-                    <div ref={sectionsRef} className='player-sections'>
-                        {sections.filter(Boolean).map((f, i) => (
-                            <PlayerSection key={(f as Section).title}
-                                section={f as Section}
-                                prevSection={sections[i - 1] as Section}
-                                isFirst={i === 0} />
-                        ))}
-                    </div>
+            <div className='player-identity'>
+                <div className='player-name-line'>
+                    <strong className='player-name' style={{ color: `var(--${classSlug}-color)` }} title={rankTitle}>{player.name}</strong>
+                    <span className='player-realm'>{player.realm}</span>
                 </div>
             </div>
-        </div>
+
+            {(canViewEquipment || canViewTalents) && <div className='player-actions'>
+                {canViewEquipment && <button type='button' className='player-action player-equipment-button'
+                    style={{ backgroundImage: `url(${Images.gearIcon})` }}
+                    title='Check equipment' onClick={openPlayerCharacter}
+                    aria-label={`View ${player.name}'s gear`} />}
+                {canViewTalents && <button type='button' className='player-action player-talents-button'
+                    style={{ backgroundImage: `url(${Images.talentsIcon})` }}
+                    title='Check talents' onClick={openPlayerTalents}
+                    aria-label={`View ${player.name}'s talents`} />}
+            </div>}
+
+            <div className='player-metrics'>
+                {player.level !== maxLevel && <div className='player-stat'>
+                    <span className='player-stat-label'>Level</span>
+                    <span className='player-stat-value'>{player.level}</span>
+                </div>}
+                {player.itemLevel !== -1 && <div className='player-stat'>
+                    <span className='player-stat-label'>Item level</span>
+                    <span className='player-stat-value'>{player.itemLevel}</span>
+                </div>}
+                {scores.map(score => <div key={score.type} className='player-stat'>
+                    <span className='player-stat-label'>{score.label}</span>
+                    <HoverElement className={`player-stat-value player-score ${colorParse(score.value!)}`}
+                        side='LEFT' content={() => tooltip(score.type)}>
+                        {transformParse(score.value!)}
+                    </HoverElement>
+                </div>)}
+                {showProgress && <div className='player-stat'>
+                    <span className='player-stat-label'>Progress</span>
+                    <span className='player-stat-value'>{player.killedBosses ?? 0} bosses</span>
+                </div>}
+                {showLastLogin && <div className='player-stat'>
+                    <span className='player-stat-label'>Last login</span>
+                    <span className='player-stat-value'>{lastLogin}</span>
+                </div>}
+            </div>
+        </article>
     );
 }

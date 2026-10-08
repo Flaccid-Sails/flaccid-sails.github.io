@@ -15,7 +15,7 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
                     type: 'CACHE_LOADED_IMAGES',
                     urls: performance.getEntriesByType('resource').map(entry => entry.name),
                 });
-            }).catch(() => {});
+            }).catch(() => { });
     });
 }
 

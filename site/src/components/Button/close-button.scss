@@ -1,24 +1,23 @@
 .wow-close-button {
-  width: 32px;
-  height: 32px;
-  flex: 0 0 32px;
-  padding: 0;
-  border: 0;
-  background: url("/assets/talent-window/window-frame/redbutton-exit-c60-2x.webp")
-    center / contain no-repeat;
-  cursor: var(--engi-cursor), pointer;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    padding: 0;
+    border: 0;
+    background: url("/assets/talent-window/window-frame/redbutton-exit-c60-2x.webp") center / contain no-repeat;
+    cursor: var(--engi-cursor), pointer;
 }
 
 .wow-close-button:hover,
 .wow-close-button:focus-visible {
-  filter: brightness(1.3);
+    filter: brightness(1.3);
 }
 
 .wow-close-button:focus-visible {
-  outline: 1px solid var(--title-color);
-  outline-offset: 2px;
+    outline: 1px solid var(--title-color);
+    outline-offset: 2px;
 }
 
 .wow-close-button:active {
-  background-image: url("/assets/talent-window/window-frame/redbutton-exit-pressed-c60-2x.webp");
+    background-image: url("/assets/talent-window/window-frame/redbutton-exit-pressed-c60-2x.webp");
 }

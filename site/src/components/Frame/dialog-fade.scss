@@ -1,33 +1,36 @@
 .dialog-fade {
-  animation: dialog-fade-in 150ms ease-out both;
+    animation: dialog-fade-in 150ms ease-out both;
 }
 
 .dialog-fade.dialog-fade-out {
-  animation: dialog-fade-out 150ms ease-in both;
-  pointer-events: none;
+    animation: dialog-fade-out 150ms ease-in both;
+    pointer-events: none;
 }
 
 @keyframes dialog-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes dialog-fade-out {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dialog-fade,
-  .dialog-fade.dialog-fade-out {
-    animation-duration: 1ms;
-  }
+
+    .dialog-fade,
+    .dialog-fade.dialog-fade-out {
+        animation-duration: 1ms;
+    }
 }
