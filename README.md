@@ -21,7 +21,7 @@ npm run preview
 
 ## Talent updates
 
-Source: [Talents Forever](https://talentsforever.com/), [public JSON](https://talentsforever.com/data.json), by Chris Baldwin. The source explicitly licenses its export under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Game text and artwork belong to Blizzard Entertainment.
+Source: [Talents Forever](https://talentsforever.com/), [public JSON](https://talentsforever.com/data.json), by Chris Baldwin. Game text and artwork belong to Blizzard Entertainment.
 
 ## When Forever launches
 
