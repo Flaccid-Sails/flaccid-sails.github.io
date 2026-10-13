@@ -17,7 +17,14 @@ async function writeDataset(directory, data) {
 }
 const epoch = Date.parse('2026-10-07T12:00:00Z');
 const classes = Object.keys(catalog.classes);
-const names = ['Saltbeard', 'Dawnwatch', 'Reefrunner', 'Blackwake', 'Tidelight', 'Stormcall', 'Frostsail', 'Duskweaver', 'Wildgrove', 'Ironwake', 'Sunward', 'Gullwatch', 'Nightwake', 'Pearlkeeper', 'Wavecaller', 'Starwake', 'Ashbinder', 'Oakheart', 'Deckhand', 'Harborlight', 'Littlefin', 'Newtide', 'Seabreeze', 'Sprout'];
+const names = [
+    'Bram Saltbeard', 'Anne Goldsail', 'Finn Sharktooth', 'Vera Cutlass',
+    'Pearl Blacktide', 'Silas Stormsail', 'Nell Frosthook', 'Marlow Dreadwake',
+    'Ivy Rumrunner', 'Flint Ironhook', 'Grace Goldtooth', 'Wren Gullwatch',
+    'Jack Nightblade', 'Bonnie Pearlboot', 'Ronan Keelhaul', 'Ruby Cannonfire',
+    'Dorian Blackpowder', 'Rowan Shipwreck', 'Pip Deckhand', 'Cora Crowmast',
+    'Niko Barnacle', 'Isla Plunder', 'Theo Seaboot', 'Fern Rumswig',
+];
 const players = names.map((name, i) => ({
     name, realm: 'Preview', class: classes[i % classes.length], level: i < 18 ? 60 : 16 + (i - 18) * 7,
     rank: i === 0 ? 0 : i < 4 ? 2 : i < 18 ? 4 : 7,
@@ -37,10 +44,11 @@ for (const [index, player] of players.entries()) {
 }
 const bosses = [{ id: -1, name: 'The Reef Guardian (demo)' }, { id: -2, name: 'Admiral Blackwake (demo)' }, { id: -3, name: 'The Drowned King (demo)' }];
 const zones = [{ id: -1, name: 'Demo raid', bosses }];
+const isHealer = player => ['Paladin', 'Priest', 'Shaman', 'Druid'].includes(player.class);
 const logs = Object.fromEntries(players.filter(p => p.level === 60).map((p, i) => [`preview-${p.name}`, {
-    dps: 55 + i * 2, healer: i % 3 === 1 ? 65 + i : undefined,
+    dps: 55 + i * 2, healer: isHealer(p) ? 65 + i : undefined,
     tank: i % 9 === 0 ? 85 + i / 2 : undefined, difficulty: 3, killedBosses: 3,
-    bosses: bosses.map(b => ({ bossId: b.id, difficulty: 3, dps: 60 + i * 2, healer: i % 3 === 1 ? 65 + i : undefined })),
+    bosses: bosses.map(b => ({ bossId: b.id, difficulty: 3, dps: 60 + i * 2, healer: isHealer(p) ? 65 + i : undefined })),
 }]));
 const reportPlayers = players.filter(p => p.level === 60);
 const reports = [0, 1, 2].map(i => ({
@@ -48,9 +56,9 @@ const reports = [0, 1, 2].map(i => ({
     endTime: epoch - i * 86_400_000, zoneId: -1,
     bosses: bosses.map(b => ({
         id: b.id, difficulty: 3,
-        dps: reportPlayers.filter((_, n) => n % 3 !== 1 && n % 9 !== 0).map((p, n) => ({ name: p.name, realm: p.realm, log: 65 + n * 2 })),
+        dps: reportPlayers.filter((p, n) => !isHealer(p) && n % 9 !== 0).map((p, n) => ({ name: p.name, realm: p.realm, log: 65 + n * 2 })),
         tanks: reportPlayers.filter((_, n) => n % 9 === 0).map(p => ({ name: p.name, realm: p.realm, log: 85 })),
-        healers: reportPlayers.filter((_, n) => n % 3 === 1).map((p, n) => ({ name: p.name, realm: p.realm, log: 78 + n * 2 })),
+        healers: reportPlayers.filter(isHealer).map((p, n) => ({ name: p.name, realm: p.realm, log: 78 + n * 2 })),
     })),
 }));
 const slots = ['HEAD', 'NECK', 'SHOULDER', 'BACK', 'CHEST', 'WRIST', 'HANDS', 'WAIST', 'LEGS', 'FEET', 'FINGER_1', 'FINGER_2', 'TRINKET_1', 'TRINKET_2', 'MAIN_HAND', 'OFF_HAND'];

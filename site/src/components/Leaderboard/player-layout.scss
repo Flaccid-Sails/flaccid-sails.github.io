@@ -43,10 +43,10 @@
 .player-card {
     position: relative;
     display: grid;
-    grid-template-columns: 64px minmax(0, 1fr) auto;
+    grid-template-columns: 64px minmax(0, 1fr);
     grid-template-areas:
-        "avatar identity actions"
-        "avatar metrics metrics";
+        "avatar identity"
+        "avatar metrics";
     align-content: center;
     column-gap: 12px;
     min-width: 0;
@@ -109,7 +109,7 @@
 
 .player-name-line {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     flex-wrap: wrap;
     gap: 3px 8px;
     min-width: 0;
@@ -126,11 +126,6 @@
     white-space: nowrap;
 }
 
-.player-realm {
-    color: #aaa098;
-    font-size: 13px;
-}
-
 .player-avatar-rank {
     font-size: 12px;
     line-height: 1.1;
@@ -139,15 +134,14 @@
 }
 
 .player-actions {
-    grid-area: actions;
     display: flex;
-    align-self: end;
-    gap: 5px;
+    align-items: center;
+    gap: 2px;
 }
 
 .player-action {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 40px;
     border: 0;
     background-color: transparent;
     background-position: center;
@@ -156,12 +150,15 @@
 }
 
 .player-equipment-button {
-    background-size: 24px 25px;
+    width: 30px;
+    height: 36px;
+    background-size: 36px 36px;
+    transform: translateY(1px);
 }
 
 .player-talents-button {
-    background-position: center -15px;
-    background-size: 22px auto;
+    background-position: center -23px;
+    background-size: 32px auto;
 }
 
 .player-action:hover:not(:disabled),
@@ -222,7 +219,7 @@
     }
 
     .player-card {
-        grid-template-columns: 52px minmax(0, 1fr) auto;
+        grid-template-columns: 52px minmax(0, 1fr);
         column-gap: 7px;
         min-height: 94px;
         padding: 8px 20px 9px;
@@ -252,17 +249,19 @@
     }
 
     .player-action {
-        width: 30px;
-        height: 30px;
+        width: 28px;
+        height: 36px;
     }
 
     .player-equipment-button {
-        background-size: 22px 22px;
+        width: 26px;
+        height: 32px;
+        background-size: 32px 32px;
     }
 
     .player-talents-button {
-        background-position: center -12px;
-        background-size: 20px auto;
+        background-position: center -20px;
+        background-size: 28px auto;
     }
 
     .player-metrics {

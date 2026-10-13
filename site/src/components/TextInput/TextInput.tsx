@@ -33,6 +33,6 @@ export function TextInput({ style, maxLength, className, placeholder, text, onIn
             placeholder={placeholder}
             value={inputText}
             onInput={onInputHandler}
-            maxLength={maxLength ?? 16} />
+            maxLength={maxLength} />
     );
 }

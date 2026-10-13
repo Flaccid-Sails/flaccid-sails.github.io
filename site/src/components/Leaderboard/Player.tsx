@@ -78,20 +78,18 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
             <div className='player-identity'>
                 <div className='player-name-line'>
                     <strong className='player-name' style={{ color: `var(--${classSlug}-color)` }} title={rankTitle}>{player.name}</strong>
-                    <span className='player-realm'>{player.realm}</span>
+                    {(canViewEquipment || canViewTalents) && <div className='player-actions'>
+                        {canViewEquipment && <button type='button' className='player-action player-equipment-button'
+                            style={{ backgroundImage: `url(${Images.gearIcon})` }}
+                            title='Check equipment' onClick={openPlayerCharacter}
+                            aria-label={`View ${player.name}'s gear`} />}
+                        {canViewTalents && <button type='button' className='player-action player-talents-button'
+                            style={{ backgroundImage: `url(${Images.talentsIcon})` }}
+                            title='Check talents' onClick={openPlayerTalents}
+                            aria-label={`View ${player.name}'s talents`} />}
+                    </div>}
                 </div>
             </div>
-
-            {(canViewEquipment || canViewTalents) && <div className='player-actions'>
-                {canViewEquipment && <button type='button' className='player-action player-equipment-button'
-                    style={{ backgroundImage: `url(${Images.gearIcon})` }}
-                    title='Check equipment' onClick={openPlayerCharacter}
-                    aria-label={`View ${player.name}'s gear`} />}
-                {canViewTalents && <button type='button' className='player-action player-talents-button'
-                    style={{ backgroundImage: `url(${Images.talentsIcon})` }}
-                    title='Check talents' onClick={openPlayerTalents}
-                    aria-label={`View ${player.name}'s talents`} />}
-            </div>}
 
             <div className='player-metrics'>
                 {player.level !== maxLevel && <div className='player-stat'>

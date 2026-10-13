@@ -96,7 +96,6 @@ export function App() {
         <Frame theme={theme} className='app-frame'
             contentClassName='app-frame-content'>
             <Header parameters={parameters} theme={theme} requestFailed={requestFailed} />
-            {requestFailed && snapshot && <p role='status' className='app-status'>The latest refresh is unavailable. Showing the last loaded data.</p>}
             {snapshot && !parameters.lastUpdate && <p role='status' className='app-status'>Waiting for the first guild update.</p>}
             <main className='app-main'>
                 {!snapshot && !requestFailed && <p role='status' className='app-loading'>Loading guild data...</p>}
