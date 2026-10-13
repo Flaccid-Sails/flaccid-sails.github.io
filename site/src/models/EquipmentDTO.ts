@@ -1,6 +1,8 @@
 import { SocketDTO } from "./SocketDTO";
+import type { ItemAppearance } from './CharacterAppearance';
 
 export interface EquipmentDTO {
+    appearance?: ItemAppearance;
     id: number;
     name: string;
     slot: string;

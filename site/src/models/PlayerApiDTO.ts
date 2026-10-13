@@ -1,4 +1,7 @@
+import type { CharacterAppearance } from './CharacterAppearance';
+
 export interface PlayerApiDTO {
+    appearance?: CharacterAppearance;
     name: string;
     realm: string;
     equippedItemLevel: number;

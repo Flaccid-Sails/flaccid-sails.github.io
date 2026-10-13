@@ -1,0 +1,2849 @@
+{
+  "source": "https://github.com/Xian55/tortoise-db-viewer",
+  "dataset": "https://cdn.tortoiseclothing.org/data/tortoise.sqlite",
+  "modelVersion": "896ce44982",
+  "outfits": {
+    "Warrior": {
+      "appearance": {
+        "race": 4,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16861,
+          "name": "Bracers of Might",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 328,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+23 Stamina",
+            "+11 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_bracer_19.webp",
+          "appearance": {
+            "display_id": 31020,
+            "t_arm_l": "Plate_RaidWarrior_A_01Blue_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 16862,
+          "name": "Sabatons of Might",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 515,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "FEET",
+          "stats": [
+            "+26 Stamina",
+            "+15 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_plate_04.webp",
+          "appearance": {
+            "display_id": 31025,
+            "geo1": 3,
+            "t_leg_l": "Plate_RaidWarrior_A_01Blue_Boot_LL",
+            "t_foot": "Plate_RaidWarrior_A_01Blue_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16863,
+          "name": "Gauntlets of Might",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 468,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+17 Stamina",
+            "+22 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_10.webp",
+          "appearance": {
+            "display_id": 31022,
+            "geo1": 3,
+            "t_arm_l": "Plate_RaidWarrior_A_01Blue_Glove_AL",
+            "t_hand": "Plate_RaidWarrior_A_01Blue_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 16864,
+          "name": "Belt of Might",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 421,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+15 Stamina",
+            "+21 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_09.webp",
+          "appearance": {
+            "display_id": 31019,
+            "t_leg_u": "Plate_RaidWarrior_A_01Blue_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 16865,
+          "name": "Breastplate of Might",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 749,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+28 Stamina",
+            "+20 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_plate16.webp",
+          "appearance": {
+            "display_id": 31021,
+            "t_arm_u": "Plate_RaidWarrior_A_01Blue_Sleeve_AU",
+            "t_torso_u": "Plate_RaidWarrior_A_01Blue_Chest_TU",
+            "t_torso_l": "Plate_RaidWarrior_A_01Blue_Chest_TL",
+            "inv": 5
+          }
+        },
+        {
+          "id": 16866,
+          "name": "Helm of Might",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 608,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+35 Stamina",
+            "+15 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_09.webp",
+          "appearance": {
+            "display_id": 31260,
+            "model_l": "Helm_Plate_RaidWarrior_A_01",
+            "per_race": 1,
+            "tex_l": "Helm_Plate_RaidWarrior_A_01Blue",
+            "helm_m": 247,
+            "helm_f": 247,
+            "inv": 1
+          }
+        },
+        {
+          "id": 16867,
+          "name": "Legplates of Might",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 655,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+24 Stamina",
+            "+24 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_plate_17.webp",
+          "appearance": {
+            "display_id": 31023,
+            "t_leg_u": "Plate_RaidWarrior_A_01Blue_Pant_LU",
+            "t_leg_l": "Plate_RaidWarrior_A_01Blue_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 16868,
+          "name": "Pauldrons of Might",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 562,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+22 Stamina",
+            "+15 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_15.webp",
+          "appearance": {
+            "display_id": 31024,
+            "model_l": "LShoulder_Plate_RaidWarrior_A_01",
+            "model_r": "RShoulder_Plate_RaidWarrior_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Plate_RaidWarrior_A_01Blue",
+            "tex_r": "Shoulder_Plate_RaidWarrior_A_01Blue",
+            "inv": 3
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 18348,
+          "name": "Quel'Serrar",
+          "slot": "MAIN_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "MAIN_HAND",
+          "stats": [
+            "+12 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 0"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 71,
+          "media": "icons/inv_sword_01.webp",
+          "appearance": {
+            "display_id": 30994,
+            "model_l": "Sword_1H_Long_D_03",
+            "per_race": 0,
+            "tex_l": "Sword_1H_Long_D_03_V01",
+            "inv": 21
+          }
+        },
+        {
+          "id": 17066,
+          "name": "Drillborer Disk",
+          "slot": "OFF_HAND",
+          "quality": "EPIC",
+          "armor": 2539,
+          "itemClass": "Armor",
+          "itemSubclass": "Shield",
+          "inventoryType": "OFF_HAND",
+          "stats": [
+            "+10 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 67,
+          "media": "icons/inv_shield_10.webp",
+          "appearance": {
+            "display_id": 34110,
+            "model_l": "Shield_Epic_A_01",
+            "per_race": 0,
+            "tex_l": "Shield_Epic_A_01",
+            "inv": 14
+          }
+        }
+      ]
+    },
+    "Paladin": {
+      "appearance": {
+        "race": 1,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16853,
+          "name": "Lawbringer Breastplate",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 749,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+22 Intellect",
+            "+20 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_plate03.webp",
+          "appearance": {
+            "display_id": 31505,
+            "t_arm_u": "Plate_RaidPaladin_A_01Gold_Sleeve_AU",
+            "t_torso_u": "Plate_RaidPaladin_A_01Gold_Chest_TU",
+            "t_torso_l": "Plate_RaidPaladin_A_01Gold_Chest_TL",
+            "inv": 5
+          }
+        },
+        {
+          "id": 16854,
+          "name": "Lawbringer Helm",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 608,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+26 Intellect",
+            "+20 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_05.webp",
+          "appearance": {
+            "display_id": 31506,
+            "model_l": "Helm_Plate_RaidPaladin_A_01",
+            "per_race": 1,
+            "tex_l": "Helm_Plate_RaidPaladin_A_01Gold",
+            "helm_m": 248,
+            "helm_f": 306,
+            "inv": 1
+          }
+        },
+        {
+          "id": 16855,
+          "name": "Lawbringer Legplates",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 655,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+18 Intellect",
+            "+20 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_plate_19.webp",
+          "appearance": {
+            "display_id": 31352,
+            "t_leg_u": "Plate_RaidPaladin_A_01Gold_Pant_LU",
+            "t_leg_l": "Plate_RaidPaladin_A_01Gold_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 16856,
+          "name": "Lawbringer Spaulders",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 562,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+15 Intellect",
+            "+18 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_20.webp",
+          "appearance": {
+            "display_id": 31510,
+            "model_l": "LShoulder_Plate_RaidPaladin_A_01",
+            "model_r": "RShoulder_Plate_RaidPaladin_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Plate_RaidPaladin_A_01Gold",
+            "tex_r": "Shoulder_Plate_RaidPaladin_A_01Gold",
+            "inv": 3
+          }
+        },
+        {
+          "id": 16857,
+          "name": "Lawbringer Bracers",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 328,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+8 Intellect",
+            "+11 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_bracer_18.webp",
+          "appearance": {
+            "display_id": 31509,
+            "t_arm_l": "Plate_RaidPaladin_A_01Gold_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 16858,
+          "name": "Lawbringer Belt",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 421,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+25 Intellect",
+            "+11 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_27.webp",
+          "appearance": {
+            "display_id": 31353,
+            "t_leg_u": "Plate_RaidPaladin_A_01Gold_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 16859,
+          "name": "Lawbringer Boots",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 515,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "FEET",
+          "stats": [
+            "+13 Intellect",
+            "+15 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_plate_09.webp",
+          "appearance": {
+            "display_id": 31354,
+            "geo1": 3,
+            "t_leg_l": "Plate_RaidPaladin_A_01Gold_Boot_LL",
+            "t_foot": "Plate_RaidPaladin_A_01Gold_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16860,
+          "name": "Lawbringer Gloves",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 468,
+          "itemClass": "Armor",
+          "itemSubclass": "Plate",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+15 Intellect",
+            "+15 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_29.webp",
+          "appearance": {
+            "display_id": 31507,
+            "geo1": 3,
+            "t_arm_l": "Plate_RaidPaladin_A_01Gold_Glove_AL",
+            "t_hand": "Plate_RaidPaladin_A_01Gold_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 18822,
+          "name": "Obsidian Edged Blade",
+          "slot": "MAIN_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "MAIN_HAND",
+          "stats": [
+            "+42 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 68,
+          "media": "icons/inv_sword_28.webp",
+          "appearance": {
+            "display_id": 34112,
+            "model_l": "Sword_2H_Epic_A_03",
+            "per_race": 0,
+            "tex_l": "Sword_2H_Epic_A_03",
+            "inv": 17
+          }
+        }
+      ]
+    },
+    "Hunter": {
+      "appearance": {
+        "race": 3,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16845,
+          "name": "Giantstalker's Breastplate",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 422,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+26 Agility",
+            "+11 Intellect",
+            "+23 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_chain_03.webp",
+          "appearance": {
+            "display_id": 32022,
+            "t_arm_u": "Mail_RaidHunter_A_01_Sleeve_AU",
+            "t_torso_u": "Mail_RaidHunter_A_01_Chest_TU",
+            "t_torso_l": "Mail_RaidHunter_A_01_Chest_TL",
+            "inv": 5
+          }
+        },
+        {
+          "id": 16846,
+          "name": "Giantstalker's Helmet",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 343,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+23 Agility",
+            "+15 Intellect",
+            "+8 Spirit",
+            "+23 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_05.webp",
+          "appearance": {
+            "display_id": 32028,
+            "model_l": "Helm_Mail_RaidHunter_A_01",
+            "per_race": 1,
+            "tex_l": "Helm_Mail_RaidHunter_A_01",
+            "helm_m": 249,
+            "helm_f": 305,
+            "inv": 1
+          }
+        },
+        {
+          "id": 16847,
+          "name": "Giantstalker's Leggings",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 369,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+32 Agility",
+            "+6 Intellect",
+            "+8 Spirit",
+            "+15 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_mail_03.webp",
+          "appearance": {
+            "display_id": 32029,
+            "t_leg_u": "Mail_RaidHunter_A_01_Pant_LU",
+            "t_leg_l": "Mail_RaidHunter_A_01_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 16848,
+          "name": "Giantstalker's Epaulets",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 317,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+24 Agility",
+            "+5 Intellect",
+            "+9 Spirit",
+            "+14 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_10.webp",
+          "appearance": {
+            "display_id": 32030,
+            "model_l": "LShoulder_Mail_RaidHunter_A_01",
+            "model_r": "RShoulder_Mail_RaidHunter_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Mail_RaidHunter_A_01",
+            "tex_r": "Shoulder_Mail_RaidHunter_A_01",
+            "inv": 3
+          }
+        },
+        {
+          "id": 16849,
+          "name": "Giantstalker's Boots",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 290,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "FEET",
+          "stats": [
+            "+28 Agility",
+            "+6 Spirit",
+            "+14 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_chain_13.webp",
+          "appearance": {
+            "display_id": 32040,
+            "geo1": 3,
+            "t_leg_l": "Mail_RaidHunter_A_01_Boot_LL",
+            "t_foot": "Mail_RaidHunter_A_01_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16850,
+          "name": "Giantstalker's Bracers",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 185,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+20 Agility",
+            "+6 Intellect",
+            "+5 Spirit",
+            "+11 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_bracer_17.webp",
+          "appearance": {
+            "display_id": 32021,
+            "t_arm_l": "Mail_RaidHunter_A_01_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 16851,
+          "name": "Giantstalker's Belt",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 237,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+18 Agility",
+            "+9 Intellect",
+            "+4 Spirit",
+            "+16 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_28.webp",
+          "appearance": {
+            "display_id": 32019,
+            "t_leg_u": "Mail_RaidHunter_A_01_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 16852,
+          "name": "Giantstalker's Gloves",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 264,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+18 Agility",
+            "+12 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_10.webp",
+          "appearance": {
+            "display_id": 32024,
+            "geo1": 3,
+            "t_arm_l": "Mail_RaidHunter_A_01_Glove_AL",
+            "t_hand": "Mail_RaidHunter_A_01_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 18713,
+          "name": "Rhok'delar, Longbow of the Ancient Keepers",
+          "slot": "RANGED",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "RANGED",
+          "stats": [],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 75,
+          "media": "icons/inv_weapon_bow_01.webp",
+          "appearance": {
+            "display_id": 31338,
+            "model_l": "Bow_1H_HunterEpic",
+            "per_race": 0,
+            "tex_l": "Bow_1H_Epic01",
+            "inv": 15
+          }
+        }
+      ]
+    },
+    "Rogue": {
+      "appearance": {
+        "race": 4,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16820,
+          "name": "Nightslayer Chestpiece",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 200,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+29 Agility",
+            "+20 Stamina",
+            "+10 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_cloth_07.webp",
+          "appearance": {
+            "display_id": 31105,
+            "t_arm_u": "Leather_RaidRogue_A_01Blue_Sleeve_AU",
+            "t_arm_l": "Leather_RaidRogue_A_01Blue_Sleeve_AL",
+            "t_torso_u": "Leather_RaidRogue_A_01Blue_Chest_TU",
+            "t_torso_l": "Leather_RaidRogue_A_01Blue_Chest_TL",
+            "inv": 5
+          }
+        },
+        {
+          "id": 16821,
+          "name": "Nightslayer Cover",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 163,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+20 Agility",
+            "+19 Stamina",
+            "+6 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_41.webp",
+          "appearance": {
+            "display_id": 31514,
+            "model_l": "Helm_Leather_RaidRogue_A_01",
+            "per_race": 1,
+            "tex_l": "Helm_Leather_RaidRogue_A_01",
+            "helm_m": 248,
+            "helm_f": 306,
+            "inv": 1
+          }
+        },
+        {
+          "id": 16822,
+          "name": "Nightslayer Pants",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 175,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+33 Agility",
+            "+15 Stamina",
+            "+10 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_leather_03.webp",
+          "appearance": {
+            "display_id": 31340,
+            "t_leg_u": "Leather_RaidRogue_A_01Blue_Pant_LU",
+            "t_leg_l": "Leather_RaidRogue_A_01Blue_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 16823,
+          "name": "Nightslayer Shoulder Pads",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 150,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+26 Agility",
+            "+12 Stamina",
+            "+3 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_25.webp",
+          "appearance": {
+            "display_id": 31504,
+            "model_l": "LShoulder_Leather_RaidRogue_A_01",
+            "model_r": "RShoulder_Leather_RaidRogue_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Leather_RaidRogue_A_01Blue",
+            "tex_r": "Shoulder_Leather_RaidRogue_A_01Blue",
+            "inv": 3
+          }
+        },
+        {
+          "id": 16824,
+          "name": "Nightslayer Boots",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 138,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "FEET",
+          "stats": [
+            "+26 Agility",
+            "+18 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_08.webp",
+          "appearance": {
+            "display_id": 31109,
+            "t_leg_l": "Leather_RaidRogue_A_01Blue_Boot_LL",
+            "t_foot": "Leather_RaidRogue_A_01Blue_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16825,
+          "name": "Nightslayer Bracelets",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 88,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+20 Agility",
+            "+15 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_bracer_02.webp",
+          "appearance": {
+            "display_id": 31106,
+            "t_arm_l": "Leather_RaidRogue_A_01Blue_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 16826,
+          "name": "Nightslayer Gloves",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 125,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+18 Agility",
+            "+17 Stamina",
+            "+12 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_21.webp",
+          "appearance": {
+            "display_id": 31503,
+            "t_arm_l": "Leather_RaidRogue_A_01Blue_Glove_AL",
+            "t_hand": "Leather_RaidRogue_A_01Blue_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 16827,
+          "name": "Nightslayer Belt",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 113,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+17 Agility",
+            "+18 Stamina",
+            "+9 Strength"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_23.webp",
+          "appearance": {
+            "display_id": 31339,
+            "t_leg_u": "Leather_RaidRogue_A_01Blue_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 18816,
+          "name": "Perdition's Blade",
+          "slot": "MAIN_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "MAIN_HAND",
+          "stats": [],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 77,
+          "media": "icons/inv_sword_48.webp",
+          "appearance": {
+            "display_id": 33615,
+            "model_l": "Knife_1H_Epic_A_03",
+            "per_race": 0,
+            "tex_l": "Knife_1H_Epic_A_03",
+            "inv": 13
+          }
+        },
+        {
+          "id": 18805,
+          "name": "Core Hound Tooth",
+          "slot": "OFF_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "OFF_HAND",
+          "stats": [
+            "+9 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 71,
+          "media": "icons/inv_weapon_shortblade_11.webp",
+          "appearance": {
+            "display_id": 33626,
+            "model_l": "Knife_1H_Epic_A_04",
+            "per_race": 0,
+            "tex_l": "Knife_1H_Epic_A_04Molten",
+            "inv": 13
+          }
+        }
+      ]
+    },
+    "Priest": {
+      "appearance": {
+        "race": 1,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16811,
+          "name": "Boots of Prophecy",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 70,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "FEET",
+          "stats": [
+            "+18 Intellect",
+            "+15 Spirit",
+            "+17 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_07.webp",
+          "appearance": {
+            "display_id": 31718,
+            "geo1": 3,
+            "t_leg_l": "Robe_RaidPriest_A_01Gold_Boot_LL",
+            "t_foot": "Robe_RaidPriest_A_01Gold_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16812,
+          "name": "Gloves of Prophecy",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 63,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+15 Intellect",
+            "+15 Spirit",
+            "+10 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_14.webp",
+          "appearance": {
+            "display_id": 30620,
+            "t_hand": "Robe_RaidPriest_A_01Gold_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 16813,
+          "name": "Circlet of Prophecy",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 83,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+27 Intellect",
+            "+20 Spirit",
+            "+17 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_34.webp",
+          "appearance": {
+            "display_id": 31371,
+            "model_l": "Helm_Robe_RaidPriest_A_01",
+            "per_race": 1,
+            "tex_l": "Helm_Robe_RaidPriest_A_01Gold",
+            "helm_m": 245,
+            "helm_f": 245,
+            "inv": 1
+          }
+        },
+        {
+          "id": 16814,
+          "name": "Pants of Prophecy",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 89,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+24 Intellect",
+            "+20 Spirit",
+            "+18 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_08.webp",
+          "appearance": {
+            "display_id": 28198,
+            "t_leg_u": "Cloth_C_03Green_Pant_LU",
+            "t_leg_l": "Cloth_C_03Green_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 16815,
+          "name": "Robes of Prophecy",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 102,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+27 Intellect",
+            "+17 Spirit",
+            "+20 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_cloth_03.webp",
+          "appearance": {
+            "display_id": 31490,
+            "geo1": 1,
+            "geo3": 1,
+            "t_arm_u": "Robe_RaidPriest_A_01Gold_Sleeve_AU",
+            "t_arm_l": "Robe_RaidPriest_A_01Gold_Sleeve_AL",
+            "t_torso_u": "Robe_RaidPriest_A_01Gold_Chest_TU",
+            "t_torso_l": "Robe_RaidPriest_A_01Gold_Chest_TL",
+            "t_leg_u": "Robe_RaidPriest_A_01Gold_Robe_LU",
+            "t_leg_l": "Robe_RaidPriest_A_01Gold_Robe_LL",
+            "inv": 20
+          }
+        },
+        {
+          "id": 16816,
+          "name": "Mantle of Prophecy",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 76,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+23 Intellect",
+            "+10 Spirit",
+            "+13 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_02.webp",
+          "appearance": {
+            "display_id": 30623,
+            "model_l": "LShoulder_Robe_RaidPriest_A_01",
+            "model_r": "RShoulder_Robe_RaidPriest_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Robe_RaidPriest_A_01Gold",
+            "tex_r": "Shoulder_Robe_RaidPriest_A_01Gold",
+            "inv": 3
+          }
+        },
+        {
+          "id": 16817,
+          "name": "Girdle of Prophecy",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 57,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+22 Intellect",
+            "+10 Spirit",
+            "+10 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_22.webp",
+          "appearance": {
+            "display_id": 30621,
+            "t_leg_u": "Robe_RaidPriest_A_01Gold_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 16819,
+          "name": "Vambraces of Prophecy",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 44,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+14 Intellect",
+            "+10 Spirit",
+            "+8 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_bracer_09.webp",
+          "appearance": {
+            "display_id": 30617,
+            "t_arm_l": "Robe_RaidPriest_A_01Gold_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 18608,
+          "name": "Benediction",
+          "slot": "MAIN_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "MAIN_HAND",
+          "stats": [
+            "+31 Intellect",
+            "+10 Stamina",
+            "+12 Spirit"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 75,
+          "media": "icons/inv_staff_30.webp",
+          "appearance": {
+            "display_id": 31347,
+            "model_l": "Stave_2H_Long_EpicPriest01",
+            "per_race": 0,
+            "tex_l": "Stave_2H_Long_D_02Gold",
+            "inv": 17
+          }
+        }
+      ]
+    },
+    "Shaman": {
+      "appearance": {
+        "race": 2,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16837,
+          "name": "Earthfury Boots",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 290,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "FEET",
+          "stats": [
+            "+10 Intellect",
+            "+22 Spirit",
+            "+15 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_plate_06.webp",
+          "appearance": {
+            "display_id": 31830,
+            "geo1": 3,
+            "t_leg_l": "Mail_RaidShaman_A_01Purple_Boot_LL",
+            "t_foot": "Mail_RaidShaman_A_01Purple_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16838,
+          "name": "Earthfury Belt",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 237,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+21 Intellect",
+            "+7 Spirit",
+            "+12 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_14.webp",
+          "appearance": {
+            "display_id": 31829,
+            "t_leg_u": "Mail_RaidShaman_A_01Purple_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 16839,
+          "name": "Earthfury Gloves",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 264,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+13 Intellect",
+            "+15 Spirit",
+            "+14 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_11.webp",
+          "appearance": {
+            "display_id": 31834,
+            "geo1": 3,
+            "t_arm_l": "Mail_RaidShaman_A_01Purple_Glove_AL",
+            "t_hand": "Mail_RaidShaman_A_01Purple_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 16840,
+          "name": "Earthfury Bracers",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 185,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+17 Intellect",
+            "+11 Spirit",
+            "+10 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_bracer_16.webp",
+          "appearance": {
+            "display_id": 31831,
+            "t_arm_l": "Mail_RaidShaman_A_01Purple_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 16841,
+          "name": "Earthfury Chestpiece",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 422,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+27 Intellect",
+            "+13 Spirit",
+            "+17 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_chain_11.webp",
+          "appearance": {
+            "display_id": 31832,
+            "geo3": 1,
+            "t_arm_u": "Mail_RaidShaman_A_01Purple_Sleeve_AU",
+            "t_torso_u": "Mail_RaidShaman_A_01Purple_Chest_TU",
+            "t_torso_l": "Mail_RaidShaman_A_01Purple_Chest_TL",
+            "t_leg_u": "Mail_RaidShaman_A_01Purple_Robe_LU",
+            "t_leg_l": "Mail_RaidShaman_A_01Purple_Robe_LL",
+            "inv": 20
+          }
+        },
+        {
+          "id": 16842,
+          "name": "Earthfury Helmet",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 343,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+23 Intellect",
+            "+13 Spirit",
+            "+24 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_09.webp",
+          "appearance": {
+            "display_id": 31835,
+            "model_l": "Helm_Mail_RaidShaman_A_01",
+            "per_race": 1,
+            "tex_l": "Helm_Mail_RaidShaman_A_01",
+            "helm_m": 249,
+            "helm_f": 305,
+            "inv": 1
+          }
+        },
+        {
+          "id": 16843,
+          "name": "Earthfury Pants",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 369,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+19 Intellect",
+            "+21 Spirit",
+            "+18 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_03.webp",
+          "appearance": {
+            "display_id": 31836,
+            "t_leg_u": "Mail_RaidShaman_A_01Purple_Pant_LU",
+            "t_leg_l": "Mail_RaidShaman_A_01Purple_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 16844,
+          "name": "Earthfury Spaulders",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 317,
+          "itemClass": "Armor",
+          "itemSubclass": "Mail",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+18 Intellect",
+            "+10 Spirit",
+            "+17 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_29.webp",
+          "appearance": {
+            "display_id": 31833,
+            "model_l": "LShoulder_Mail_RaidShaman_A_01",
+            "model_r": "RShoulder_Mail_RaidShaman_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Mail_RaidShaman_A_01",
+            "tex_r": "Shoulder_Mail_RaidShaman_A_01",
+            "inv": 3
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 17105,
+          "name": "Aurastone Hammer",
+          "slot": "MAIN_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "MAIN_HAND",
+          "stats": [
+            "+10 Intellect",
+            "+10 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 69,
+          "media": "icons/inv_hammer_05.webp",
+          "appearance": {
+            "display_id": 34109,
+            "model_l": "Hammer_1H_Epic_D_01",
+            "per_race": 0,
+            "tex_l": "Hammer_Epic_D_01Silver",
+            "inv": 13
+          }
+        },
+        {
+          "id": 17066,
+          "name": "Drillborer Disk",
+          "slot": "OFF_HAND",
+          "quality": "EPIC",
+          "armor": 2539,
+          "itemClass": "Armor",
+          "itemSubclass": "Shield",
+          "inventoryType": "OFF_HAND",
+          "stats": [
+            "+10 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 67,
+          "media": "icons/inv_shield_10.webp",
+          "appearance": {
+            "display_id": 34110,
+            "model_l": "Shield_Epic_A_01",
+            "per_race": 0,
+            "tex_l": "Shield_Epic_A_01",
+            "inv": 14
+          }
+        }
+      ]
+    },
+    "Mage": {
+      "appearance": {
+        "race": 7,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16795,
+          "name": "Arcanist Crown",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 83,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+16 Stamina",
+            "+25 Intellect",
+            "+8 Spirit"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_53.webp",
+          "appearance": {
+            "display_id": 31517,
+            "model_l": "Helm_Robe_RaidMage_A_01",
+            "per_race": 1,
+            "tex_l": "Helm_Robe_RaidMage_A_01Purple",
+            "helm_m": 245,
+            "helm_f": 245,
+            "inv": 1
+          }
+        },
+        {
+          "id": 16796,
+          "name": "Arcanist Leggings",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 89,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+23 Intellect",
+            "+10 Spirit",
+            "+18 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_cloth_16.webp",
+          "appearance": {
+            "display_id": 30582,
+            "t_leg_u": "Robe_RaidMage_A_01Purple_Pant_LU",
+            "t_leg_l": "Robe_RaidMage_A_01Purple_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 16797,
+          "name": "Arcanist Mantle",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 76,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+16 Intellect",
+            "+13 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_02.webp",
+          "appearance": {
+            "display_id": 30586,
+            "model_l": "LShoulder_Robe_RaidMage_A_01",
+            "model_r": "RShoulder_Robe_RaidMage_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Robe_RaidMage_A_01Purple",
+            "tex_r": "Shoulder_Robe_RaidMage_A_01Purple",
+            "inv": 3
+          }
+        },
+        {
+          "id": 16798,
+          "name": "Arcanist Robes",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 102,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+21 Intellect",
+            "+16 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_cloth_03.webp",
+          "appearance": {
+            "display_id": 30581,
+            "geo1": 1,
+            "geo3": 1,
+            "t_arm_u": "Robe_RaidMage_A_01Purple_Sleeve_AU",
+            "t_arm_l": "Robe_RaidMage_A_01Purple_Sleeve_AL",
+            "t_torso_u": "Robe_RaidMage_A_01Purple_Chest_TU",
+            "t_torso_l": "Robe_RaidMage_A_01Purple_Chest_TL",
+            "t_leg_u": "Robe_RaidMage_A_01Purple_Robe_LU",
+            "t_leg_l": "Robe_RaidMage_A_01Purple_Robe_LL",
+            "inv": 20
+          }
+        },
+        {
+          "id": 16799,
+          "name": "Arcanist Bindings",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 44,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+15 Intellect",
+            "+10 Stamina",
+            "+5 Spirit"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_29.webp",
+          "appearance": {
+            "display_id": 30584,
+            "t_arm_l": "Robe_RaidMage_A_01Purple_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 16800,
+          "name": "Arcanist Boots",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 70,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "FEET",
+          "stats": [
+            "+13 Stamina",
+            "+16 Intellect",
+            "+9 Spirit"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_07.webp",
+          "appearance": {
+            "display_id": 30587,
+            "geo1": 3,
+            "t_leg_l": "Robe_RaidMage_A_01Purple_Boot_LL",
+            "t_foot": "Robe_RaidMage_A_01Purple_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16801,
+          "name": "Arcanist Gloves",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 63,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+17 Intellect",
+            "+10 Spirit",
+            "+12 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_14.webp",
+          "appearance": {
+            "display_id": 30585,
+            "geo1": 3,
+            "t_arm_l": "Robe_RaidMage_A_01Purple_Glove_AL",
+            "t_hand": "Robe_RaidMage_A_01Purple_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 16802,
+          "name": "Arcanist Belt",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 57,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+18 Intellect",
+            "+10 Spirit",
+            "+11 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_30.webp",
+          "appearance": {
+            "display_id": 30583,
+            "t_leg_u": "Robe_RaidMage_A_01Purple_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 18842,
+          "name": "Staff of Dominance",
+          "slot": "MAIN_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "MAIN_HAND",
+          "stats": [
+            "+34 Intellect",
+            "+16 Stamina",
+            "+14 Spirit"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 70,
+          "media": "icons/inv_staff_13.webp",
+          "appearance": {
+            "display_id": 34114,
+            "model_l": "Stave_2H_Epic_A_01",
+            "per_race": 0,
+            "tex_l": "Stave_2H_Epic_A_01",
+            "inv": 17
+          }
+        }
+      ]
+    },
+    "Warlock": {
+      "appearance": {
+        "race": 5,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16803,
+          "name": "Felheart Slippers",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 70,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "FEET",
+          "stats": [
+            "+11 Intellect",
+            "+21 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_cloth_05.webp",
+          "appearance": {
+            "display_id": 31975,
+            "geo1": 1,
+            "t_leg_l": "Robe_RaidWarlock_A_01Red_Boot_LL",
+            "t_foot": "Robe_RaidWarlock_A_01Red_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16804,
+          "name": "Felheart Bracers",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 44,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+12 Intellect",
+            "+18 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_bracer_07.webp",
+          "appearance": {
+            "display_id": 31970,
+            "t_arm_l": "Robe_RaidWarlock_A_01Red_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 16805,
+          "name": "Felheart Gloves",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 63,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+15 Intellect",
+            "+18 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_19.webp",
+          "appearance": {
+            "display_id": 31971,
+            "geo1": 3,
+            "t_arm_l": "Robe_RaidWarlock_A_01Red_Glove_AL",
+            "t_hand": "Robe_RaidWarlock_A_01Red_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 16806,
+          "name": "Felheart Belt",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 57,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+15 Intellect",
+            "+16 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_13.webp",
+          "appearance": {
+            "display_id": 31969,
+            "t_leg_u": "Robe_RaidWarlock_A_01Red_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 16807,
+          "name": "Felheart Shoulder Pads",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 76,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+12 Intellect",
+            "+21 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_23.webp",
+          "appearance": {
+            "display_id": 31974,
+            "model_l": "LShoulder_Robe_RaidWarlock_A_01",
+            "model_r": "RShoulder_Robe_RaidWarlock_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Robe_RaidWarlock_A_01Red",
+            "tex_r": "Shoulder_Robe_RaidWarlock_A_01Red",
+            "inv": 3
+          }
+        },
+        {
+          "id": 16808,
+          "name": "Felheart Horns",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 83,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+21 Intellect",
+            "+22 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_08.webp",
+          "appearance": {
+            "display_id": 31987,
+            "model_l": "Helm_Robe_RaidWarlock_A_01",
+            "per_race": 1,
+            "tex_l": "Helm_Robe_RaidWarlock_A_01Red",
+            "inv": 1
+          }
+        },
+        {
+          "id": 16809,
+          "name": "Felheart Robes",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 102,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+20 Intellect",
+            "+25 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_cloth_09.webp",
+          "appearance": {
+            "display_id": 31973,
+            "geo3": 1,
+            "t_arm_u": "Robe_RaidWarlock_A_01Red_Sleeve_AU",
+            "t_arm_l": "Robe_RaidWarlock_A_01Red_Sleeve_AL",
+            "t_torso_u": "Robe_RaidWarlock_A_01Red_Chest_TU",
+            "t_torso_l": "Robe_RaidWarlock_A_01Red_Chest_TL",
+            "t_leg_u": "Robe_RaidWarlock_A_01Red_Robe_LU",
+            "t_leg_l": "Robe_RaidWarlock_A_01Red_Robe_LL",
+            "inv": 20
+          }
+        },
+        {
+          "id": 16810,
+          "name": "Felheart Pants",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 89,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+19 Intellect",
+            "+20 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_cloth_14.webp",
+          "appearance": {
+            "display_id": 31972,
+            "t_leg_u": "Robe_RaidWarlock_A_01Red_Pant_LU",
+            "t_leg_l": "Robe_RaidWarlock_A_01Red_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 18842,
+          "name": "Staff of Dominance",
+          "slot": "MAIN_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "MAIN_HAND",
+          "stats": [
+            "+34 Intellect",
+            "+16 Stamina",
+            "+14 Spirit"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 70,
+          "media": "icons/inv_staff_13.webp",
+          "appearance": {
+            "display_id": 34114,
+            "model_l": "Stave_2H_Epic_A_01",
+            "per_race": 0,
+            "tex_l": "Stave_2H_Epic_A_01",
+            "inv": 17
+          }
+        }
+      ]
+    },
+    "Druid": {
+      "appearance": {
+        "race": 4,
+        "sex": "f",
+        "skin": 0,
+        "face": 0,
+        "hair": 0,
+        "hairColor": 0,
+        "facialHair": 0
+      },
+      "equipment": [
+        {
+          "id": 16828,
+          "name": "Cenarion Belt",
+          "slot": "WAIST",
+          "quality": "EPIC",
+          "armor": 113,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "WAIST",
+          "stats": [
+            "+22 Intellect",
+            "+10 Spirit",
+            "+10 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_belt_06.webp",
+          "appearance": {
+            "display_id": 31722,
+            "t_leg_u": "Leather_RaidDruid_A_01_Belt_LU",
+            "inv": 6
+          }
+        },
+        {
+          "id": 16829,
+          "name": "Cenarion Boots",
+          "slot": "FEET",
+          "quality": "EPIC",
+          "armor": 138,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "FEET",
+          "stats": [
+            "+13 Intellect",
+            "+15 Spirit",
+            "+16 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_boots_08.webp",
+          "appearance": {
+            "display_id": 31724,
+            "t_leg_l": "Leather_RaidDruid_A_01_Boot_LL",
+            "t_foot": "Leather_RaidDruid_A_01_Boot_FO",
+            "inv": 8
+          }
+        },
+        {
+          "id": 16830,
+          "name": "Cenarion Bracers",
+          "slot": "WRIST",
+          "quality": "EPIC",
+          "armor": 88,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "WRIST",
+          "stats": [
+            "+14 Intellect",
+            "+13 Spirit",
+            "+13 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_bracer_03.webp",
+          "appearance": {
+            "display_id": 31725,
+            "t_arm_l": "Leather_RaidDruid_A_01_Bracer_AL",
+            "inv": 9
+          }
+        },
+        {
+          "id": 16831,
+          "name": "Cenarion Gloves",
+          "slot": "HANDS",
+          "quality": "EPIC",
+          "armor": 125,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "HANDS",
+          "stats": [
+            "+18 Intellect",
+            "+15 Spirit",
+            "+17 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_gauntlets_07.webp",
+          "appearance": {
+            "display_id": 31726,
+            "t_arm_l": "Leather_RaidDruid_A_01_Glove_AL",
+            "t_hand": "Leather_RaidDruid_A_01_Glove_HA",
+            "inv": 10
+          }
+        },
+        {
+          "id": 16833,
+          "name": "Cenarion Vestments",
+          "slot": "CHEST",
+          "quality": "EPIC",
+          "armor": 200,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "CHEST",
+          "stats": [
+            "+24 Intellect",
+            "+16 Spirit",
+            "+23 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_chest_cloth_06.webp",
+          "appearance": {
+            "display_id": 31797,
+            "geo3": 1,
+            "t_arm_u": "Leather_RaidDruid_A_01_Sleeve_AU",
+            "t_arm_l": "Leather_RaidDruid_A_01_Sleeve_AL",
+            "t_torso_u": "Leather_RaidDruid_A_01_Chest_TU",
+            "t_torso_l": "Leather_RaidDruid_A_01_Chest_TL",
+            "t_leg_u": "Leather_RaidDruid_A_01_Robe_LU",
+            "t_leg_l": "Leather_RaidDruid_A_01_Robe_LL",
+            "inv": 20
+          }
+        },
+        {
+          "id": 16834,
+          "name": "Cenarion Helm",
+          "slot": "HEAD",
+          "quality": "EPIC",
+          "armor": 163,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "HEAD",
+          "stats": [
+            "+28 Intellect",
+            "+13 Spirit",
+            "+26 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_helmet_09.webp",
+          "appearance": {
+            "display_id": 32790,
+            "model_l": "Helm_Leather_RaidDruid_A_01",
+            "per_race": 1,
+            "tex_l": "Leather_RaidDruid_A_01_headband_beta",
+            "helm_m": 245,
+            "helm_f": 245,
+            "inv": 1
+          }
+        },
+        {
+          "id": 16835,
+          "name": "Cenarion Leggings",
+          "slot": "LEGS",
+          "quality": "EPIC",
+          "armor": 175,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "LEGS",
+          "stats": [
+            "+19 Intellect",
+            "+20 Spirit",
+            "+18 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_pants_06.webp",
+          "appearance": {
+            "display_id": 31729,
+            "t_leg_u": "Leather_RaidDruid_A_01_Pant_LU",
+            "t_leg_l": "Leather_RaidDruid_A_01_Pant_LL",
+            "inv": 7
+          }
+        },
+        {
+          "id": 16836,
+          "name": "Cenarion Spaulders",
+          "slot": "SHOULDER",
+          "quality": "EPIC",
+          "armor": 150,
+          "itemClass": "Armor",
+          "itemSubclass": "Leather",
+          "inventoryType": "SHOULDER",
+          "stats": [
+            "+20 Intellect",
+            "+10 Spirit",
+            "+13 Stamina"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 66,
+          "media": "icons/inv_shoulder_07.webp",
+          "appearance": {
+            "display_id": 32016,
+            "model_l": "LShoulder_Leather_RaidDruid_A_01",
+            "model_r": "RShoulder_Leather_RaidDruid_A_01",
+            "per_race": 0,
+            "tex_l": "Shoulder_Leather_RaidDruid_A_01Green",
+            "tex_r": "Shoulder_Leather_RaidDruid_A_01Green",
+            "inv": 3
+          }
+        },
+        {
+          "id": 13340,
+          "name": "Cape of the Black Baron",
+          "slot": "BACK",
+          "quality": "RARE",
+          "armor": 45,
+          "itemClass": "Armor",
+          "itemSubclass": "Cloth",
+          "inventoryType": "BACK",
+          "stats": [
+            "+15 Agility"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 58"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 63,
+          "media": "icons/inv_misc_cape_20.webp",
+          "appearance": {
+            "display_id": 24013,
+            "tex_l": "Cape_Mail_B_01Black",
+            "geo1": 1,
+            "inv": 16
+          }
+        },
+        {
+          "id": 18842,
+          "name": "Staff of Dominance",
+          "slot": "MAIN_HAND",
+          "quality": "EPIC",
+          "armor": 0,
+          "itemClass": "Weapon",
+          "itemSubclass": "Weapon",
+          "inventoryType": "MAIN_HAND",
+          "stats": [
+            "+34 Intellect",
+            "+16 Stamina",
+            "+14 Spirit"
+          ],
+          "bonusStats": [],
+          "requirements": [
+            "Requires Level 60"
+          ],
+          "spells": [],
+          "sockets": [],
+          "itemLevel": 70,
+          "media": "icons/inv_staff_13.webp",
+          "appearance": {
+            "display_id": 34114,
+            "model_l": "Stave_2H_Epic_A_01",
+            "per_race": 0,
+            "tex_l": "Stave_2H_Epic_A_01",
+            "inv": 17
+          }
+        }
+      ]
+    }
+  }
+}

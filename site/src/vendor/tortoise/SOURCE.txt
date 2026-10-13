@@ -1,0 +1,18 @@
+Character renderer adapted from https://github.com/Xian55/tortoise-db-viewer
+Retrieved 2026-10-13. Upstream modelviewer.js revision:
+c75d27f7707170c21477bf7c3d67a938d70a2158
+
+Source modules: src/modelviewer.js, src/m2b.js, src/charcomposite.js, src/chargear.js.
+Upstream notices are preserved in NOTICE.md. No separate renderer license was
+present in the source snapshot; attribution does not establish permission to reuse.
+World of Warcraft artwork belongs to Blizzard Entertainment and its licensors.
+
+Local changes: fixed CDN configuration, TypeScript declaration, removed global
+debug hooks, bounded fetches, disposed textures and image bitmaps on teardown or
+cancelled mounts, surfaced missing equipment, and rejected missing body textures.
+Three.js is installed separately from npm under its MIT license.
+
+Models and textures are requested directly from:
+https://cdn.tortoiseclothing.org/model3d/
+Asset cache version: 896ce44982
+No game models or textures are stored in this repository.

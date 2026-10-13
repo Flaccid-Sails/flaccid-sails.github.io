@@ -5,6 +5,7 @@ import { createDemoTalentBuild } from './demo-talents.mjs';
 import { summarizeReports } from './report-summary.mjs';
 
 const catalog = JSON.parse(await readFile('data/talents.json', 'utf8'));
+const { outfits } = JSON.parse(await readFile('data/demo-equipment.json', 'utf8'));
 const output = resolve('site/public/data');
 await rm(output, { recursive: true, force: true });
 async function writeDataset(directory, data) {
@@ -23,6 +24,7 @@ const players = names.map((name, i) => ({
     equippedItemLevel: i < 18 ? 60 + i % 12 : -1, itemLevel: i < 18 ? 63 + i % 12 : -1,
     achievementPoints: 0, lastLogin: epoch - i * 3_600_000,
     image: `icons/${catalog.classes[classes[i % classes.length]].icon}.webp`,
+    appearance: { ...outfits[classes[i % classes.length]].appearance, sex: i < classes.length ? 'm' : 'f' },
 }));
 const characterBuilds = new Map();
 for (const [index, player] of players.entries()) {
@@ -74,7 +76,8 @@ for (const [i, player] of players.entries()) {
         inventoryType: slot, stats: ['+15 Stamina', '+12 Intellect'], bonusStats: [],
         requirements: ['Requires Level 60'], spells: [], sockets: [], itemLevel: player.equippedItemLevel,
         media: `icons/${icons[n]}.webp`,
-    }));
+    })).filter(item => ['NECK', 'FINGER_1', 'FINGER_2', 'TRINKET_1', 'TRINKET_2'].includes(item.slot))
+        .concat(outfits[player.class].equipment);
     characterFiles[`${player.realm}/${player.name}`] = await writeDataset('characters', profile);
 }
 const reportIndex = [];

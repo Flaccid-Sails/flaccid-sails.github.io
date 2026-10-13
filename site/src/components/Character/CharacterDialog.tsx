@@ -9,6 +9,7 @@ import { useDialogFade } from '../Frame/useDialogFade';
 import { ScrollView } from '../ScrollView/ScrollView';
 import { CharacterItem } from './CharacterItem';
 import { CharacterStatistics } from './CharacterStatistics';
+import { CharacterModel } from './CharacterModel';
 import { CloseButton } from '../Button/CloseButton';
 import { characterAsset, EquipmentSlot, leftEquipmentSlots, rightEquipmentSlots, weaponEquipmentSlots } from './equipment-slots';
 import './character.scss';
@@ -90,6 +91,7 @@ export function CharacterDialog() {
                 onScroll={() => EventEmitter.emit('CLOSE_POPUPS')}>
                 <div className='character-layout' aria-busy={!details && !failed}>
                     <section className='character-paperdoll' aria-label='Equipped items'>
+                        {details && !isClosing && <CharacterModel key={`${player.realm}/${player.name}`} player={player} equipment={details.equipment} />}
                         <div className='character-equipment-column character-equipment-left'>
                             {leftEquipmentSlots.map(slot => renderSlot(slot, 'RIGHT'))}
                         </div>
