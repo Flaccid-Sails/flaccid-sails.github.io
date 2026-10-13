@@ -25,3 +25,4 @@ jobs:
       - run: npm run build
         env:
           SITE_BASE_PATH: /
+          ARTWORK_BASE_URL: https://flaccid-sails.github.io/site-assets/v1/

@@ -1,9 +1,10 @@
 import { createHash } from 'node:crypto';
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const dist = fileURLToPath(new URL('../site/dist/', import.meta.url));
+const artworkBase = process.env.ARTWORK_BASE_URL;
 const paths = [];
 
 async function collect(directory) {
@@ -17,20 +18,24 @@ async function collect(directory) {
 await collect(dist);
 paths.sort();
 
-const assets = Object.fromEntries(await Promise.all(paths.map(async path => [
-    relative(dist, path).split('\\').join('/'),
-    createHash('sha256').update(await readFile(path)).digest('hex').slice(0, 16),
-])));
+const assets = Object.fromEntries(await Promise.all(paths.map(async path => {
+    const name = relative(dist, path).split('\\').join('/');
+    return [
+        artworkBase && name.startsWith('assets/') ? new URL(name, artworkBase).href : name,
+        createHash('sha256').update(await readFile(path)).digest('hex').slice(0, 16),
+    ];
+})));
 
-const worker = `const assets = ${JSON.stringify(assets)};
-const scope = new URL(self.registration.scope);
+const worker = `const scope = new URL(self.registration.scope);
+const assets = Object.fromEntries(Object.entries(${JSON.stringify(assets)})
+    .map(([path, hash]) => [new URL(path, scope).href, hash]));
 const cacheName = 'flaccid-sails-images-v1:' + scope.pathname;
 
 function assetPath(value) {
     const url = new URL(value, scope);
-    if (url.origin !== scope.origin || !url.pathname.startsWith(scope.pathname)) return;
-    const path = decodeURIComponent(url.pathname.slice(scope.pathname.length));
-    return assets[path] ? path : undefined;
+    url.search = '';
+    url.hash = '';
+    return assets[url.href] ? url.href : undefined;
 }
 
 function versionedUrl(path) {
@@ -48,8 +53,8 @@ self.addEventListener('activate', event => {
         const cache = await caches.open(cacheName);
         for (const request of await cache.keys()) {
             const url = new URL(request.url);
-            const path = decodeURIComponent(url.pathname.slice(scope.pathname.length));
-            if (assets[path] !== url.searchParams.get('v')) await cache.delete(request);
+            const path = assetPath(request.url);
+            if (!path || assets[path] !== url.searchParams.get('v')) await cache.delete(request);
         }
         await self.clients.claim();
     })());
@@ -100,4 +105,8 @@ self.addEventListener('message', event => {
 `;
 
 await writeFile(join(dist, 'image-sw.js'), worker);
+if (artworkBase) {
+    for (const name of await readdir(new URL('../site/public/assets/', import.meta.url)))
+        await rm(join(dist, 'assets', name), { recursive: true, force: true });
+}
 console.log(`Prepared image cache for ${paths.length} WebP files.`);

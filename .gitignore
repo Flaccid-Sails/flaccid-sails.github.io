@@ -1,6 +1,7 @@
 node_modules/
 site/node_modules/
 site/dist/
+site-assets/
 site/public/data/
 .env
 .env.*

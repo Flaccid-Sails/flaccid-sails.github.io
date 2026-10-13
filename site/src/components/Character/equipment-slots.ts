@@ -5,7 +5,7 @@ export interface EquipmentSlot {
     aliases?: string[];
 }
 
-export const characterAsset = (path: string) => `${import.meta.env.BASE_URL}assets/character-window/${path}`;
+export const characterAsset = (path: string) => `${import.meta.env.VITE_ARTWORK_BASE_URL}assets/character-window/${path}`;
 
 export const leftEquipmentSlots: EquipmentSlot[] = [
     { key: 'HEAD', label: 'Head', emptyIcon: 'head' },

@@ -40,6 +40,7 @@ jobs:
         run: npm run build
         env:
           SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+          ARTWORK_BASE_URL: https://flaccid-sails.github.io/site-assets/v1/
       - name: Commit the successful talent check to main
         shell: bash
         run: bash scripts/save-talents.sh

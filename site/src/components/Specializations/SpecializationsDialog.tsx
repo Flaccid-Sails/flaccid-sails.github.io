@@ -10,7 +10,7 @@ import { useDialogFade } from '../Frame/useDialogFade';
 import './specializations.scss';
 
 interface Props { players?: PlayerApiDTO[] }
-const asset = (path: string) => `${import.meta.env.BASE_URL}assets/talent-window/${path}`;
+const asset = (path: string) => `${import.meta.env.VITE_ARTWORK_BASE_URL}assets/talent-window/${path}`;
 const iconUrl = (name: string) => `${import.meta.env.BASE_URL}icons/${name}.webp`;
 const rankKey = (tree: TalentTree, talent: Talent) => `${tree.name}/${talent.name}`;
 
