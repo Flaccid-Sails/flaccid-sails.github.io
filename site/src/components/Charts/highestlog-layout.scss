@@ -1,3 +1,7 @@
 .highest-log .wow-chart-rows {
     min-height: 42px;
 }
+
+.highest-log .wow-chart-row {
+    grid-template-columns: 25px minmax(0, 140px) minmax(30px, 1fr) minmax(22px, auto);
+}
