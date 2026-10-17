@@ -11,7 +11,7 @@ async function collect(directory) {
     for (const entry of await readdir(directory, { withFileTypes: true })) {
         const path = join(directory, entry.name);
         if (entry.isDirectory()) await collect(path);
-        else if (entry.name.endsWith('.webp')) paths.push(path);
+        else if (entry.name.endsWith('.webp') || entry.name.endsWith('.gif')) paths.push(path);
     }
 }
 
@@ -109,4 +109,4 @@ if (artworkBase) {
     for (const name of await readdir(new URL('../site/public/assets/', import.meta.url)))
         await rm(join(dist, 'assets', name), { recursive: true, force: true });
 }
-console.log(`Prepared image cache for ${paths.length} WebP files.`);
+console.log(`Prepared image cache for ${paths.length} image files.`);

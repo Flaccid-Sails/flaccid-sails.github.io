@@ -1,5 +1,5 @@
 export class Images {
-    public static readonly logo = import.meta.env.BASE_URL + 'logo.webp';
+    public static readonly logo = import.meta.env.BASE_URL + 'logo.gif';
     public static readonly wowIcon = import.meta.env.VITE_ARTWORK_BASE_URL + 'assets/wow-icon.webp';
     public static readonly sortArrow = import.meta.env.VITE_ARTWORK_BASE_URL + 'assets/UI-SortArrow.webp';
 
