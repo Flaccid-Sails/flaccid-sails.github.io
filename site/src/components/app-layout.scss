@@ -35,7 +35,7 @@
 
 .app-error {
     display: flex;
-    height: calc(100vh - 114px);
+    height: 100%;
     width: 100%;
     align-items: center;
     justify-content: center;
@@ -48,4 +48,5 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+    min-width: 0;
 }

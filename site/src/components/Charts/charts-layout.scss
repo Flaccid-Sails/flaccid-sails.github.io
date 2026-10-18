@@ -2,14 +2,23 @@
     display: none !important;
     width: 380px;
     min-width: 380px;
+    min-height: 0;
 
     @media (width >=80rem) {
         display: grid !important;
     }
 }
 
+.charts-frame-content {
+    min-height: 0;
+
+    > aside {
+        height: 100%;
+    }
+}
+
 .charts-scroll {
-    height: calc(100dvh - 143px);
+    height: 100%;
 }
 
 .charts-content {

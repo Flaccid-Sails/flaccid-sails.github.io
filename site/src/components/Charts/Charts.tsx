@@ -18,7 +18,7 @@ export function Charts({ players, maxLevel, minimumRaidItemLevel, theme }: Props
     const image = useMemo(() => themeToBackgroundImage(theme), [theme]);
 
     return (
-        <Frame theme={theme} className='charts-frame'>
+        <Frame theme={theme} className='charts-frame' contentClassName='charts-frame-content'>
             <aside style={{ backgroundImage: `url(${image})` }}>
                 <ScrollView className='charts-scroll'>
                     <div className='charts-content'>

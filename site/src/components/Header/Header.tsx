@@ -317,9 +317,11 @@ export function Header({ parameters, theme, requestFailed }: Props): React.React
 
     return (
         <header className='site-header'>
-            <div className='header-background' style={headerStyle} />
-            <div className='header-left-decoration' style={leftStyle} />
-            <div className='header-right-decoration' style={rightStyle} />
+            <div className='header-artwork' aria-hidden='true'>
+                <div className='header-background' style={headerStyle} />
+                <div className='header-left-decoration' style={leftStyle} />
+                <div className='header-right-decoration' style={rightStyle} />
+            </div>
             <div className='header-content'>
                 <a className='header-brand'
                     href={import.meta.env.BASE_URL}
