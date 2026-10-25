@@ -256,6 +256,15 @@
     text-align: left;
     text-shadow: 1px 1px 2px #000;
 
+    &::after {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: #000a;
+        content: '';
+        pointer-events: none;
+    }
+
     .wow-chart-icon { display: none; }
     .wow-chart-row { grid-template-columns: minmax(0, 1fr) minmax(70px, 1fr) 34px; gap: 10px; padding-inline: 0; }
     .wow-chart-label, .wow-chart-value { color: #f1deb2; font-size: 14px; }
