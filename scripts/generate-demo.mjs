@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 import { createDemoTalentBuild } from './demo-talents.mjs';
 import { summarizeReports } from './report-summary.mjs';
+import { collectPlayerLogHistory } from '../site/src/utils/log-progress.ts';
 
 const catalog = JSON.parse(await readFile('data/talents.json', 'utf8'));
 const { outfits } = JSON.parse(await readFile('data/demo-equipment.json', 'utf8'));
@@ -51,22 +52,30 @@ const logs = Object.fromEntries(players.filter(p => p.level === 60).map((p, i) =
     bosses: bosses.map(b => ({ bossId: b.id, difficulty: 3, dps: 60 + i * 2, healer: isHealer(p) ? 65 + i : undefined })),
 }]));
 const reportPlayers = players.filter(p => p.level === 60);
-const reports = [0, 1, 2].map(i => ({
-    code: `demo-${i}`, title: ['First voyage (demo)', 'A night at sea (demo)', 'Crew practice (demo)'][i],
-    endTime: epoch - i * 86_400_000, zoneId: -1,
-    bosses: bosses.map(b => ({
+const raidNights = ['First voyage', 'Finding our sea legs', 'Crew practice', 'A night at sea',
+    'Rough waters', 'Back on course', 'Full sail', 'The return voyage'];
+const demoParse = (base, playerIndex, raidIndex, bossIndex) => Math.min(100, Math.max(0,
+    base + playerIndex * 2 + raidIndex * 3 - bossIndex * 4 + [0, 2, -3, 1, -9, 0, 4, 2][raidIndex]));
+const reports = raidNights.map((title, i) => ({
+    code: `demo-${i}`, title: `${title} (demo)`,
+    endTime: epoch - (raidNights.length - 1 - i) * 3 * 86_400_000, zoneId: -1,
+    bosses: bosses.map((b, bossIndex) => ({
         id: b.id, difficulty: 3,
-        dps: reportPlayers.filter((p, n) => !isHealer(p) && n % 9 !== 0).map((p, n) => ({ name: p.name, realm: p.realm, log: 65 + n * 2 })),
-        tanks: reportPlayers.filter((_, n) => n % 9 === 0).map(p => ({ name: p.name, realm: p.realm, log: 85 })),
-        healers: reportPlayers.filter(isHealer).map((p, n) => ({ name: p.name, realm: p.realm, log: 78 + n * 2 })),
+        dps: reportPlayers.filter((p, n) => !isHealer(p) && n % 9 !== 0).map((p, n) => ({ name: p.name, realm: p.realm, log: demoParse(50, n, i, bossIndex) })),
+        tanks: reportPlayers.filter((_, n) => n % 9 === 0).map((p, n) => ({ name: p.name, realm: p.realm, log: demoParse(61, n, i, bossIndex) })),
+        healers: reportPlayers.filter(isHealer).map((p, n) => ({ name: p.name, realm: p.realm, log: demoParse(54, n, i, bossIndex) })),
     })),
 }));
+const playerLogHistory = collectPlayerLogHistory(reports);
 const slots = ['HEAD', 'NECK', 'SHOULDER', 'BACK', 'CHEST', 'WRIST', 'HANDS', 'WAIST', 'LEGS', 'FEET', 'FINGER_1', 'FINGER_2', 'TRINKET_1', 'TRINKET_2', 'MAIN_HAND', 'OFF_HAND'];
 const icons = ['inv_helmet_03', 'inv_jewelry_necklace_01', 'inv_shoulder_01', 'inv_misc_cape_01', 'inv_chest_plate01', 'inv_bracer_01', 'inv_gauntlets_01', 'inv_belt_01', 'inv_pants_01', 'inv_boots_01', 'inv_jewelry_ring_01', 'inv_jewelry_ring_02', 'inv_misc_gem_pearl_01', 'inv_misc_gem_pearl_02', 'inv_sword_04', 'inv_shield_04'];
 const characterFiles = {};
 for (const [i, player] of players.entries()) {
     if (player.level !== 60) continue;
-    const profile = { talentBuilds: characterBuilds.get(`${player.realm}/${player.name}`) };
+    const profile = {
+        talentBuilds: characterBuilds.get(`${player.realm}/${player.name}`),
+        logHistory: playerLogHistory.get(`${player.realm}/${player.name}`) ?? [],
+    };
     profile.statistics = {
         health: 4200 + i * 70,
         power: ['Warrior', 'Rogue'].includes(player.class) ? 100 : 3100,

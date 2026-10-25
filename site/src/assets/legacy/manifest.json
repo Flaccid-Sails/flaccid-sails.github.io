@@ -1,0 +1,183 @@
+{
+  "build": "1.60.1.70450",
+  "source": "Installed WoW Forever client, wow_classic_beta",
+  "files": [
+    {
+      "file": "challenges-header.webp",
+      "width": 813,
+      "height": 60,
+      "atlas": "legacy-challenge-bg-c60",
+      "name": "legacy-challenge-bg-c60",
+      "fileDataId": 8419564,
+      "crop": {
+        "left": 973,
+        "top": 1,
+        "width": 813,
+        "height": 510
+      },
+      "slice": null,
+      "subcrop": {
+        "left": 0,
+        "top": 0,
+        "width": 813,
+        "height": 60
+      }
+    },
+    {
+      "file": "challenges-background.webp",
+      "width": 813,
+      "height": 450,
+      "atlas": "legacy-challenge-bg-c60",
+      "name": "legacy-challenge-bg-c60",
+      "fileDataId": 8419564,
+      "crop": {
+        "left": 973,
+        "top": 1,
+        "width": 813,
+        "height": 510
+      },
+      "slice": null,
+      "subcrop": {
+        "left": 0,
+        "top": 60,
+        "width": 813,
+        "height": 450
+      }
+    },
+    {
+      "file": "challenge-card.webp",
+      "width": 968,
+      "height": 240,
+      "atlas": "legacy-challenge-cards-c60-2x",
+      "name": "legacy-challenge-cards-c60-2x",
+      "fileDataId": 8285995,
+      "crop": {
+        "left": 1,
+        "top": 63,
+        "width": 968,
+        "height": 240
+      },
+      "slice": null
+    },
+    {
+      "file": "challenge-card-selected.webp",
+      "width": 968,
+      "height": 240,
+      "atlas": "legacy-challenge-cards-selected-c60-2x",
+      "name": "legacy-challenge-cards-selected-c60-2x",
+      "fileDataId": 8285995,
+      "crop": {
+        "left": 1,
+        "top": 493,
+        "width": 968,
+        "height": 240
+      },
+      "slice": {
+        "ID": "391",
+        "UiTextureAtlasElementID": "36924",
+        "Left": "12",
+        "Top": "12",
+        "Right": "12",
+        "Bottom": "12",
+        "SliceMode": "0"
+      }
+    },
+    {
+      "file": "category.webp",
+      "width": 534,
+      "height": 66,
+      "atlas": "legacy-challenge-left-sub-tab-c60-2x",
+      "name": "legacy-challenge-left-sub-tab-c60-2x",
+      "fileDataId": 8285995,
+      "crop": {
+        "left": 1507,
+        "top": 735,
+        "width": 534,
+        "height": 66
+      },
+      "slice": {
+        "ID": "412",
+        "UiTextureAtlasElementID": "36931",
+        "Left": "12",
+        "Top": "12",
+        "Right": "12",
+        "Bottom": "12",
+        "SliceMode": "0"
+      }
+    },
+    {
+      "file": "category-selected.webp",
+      "width": 534,
+      "height": 66,
+      "atlas": "legacy-challenge-left-sub-tab-selected-c60-2x",
+      "name": "legacy-challenge-left-sub-tab-selected-c60-2x",
+      "fileDataId": 8285995,
+      "crop": {
+        "left": 971,
+        "top": 735,
+        "width": 534,
+        "height": 66
+      },
+      "slice": {
+        "ID": "411",
+        "UiTextureAtlasElementID": "36932",
+        "Left": "12",
+        "Top": "12",
+        "Right": "12",
+        "Bottom": "12",
+        "SliceMode": "0"
+      }
+    },
+    {
+      "file": "divider.webp",
+      "width": 24,
+      "height": 906,
+      "atlas": "legacy-tree-frame-divider-vertical-c60-2x",
+      "name": "legacy-tree-frame-divider-vertical-c60-2x",
+      "fileDataId": 8281590,
+      "crop": {
+        "left": 1629,
+        "top": 1,
+        "width": 24,
+        "height": 906
+      },
+      "slice": null
+    },
+    {
+      "file": "tree-panel.webp",
+      "width": 1388,
+      "height": 910,
+      "atlas": "legacy-tree-frame-background-c60-2x",
+      "name": "legacy-tree-frame-background-c60-2x",
+      "fileDataId": 8281590,
+      "crop": {
+        "left": 1,
+        "top": 1,
+        "width": 1626,
+        "height": 1020
+      },
+      "slice": null,
+      "subcrop": {
+        "left": 238,
+        "top": 110,
+        "width": 1388,
+        "height": 910
+      }
+    },
+    {
+      "file": "summary-card.webp",
+      "width": 390,
+      "height": 190,
+      "atlas": "legacy-challenge-cards-small-c60-2x",
+      "name": "legacy-challenge-cards-small-c60-2x",
+      "fileDataId": 8285995,
+      "crop": {
+        "left": 971,
+        "top": 805,
+        "width": 390,
+        "height": 190
+      },
+      "slice": null
+    }
+  ]
+}

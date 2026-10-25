@@ -1,0 +1,42 @@
+.legacy-challenges-surface {
+    background: #100c08 url('/src/assets/legacy/challenges-background.webp') center / 100% 100% no-repeat;
+}
+
+.legacy-challenges-toolbar {
+    background: url('/src/assets/legacy/challenges-header.webp') center / 100% 100% no-repeat;
+}
+
+.legacy-tree-panel {
+    width: 100%;
+    min-width: 0;
+    border: 12px solid transparent;
+    border-image: url('/src/assets/legacy/tree-panel.webp') 24 fill / 12px stretch;
+}
+
+.legacy-challenge-card {
+    position: relative;
+    isolation: isolate;
+    border: 6px solid transparent;
+    border-image: url('/src/assets/legacy/challenge-card.webp') 12 fill / 6px stretch;
+
+    &[aria-pressed='true']::before {
+        position: absolute;
+        inset: -6px;
+        z-index: -1;
+        border: 6px solid transparent;
+        border-image: url('/src/assets/legacy/challenge-card-selected.webp') 12 fill / 6px stretch;
+        content: '';
+        pointer-events: none;
+    }
+
+    &:hover { filter: brightness(1.12); }
+}
+
+.legacy-category-button {
+    border: 6px solid transparent;
+    border-image: url('/src/assets/legacy/category.webp') 12 fill / 6px stretch;
+
+    &[aria-pressed='true'] {
+        border-image-source: url('/src/assets/legacy/category-selected.webp');
+    }
+}

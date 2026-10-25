@@ -1,0 +1,318 @@
+.log-progress-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    display: grid;
+    place-items: center;
+}
+
+.log-progress-backdrop {
+    position: absolute;
+    inset: 0;
+    background: #0009;
+}
+
+.log-progress-window {
+    position: relative;
+    isolation: isolate;
+    width: min(1080px, calc(100vw - 24px));
+    height: min(780px, calc(100dvh - 24px));
+    color: #f0e9dc;
+    filter: drop-shadow(0 0 6px #000);
+
+    .wow-window-title { color: var(--character-title-color); }
+}
+
+.log-progress-content {
+    position: absolute;
+    inset: 43px 20px 17px;
+    display: flex;
+    flex-direction: column;
+}
+
+.log-progress-player {
+    display: flex;
+    flex-shrink: 0;
+    align-items: baseline;
+    gap: 12px;
+    min-height: 52px;
+    padding: 16px 24px 12px 64px;
+    text-shadow: 1px 1px 2px #000;
+
+    strong { font-size: 20px; font-weight: normal; }
+    > span { margin-left: auto; color: #a99a80; font-size: 13px; }
+}
+
+.log-progress-search {
+    position: relative;
+    width: min(290px, 50%);
+    margin-left: auto;
+
+    &::before {
+        position: absolute;
+        top: 7px;
+        left: 9px;
+        width: 14px;
+        height: 14px;
+        background: url('/assets/talent-window/search/common-search-magnifyingglass.webp') center / contain no-repeat;
+        content: '';
+        pointer-events: none;
+    }
+
+    input {
+        width: 100%;
+        height: 28px;
+        padding: 2px 8px 2px 28px;
+        border: 0;
+        border-radius: 5px;
+        background-color: #100e0c;
+        background-image: url('/assets/talent-window/search/common-search-border-left-c60.webp'),
+            url('/assets/talent-window/search/common-search-border-right-c60.webp'),
+            url('/assets/talent-window/search/common-search-border-middle-c60.webp');
+        background-position: left center, right center, center;
+        // Keep the end caps at their native aspect ratio and overlap the middle
+        // slightly so fractional widths cannot expose a seam.
+        background-size: auto 28px, auto 28px, calc(100% - 20px) 28px;
+        background-repeat: no-repeat;
+        color: #e8e1d1;
+        font-size: 13px;
+        cursor: text;
+    }
+
+    input:focus-visible { outline: 1px solid #b19042; }
+}
+
+.log-progress-scroll { flex: 1; min-height: 0; }
+.log-progress-scroll::before {
+    position: absolute;
+    inset: 0 auto 0 246px;
+    z-index: 2;
+    width: 12px;
+    background: url('/src/assets/legacy/divider.webp') center / 100% 100% no-repeat;
+    content: '';
+    pointer-events: none;
+}
+.log-progress-scroll .viewport { overscroll-behavior: contain; }
+.log-progress-layout {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    align-items: start;
+    gap: 18px;
+    padding: 16px 14px 20px;
+}
+
+.log-progress-bosses {
+    position: sticky;
+    top: 16px;
+    min-width: 0;
+    padding-right: 12px;
+}
+
+.log-progress-boss-heading {
+    margin: 0 7px 16px;
+    color: #f4d78f;
+    font-size: 18px;
+    text-shadow: 1px 2px 2px #000;
+}
+
+.log-progress-zone {
+    margin-bottom: 16px;
+
+    h2 { margin: 0 7px 8px; color: #a99a80; font-size: 13px; font-weight: normal; }
+}
+
+.log-progress-boss-list { display: grid; gap: 5px; }
+.log-progress-boss-choice {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-height: 38px;
+    padding: 0 3px;
+    background: none;
+    color: #b9ab91;
+    text-align: left;
+
+    img { position: relative; width: 24px; height: 24px; object-fit: contain; filter: drop-shadow(0 2px 2px #000); }
+    span { position: relative; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+
+    &:hover { color: #fff4d5; }
+    &[aria-pressed='true'] { color: #fff4d5; }
+}
+
+.log-progress-main { min-width: 0; }
+.log-progress-encounter {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin: 0 3px 14px;
+
+    h2 { color: var(--title-color); font-size: 25px; font-weight: normal; text-shadow: 1px 2px 3px #000; }
+    > span { margin-left: auto; color: #a99a80; font-size: 13px; }
+}
+
+.log-progress-filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 12px;
+    margin: 0 0 10px;
+
+    .forever-button { min-width: 82px; font-size: 13px; }
+}
+
+.log-progress-roles, .log-progress-difficulties { display: flex; flex-wrap: wrap; gap: 5px; }
+.log-progress-difficulties > span { padding-inline: 6px; color: #bba883; font-size: 13px; }
+
+.log-progress-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin: 0 0 14px;
+}
+
+.log-progress-summary-stat {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-rows: 18px 40px 16px;
+    align-items: center;
+    justify-items: center;
+    min-width: 0;
+    padding: 7px 5px 9px;
+    border: 10px solid transparent;
+    border-image: url('/src/assets/legacy/summary-card.webp') 20 fill / 10px stretch;
+    text-align: center;
+    text-shadow: 1px 1px 2px #000;
+
+    &::before {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: #000a;
+        content: '';
+        pointer-events: none;
+    }
+
+    dt { color: #eed7a5; font-size: 13px; white-space: nowrap; }
+    dd { font-size: 26px; line-height: 1; white-space: nowrap; }
+    dd small { margin-left: 4px; font-size: 13px; }
+    time, > span { color: #d1bea0; font-size: 12px; }
+}
+
+.log-progress-summary-latest {
+    dt { color: #fff1cc; }
+    dd { font-size: 32px; }
+}
+
+.log-progress-chart {
+    padding: 5px 6px 6px;
+}
+.log-progress-plot { margin-top: 4px; }
+.log-progress-plot svg { display: block; width: 100%; }
+.log-progress-axis { fill: #bba883; font-size: 11px; }
+.log-progress-grid { stroke: #bba88326; }
+.log-progress-line { fill: none; stroke: #e3c27a; stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 1px 1px #000); }
+.log-progress-point {
+    fill: currentColor;
+    stroke: #17110b;
+    stroke-width: 2;
+    cursor: var(--engi-cursor), pointer;
+
+    &.selected, &:focus-visible { stroke: #ffe6a2; outline: none; filter: drop-shadow(0 0 3px #c59543); }
+}
+.log-progress-inspection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+    padding: 9px 5px 0;
+    border-top: 1px solid #72552b;
+    text-shadow: 1px 1px 2px #000;
+
+    > div { display: grid; gap: 3px; min-width: 0; }
+    time { color: #a99a80; font-size: 12px; }
+    strong { margin-left: auto; font-size: 23px; font-weight: normal; }
+}
+.log-progress-report-title { overflow: hidden; color: #f1deb2; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+.log-progress-reports {
+    margin-top: 14px;
+    padding: 0;
+    border: 0;
+    background: none;
+    box-shadow: none;
+}
+.log-progress-reports > .wow-chart-heading { margin: 0 8px 8px; }
+.log-progress-reports .wow-chart-rows { gap: 8px; }
+.log-progress-report {
+    width: 100%;
+    min-height: 82px;
+    padding: 8px 10px 5px;
+    background: none;
+    text-align: left;
+    text-shadow: 1px 1px 2px #000;
+
+    .wow-chart-icon { display: none; }
+    .wow-chart-row { grid-template-columns: minmax(0, 1fr) minmax(70px, 1fr) 34px; gap: 10px; padding-inline: 0; }
+    .wow-chart-label, .wow-chart-value { color: #f1deb2; font-size: 14px; }
+    .wow-chart-track { height: 12px; }
+}
+.log-progress-report-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: #e2c68a;
+    font-size: 12px;
+}
+
+.log-progress-explanation { margin: 12px 4px 0; color: #a99a80; font-size: 12px; line-height: 1.5; }
+.log-progress-gain { color: #86d47a; }
+.log-progress-loss { color: #ef9890; }
+.log-progress-status {
+    display: grid;
+    justify-items: center;
+    gap: 16px;
+    padding: 50px 12px;
+    text-align: center;
+    color: #c4b496;
+}
+.log-progress-window button:focus-visible { outline: 1px solid #ffe6a2; outline-offset: 2px; }
+
+@media (width < 760px) {
+    .log-progress-window { width: calc(100vw - 8px); height: calc(100dvh - 12px); }
+    .log-progress-content { inset-inline: 14px 20px; }
+    .log-progress-player { flex-wrap: wrap; gap: 2px 8px; padding: 14px 10px 10px 60px; }
+    .log-progress-player strong { font-size: 17px; }
+    .log-progress-player > span { font-size: 11px; }
+    .log-progress-search { width: 100%; margin: 6px 0 0 -44px; flex: 1 0 calc(100% + 44px); }
+    .log-progress-layout { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 10px 6px 18px; }
+    .log-progress-bosses { position: static; padding: 0; border: 0; }
+    .log-progress-scroll::before { display: none; }
+    .log-progress-boss-heading { display: none; }
+    .log-progress-zone { margin-bottom: 6px; }
+    .log-progress-zone h2 { margin-bottom: 5px; }
+    .log-progress-boss-list { display: flex; gap: 4px; overflow-x: auto; padding: 2px; scrollbar-width: thin; scrollbar-color: #93764a #171411; }
+    .log-progress-boss-choice { flex: 0 0 200px; min-height: 38px; }
+    .log-progress-encounter { margin-bottom: 10px; }
+    .log-progress-encounter h2 { font-size: 21px; }
+    .log-progress-encounter > span { display: none; }
+    .log-progress-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+    .log-progress-summary-stat { grid-template-rows: 16px 34px 14px; padding: 4px 0 6px; border-width: 8px; border-image-width: 8px; }
+    .log-progress-summary-stat dt, .log-progress-summary-stat time { font-size: 12px; }
+    .log-progress-summary-stat dd { font-size: 23px; }
+    .log-progress-summary-latest dd { font-size: 28px; }
+    .log-progress-summary .log-progress-change { display: flex; grid-column: 1 / -1; align-items: baseline; gap: 8px; padding: 7px 4px; }
+    .log-progress-change dt { white-space: normal; }
+    .log-progress-change dd { margin-left: auto; font-size: 24px; }
+    .log-progress-change > span { flex-shrink: 0; font-size: 11px; }
+    .log-progress-report .wow-chart-row { grid-template-columns: minmax(0, 1fr) minmax(60px, .65fr) 30px; gap: 6px; }
+    .log-progress-chart, .log-progress-reports { padding-inline: 1px; }
+}
+
+@media (width < 360px) {
+    .log-progress-change > span { display: none; }
+}

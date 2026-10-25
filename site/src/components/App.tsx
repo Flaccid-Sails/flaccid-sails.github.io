@@ -8,6 +8,7 @@ import { EventEmitter } from '@src/utils/event-emitter';
 import { Images } from '@src/utils/images';
 import { CharacterDialog } from './Character/CharacterDialog';
 const Charts = lazy(() => import('./Charts/Charts').then(module => ({ default: module.Charts })));
+const LogProgressDialog = lazy(() => import('./LogProgress/LogProgressDialog').then(module => ({ default: module.LogProgressDialog })));
 import { Frame } from './Frame/Frame';
 import { Header } from './Header/Header';
 import { JoinInfo } from './JoinInfo/JoinInfo';
@@ -26,6 +27,7 @@ export function App() {
     const [snapshot, setSnapshot] = useState<Snapshot>();
     const [theme, setTheme] = useState<Theme>('HORDE');
     const [requestFailed, setRequestFailed] = useState(false);
+    const [logProgressPlayer, setLogProgressPlayer] = useState<PlayerDTO>();
     const parameters = snapshot?.parameters ?? {};
     const transformedPlayers = useMemo(() => snapshot?.players.map(player => ({
         ...player,
@@ -59,6 +61,11 @@ export function App() {
             try { localStorage.setItem('flaccid-sails:theme', theme); } catch { }
         });
     }, []);
+
+    useEffect(() => EventEmitter.subscribe('OPEN_LOG_PROGRESS', player => {
+        EventEmitter.emit('CLOSE_POPUPS');
+        setLogProgressPlayer(player);
+    }), []);
 
     const color = useMemo(() => {
         switch (theme) {
@@ -124,6 +131,11 @@ export function App() {
         <JoinInfo theme={theme} color={color} />
         <CharacterDialog />
         <SpecializationsDialog players={snapshot?.players} />
+        {logProgressPlayer && snapshot && <Suspense fallback={null}>
+            <LogProgressDialog key={`${logProgressPlayer.realm}/${logProgressPlayer.name}`}
+                player={logProgressPlayer} zones={snapshot.zones} isDemo={snapshot.mode === 'demo'}
+                onClose={() => setLogProgressPlayer(undefined)} />
+        </Suspense>}
         <Popups />
     </>;
 }

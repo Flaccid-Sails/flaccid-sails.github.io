@@ -161,6 +161,27 @@
     background-size: 32px auto;
 }
 
+.player-log-progress-button {
+    width: 32px;
+    height: 40px;
+    border: 5px solid transparent;
+    border-image: url('/src/assets/log-progress/microbutton-frame.webp') 5 / 5px stretch;
+    background-color: #11100e;
+    background-image: url('/src/assets/log-progress/journal-up.webp');
+    background-size: 36px auto;
+    background-origin: border-box;
+    background-clip: padding-box;
+}
+
+.player-log-progress-button:hover,
+.player-log-progress-button:focus-visible {
+    background-image: url('/src/assets/log-progress/journal-hover.webp');
+}
+
+.player-log-progress-button:active {
+    background-image: url('/src/assets/log-progress/journal-down.webp');
+}
+
 .player-action:hover:not(:disabled),
 .player-action:focus-visible {
     filter: brightness(1.25) drop-shadow(0 0 3px #d7a548);
@@ -262,6 +283,14 @@
     .player-talents-button {
         background-position: center -20px;
         background-size: 28px auto;
+    }
+
+    .player-log-progress-button {
+        width: 28px;
+        height: 35px;
+        border-width: 4.375px;
+        border-image-width: 4.375px;
+        background-size: 32px auto;
     }
 
     .player-metrics {

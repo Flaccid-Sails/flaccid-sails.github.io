@@ -28,6 +28,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
     const showProgress = player.level === maxLevel && player.difficulty !== undefined && player.difficulty !== -1 && scores.length > 0;
     const canViewEquipment = player.level === maxLevel;
     const canViewTalents = player.level === 60;
+    const canViewLogs = player.level === maxLevel;
 
     const openPlayerCharacter = (): void => {
         if (!canViewEquipment) return;
@@ -78,7 +79,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
             <div className='player-identity'>
                 <div className='player-name-line'>
                     <strong className='player-name' style={{ color: `var(--${classSlug}-color)` }} title={rankTitle}>{player.name}</strong>
-                    {(canViewEquipment || canViewTalents) && <div className='player-actions'>
+                    {(canViewEquipment || canViewTalents || canViewLogs) && <div className='player-actions'>
                         {canViewEquipment && <button type='button' className='player-action player-equipment-button'
                             style={{ backgroundImage: `url(${Images.gearIcon})` }}
                             title='Check equipment' onClick={openPlayerCharacter}
@@ -87,6 +88,9 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
                             style={{ backgroundImage: `url(${Images.talentsIcon})` }}
                             title='Check talents' onClick={openPlayerTalents}
                             aria-label={`View ${player.name}'s talents`} />}
+                        {canViewLogs && <button type='button' className='player-action player-log-progress-button'
+                            title='Log progress' onClick={() => EventEmitter.emit('OPEN_LOG_PROGRESS', player)}
+                            aria-label={`View ${player.name}'s log progress`} />}
                     </div>}
                 </div>
             </div>

@@ -6,6 +6,7 @@ type Events = {
     'OPEN_TALENTS': [];
     'OPEN_CHARACTER_DIALOG': [PlayerDTO];
     'OPEN_SPECIALIZATIONS_DIALOG': [PlayerDTO];
+    'OPEN_LOG_PROGRESS': [PlayerDTO];
     'HOVER_ELEMENT': [MouseEvent<HTMLDivElement>, 'LEFT' | 'RIGHT' | 'DOWN' | 'UP', () => ReactNode, boolean, boolean];
     'CLOSE_POPUPS': [];
     'CHANGE_THEME': [Theme];
