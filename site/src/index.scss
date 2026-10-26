@@ -113,7 +113,7 @@ a * {
     }
 }
 
-.button {
+:where(.button) {
     position: relative;
     display: flex;
     color: var(--foreground-color);

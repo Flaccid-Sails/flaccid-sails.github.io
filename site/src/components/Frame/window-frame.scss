@@ -40,7 +40,8 @@
     width: 95px;
     height: 95px;
     background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornertopleft-c60-2x.webp");
-    background-size: contain;
+    background-size: 95px 95px;
+    background-position: left top;
 }
 
 .wow-window-top-right {
@@ -49,7 +50,8 @@
     width: 95px;
     height: 95px;
     background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornertopright-c60-2x.webp");
-    background-size: contain;
+    background-size: 95px 95px;
+    background-position: right top;
 }
 
 .wow-window-bottom-left {
@@ -58,7 +60,8 @@
     width: 95px;
     height: 100px;
     background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornerbottomleft-c60-2x.webp");
-    background-size: contain;
+    background-size: 95px 100px;
+    background-position: left bottom;
 }
 
 .wow-window-bottom-right {
@@ -67,7 +70,8 @@
     width: 95px;
     height: 100px;
     background-image: url("/assets/talent-window/window-frame/ui-frame-metal-cornerbottomright-c60-2x.webp");
-    background-size: contain;
+    background-size: 95px 100px;
+    background-position: right bottom;
 }
 
 .wow-window-portrait {
