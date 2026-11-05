@@ -11,24 +11,24 @@ interface Props {
     maxLevel?: number;
     sortedCriteria?: keyof typeof sortComparers;
     zones?: ZoneDTO[];
+    logsAvailable?: boolean;
 }
 
-export function Player({ player, maxLevel, sortedCriteria, zones }: Props): ReactNode {
+export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable = true }: Props): ReactNode {
     const lastLogin = calculateTimeDifference(player.lastLogin, true);
     const classSlug = player.class.toLowerCase().replaceAll(' ', '-');
-    const realmSlug = player.realm.toLowerCase().replaceAll(' ', '-');
-    const href = player.realm === 'Preview' ? undefined : `https://classic.warcraftlogs.com/character/eu/${realmSlug}/${player.name.toLowerCase()}`;
-    const rankTitle = player.rank === 0 ? 'Guild master' : player.rank <= 2 ? 'Captain' : player.class;
+    const href = logsAvailable && player.warcraftLogsUrl?.startsWith('https://') ? player.warcraftLogsUrl : undefined;
+    const rankTitle = player.rank === 0 ? 'Guild master' : player.rank > 0 && player.rank <= 2 ? 'Captain' : player.class;
     const scores = [
         { type: 'DPS' as const, label: 'DPS', value: player.dps },
         { type: 'HEAL' as const, label: 'Heal', value: player.healer },
         { type: 'TANK' as const, label: 'Tank DPS', value: player.tank },
-    ].filter(score => player.level === maxLevel && score.value !== undefined && score.value !== -1 && score.value !== 0);
-    const showLastLogin = player.itemLevel !== -1 && lastLogin !== 'Today' && (sortedCriteria === 'LOGGED IN' || !scores.length);
+    ].filter(score => logsAvailable && player.level === maxLevel && score.value !== undefined && score.value !== -1 && score.value !== 0);
+    const showLastLogin = player.lastLogin > 0 && player.itemLevel !== -1 && lastLogin !== 'Today' && (sortedCriteria === 'LOGGED IN' || !scores.length);
     const showProgress = player.level === maxLevel && player.difficulty !== undefined && player.difficulty !== -1 && scores.length > 0;
-    const canViewEquipment = player.level === maxLevel;
-    const canViewTalents = player.level === 60;
-    const canViewLogs = player.level === maxLevel;
+    const canViewEquipment = player.equipmentAvailable ?? player.level === maxLevel;
+    const canViewTalents = player.talentsAvailable ?? player.level === 60;
+    const canViewLogs = logsAvailable && player.level === maxLevel;
 
     const openPlayerCharacter = (): void => {
         if (!canViewEquipment) return;
@@ -72,7 +72,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones }: Props): Reac
                         aria-label={`View ${player.name} on Warcraft Logs`}>{portrait}</a>
                 ) : <span className='player-avatar-link'>{portrait}</span>}
                 <span className='player-avatar-rank' style={{ color: `var(--rank-${player.rank}-color)` }}>
-                    Rank {toRoman(player.rank)}
+                    {player.rank < 0 ? 'Member' : `Rank ${toRoman(player.rank)}`}
                 </span>
             </div>
 

@@ -1,6 +1,6 @@
 {
     "detailedLevel": 60,
-    "detailsRefreshHours": 6,
+    "detailsRefreshHours": 3,
     "inactiveAfterDays": 14,
     "inactiveRefreshHours": 168,
     "maxCharactersPerRun": 40,

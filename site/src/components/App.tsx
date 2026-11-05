@@ -102,8 +102,13 @@ export function App() {
 
         <Frame theme={theme} className='app-frame'
             contentClassName='app-frame-content'>
-            <Header parameters={parameters} theme={theme} requestFailed={requestFailed} />
-            {snapshot && !parameters.lastUpdate && <p role='status' className='app-status'>Waiting for the first guild update.</p>}
+            <Header parameters={parameters} theme={theme} requestFailed={requestFailed}
+                guild={snapshot?.guild} isDemo={snapshot?.mode !== 'live'} />
+            {snapshot?.sources?.blizzard.roster === 'unavailable'
+                ? <p role='status' className='app-status'>Blizzard has not made the guild roster available yet.</p>
+                : snapshot?.sources?.blizzard.roster === 'cached'
+                    ? <p role='status' className='app-status'>Showing the last saved roster while Blizzard's guild data is unavailable.</p>
+                    : snapshot && !parameters.lastUpdate && <p role='status' className='app-status'>Waiting for the first guild update.</p>}
             <main className='app-main'>
                 {!snapshot && !requestFailed && <p role='status' className='app-loading'>Loading guild data...</p>}
                 {requestFailed && !snapshot && (
@@ -120,7 +125,7 @@ export function App() {
                         theme={theme}
                         hasLoaded={Boolean(parameters.lastUpdate)} />
 
-                    {wide && <Suspense fallback={null}><Charts players={transformedPlayers}
+                    {wide && snapshot.sources?.blizzard.roster !== 'unavailable' && <Suspense fallback={null}><Charts players={transformedPlayers}
                         maxLevel={parameters.maxLevel}
                         minimumRaidItemLevel={parameters.minimumRaidItemLevel}
                         theme={theme} /></Suspense>}

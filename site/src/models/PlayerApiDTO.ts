@@ -1,6 +1,11 @@
 import type { CharacterAppearance } from './CharacterAppearance';
 
 export interface PlayerApiDTO {
+    id?: number;
+    slug?: string;
+    equipmentAvailable?: boolean;
+    talentsAvailable?: boolean;
+    warcraftLogsUrl?: string;
     appearance?: CharacterAppearance;
     name: string;
     realm: string;

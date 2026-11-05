@@ -1,6 +1,6 @@
 # Flaccid Sails
 
-A static guild site for World of Warcraft: Forever. The roster, equipment and raid results are demo data until the game and its APIs are ready.
+A static guild site for World of Warcraft: Forever. It supports Blizzard-only guild snapshots without Warcraft Logs. A fresh checkout uses demo data until a live snapshot is collected.
 
 ## Run locally
 
@@ -14,6 +14,7 @@ Other commands:
 
 ```sh
 npm run data:refresh
+npm run data:live -- --allow-authenticated-blizzard
 npm test
 npm run build
 npm run preview
@@ -22,7 +23,3 @@ npm run preview
 ## Talent updates
 
 Source: [Talents Forever](https://talentsforever.com/), [public JSON](https://talentsforever.com/data.json), by Chris Baldwin. Game text and artwork belong to Blizzard Entertainment.
-
-## When Forever launches
-
-This policy is a tested scheduling contract, not an implemented Forever API integration. Demo generation and talent refresh make zero requests to Blizzard or Warcraft Logs. When the APIs are confirmed, add the live provider behind this policy and retain the generated static JSON contract.

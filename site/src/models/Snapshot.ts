@@ -10,7 +10,12 @@ export interface Snapshot {
     players: PlayerApiDTO[];
     logs: Record<string, LogsDTO>;
     zones: ZoneDTO[];
-    mode: 'demo';
+    mode: 'demo' | 'live';
+    guild?: { id: number; slug: string; name: string; region: string; ruleset: string };
+    sources?: {
+        blizzard: { roster: 'available' | 'cached' | 'unavailable'; checkedAt: string };
+        warcraftLogs: { status: 'available' | 'unavailable' };
+    };
     characterIndexFile: string;
     reportIndexFile: string;
     dashboardFile: string;

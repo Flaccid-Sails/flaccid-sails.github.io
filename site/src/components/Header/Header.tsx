@@ -1,4 +1,5 @@
 import { ParametersDTO } from '@src/models/ParametersDTO';
+import type { Snapshot } from '@src/models/Snapshot';
 import { Theme } from '@src/models/Theme';
 import { EventEmitter } from '@src/utils/event-emitter';
 import { calculateTimeDifference, themeToImage } from '@src/utils/helpers';
@@ -10,9 +11,11 @@ interface Props {
     parameters: ParametersDTO;
     theme: Theme;
     requestFailed: boolean;
+    guild?: Snapshot['guild'];
+    isDemo: boolean;
 }
 
-export function Header({ parameters, theme, requestFailed }: Props): React.ReactNode {
+export function Header({ parameters, theme, requestFailed, guild, isDemo }: Props): React.ReactNode {
     const [time, setTime] = useState<string>();
     const [, setLastUpdated] = useState<string>();
     const [hasTabFocus, setHasTabFocus] = useState<boolean>(true);
@@ -344,8 +347,8 @@ export function Header({ parameters, theme, requestFailed }: Props): React.React
                     </HoverElement>
                     {!requestFailed && (
                         <div className='header-guild-info'>
-                            <span className='header-guild-name' style={{ textShadow }}>{'Demo roster'}</span>
-                            <p className='header-guild-subtitle' style={{ textShadow }}>WoW Forever preview</p>
+                            <span className='header-guild-name' style={{ textShadow }}>{isDemo ? 'Demo roster' : guild?.name ?? 'Guild roster'}</span>
+                            <p className='header-guild-subtitle' style={{ textShadow }}>{isDemo ? 'WoW Forever preview' : `${guild?.region.toUpperCase() ?? ''} · ${guild?.ruleset ?? ''} · WoW Forever`}</p>
                         </div>
                     )}
                     <div className='header-time-info'>

@@ -2,7 +2,7 @@ name: Refresh data and deploy site
 
 on:
   schedule:
-    - cron: '17 */6 * * *'
+    - cron: '17 */3 * * *'
   workflow_dispatch:
 
 permissions:
@@ -33,10 +33,27 @@ jobs:
         run: npm run data:refresh
       - name: Verify the data pipeline
         run: npm test
+      - name: Restore the previous guild snapshot
+        id: guild-cache
+        uses: actions/cache/restore@v6.1.0
+        with:
+          path: site/public/data
+          key: forever-eu-80523-pve-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: forever-eu-80523-pve-v2-
+      - name: Refresh the live Forever guild
+        run: npm run data:live -- --allow-authenticated-blizzard --from-env --require-roster
+        env:
+          BLIZZARD_CLIENT_ID: ${{ secrets.BLIZZARD_CLIENT_ID }}
+          BLIZZARD_CLIENT_SECRET: ${{ secrets.BLIZZARD_CLIENT_SECRET }}
+          BLIZZARD_REGION: eu
+          BLIZZARD_RULESET: pve
+          BLIZZARD_GUILD_ID: '80523'
+          BLIZZARD_GUILD_SLUG: flaccid-sails
+          BLIZZARD_GUILD_NAME: Flaccid Sails
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v6.0.0
-      - name: Build the preview with static JSON
+      - name: Build the live site with static JSON
         run: npm run build
         env:
           SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
@@ -48,6 +65,11 @@ jobs:
         uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: site/dist
+      - name: Save the successful guild snapshot
+        uses: actions/cache/save@v6.1.0
+        with:
+          path: site/public/data
+          key: ${{ steps.guild-cache.outputs.cache-primary-key }}
   deploy:
     needs: build
     runs-on: ubuntu-latest

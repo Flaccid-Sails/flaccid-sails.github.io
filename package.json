@@ -10,10 +10,12 @@
         "node": ">=24"
     },
     "scripts": {
-        "dev": "npm run data:demo && npm run dev --workspace site",
+        "dev": "npm run data:prepare && npm run dev --workspace site",
+        "data:prepare": "node scripts/prepare-data.mjs",
+        "data:live": "node scripts/refresh-forever.mjs",
         "data:demo": "node scripts/generate-demo.mjs",
         "data:refresh": "node scripts/refresh-talents.mjs && node scripts/refresh-icons.mjs",
-        "build": "npm run data:demo && npm run build --workspace site",
+        "build": "npm run data:prepare && npm run build --workspace site",
         "preview": "npm run preview --workspace site",
         "test": "node --test scripts/*.test.mjs",
         "typecheck": "npm run typecheck --workspace site"

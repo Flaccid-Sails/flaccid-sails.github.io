@@ -44,8 +44,9 @@ export function Leaderboard({
     maxLevel,
     theme
 }: Props): ReactNode {
+    const logsAvailable = snapshot.sources?.warcraftLogs.status !== 'unavailable';
     const [searchQuery, setSearchQuery] = useState<string>();
-    const [sortedCriteria, setSortedCriteria] = useState<keyof typeof sortComparers>('LOG');
+    const [sortedCriteria, setSortedCriteria] = useState<keyof typeof sortComparers>('ITEM LEVEL');
     const [selectedTab, setSelectedTab] = useState<TabType>('PLAYERS');
     const [sortDirection, setSortDirection] = useState<'ASC' | 'DESC'>('DESC');
     const [reportData, setReportData] = useState<{ file: string; reports: ReportIndexEntry[] }>();
@@ -53,7 +54,7 @@ export function Leaderboard({
     const [loadError, setLoadError] = useState(false);
 
     useEffect(() => {
-        if (selectedTab === 'PLAYERS') return;
+        if (selectedTab === 'PLAYERS' || !logsAvailable) return;
         let active = true;
         setLoadError(false);
         if (selectedTab === 'REPORTS') {
@@ -66,7 +67,11 @@ export function Leaderboard({
             }).catch(() => { if (active) setLoadError(true); });
         }
         return () => { active = false; };
-    }, [selectedTab, snapshot]);
+    }, [selectedTab, snapshot, logsAvailable]);
+
+    useEffect(() => {
+        if (!logsAvailable && sortedCriteria === 'LOG') setSortedCriteria('ITEM LEVEL');
+    }, [logsAvailable, sortedCriteria]);
 
     const globalReports = reportData?.file === snapshot.reportIndexFile ? reportData.reports : undefined;
     const dashboardBosses = dashboardData?.file === snapshot.dashboardFile ? dashboardData.bosses : undefined;
@@ -161,7 +166,7 @@ export function Leaderboard({
                 <div className={`leaderboard-sort-controls${selectedTab === 'PLAYERS' ? '' : ' leaderboard-sort-controls-hidden'}`}
                     aria-hidden={selectedTab !== 'PLAYERS'}>
                     <p className='leaderboard-sort-label'>Sort by</p>
-                    {Object.keys(sortComparers).map(key => (
+                    {Object.keys(sortComparers).filter(key => logsAvailable || key !== 'LOG').map(key => (
                         <Button key={key}
                             className='leaderboard-sort-button'
                             selected={key === sortedCriteria}
@@ -193,28 +198,31 @@ export function Leaderboard({
                                     return <div className='player-roster-pair'>
                                         {pair.map(player => <Player key={`${player.realm}/${player.name}`}
                                             player={player} maxLevel={maxLevel}
-                                            sortedCriteria={sortedCriteria} zones={zones} />)}
+                                            sortedCriteria={sortedCriteria} zones={zones} logsAvailable={logsAvailable} />)}
                                     </div>;
                                 }}
                             />
                         )}
                         {players && players.length === 0 && (
-                            <h1 className='leaderboard-message'>No players found</h1>
+                            <h1 className='leaderboard-message'>{snapshot.sources?.blizzard.roster === 'unavailable'
+                                ? 'Waiting for the guild roster' : 'No players found'}</h1>
                         )}
                     </>}
                     {selectedTab === 'REPORTS' && <>
-                        {!reports && (
+                        {!logsAvailable && <p role='status' className='leaderboard-message'>Raid reports will appear when Forever logs are available.</p>}
+                        {logsAvailable && !reports && (
                             <h1 className='leaderboard-message'>{loadError ? 'Reports are unavailable.' : 'Loading...'}</h1>
                         )}
-                        {reports && scrollParent && (
+                        {logsAvailable && reports && scrollParent && (
                             <Reports scrollParent={scrollParent} reports={reports} players={globalPlayers ?? []} zones={zones} />
                         )}
                     </>}
                     {selectedTab === 'DASHBOARD' && <>
-                        {(!dashboardBosses || !globalPlayers) && (
+                        {!logsAvailable && <p role='status' className='leaderboard-message'>Raid progress will appear when Forever logs are available.</p>}
+                        {logsAvailable && (!dashboardBosses || !globalPlayers) && (
                             <h1 className='leaderboard-message'>{loadError ? 'Dashboard is unavailable.' : 'Loading...'}</h1>
                         )}
-                        {dashboardBosses && globalPlayers && (
+                        {logsAvailable && dashboardBosses && globalPlayers && (
                             <Suspense fallback={<p className='leaderboard-dashboard-loading'>Loading dashboard...</p>}><Dashboard
                                 maxLevel={maxLevel}
                                 minimumRaidItemLevel={minimumRaidItemLevel}
@@ -225,7 +233,7 @@ export function Leaderboard({
                     </>}
                 </ScrollView>
             </Frame>
-            {players && hasLoaded && (
+            {players && (hasLoaded || snapshot.mode === 'live') && (
                 <div className='leaderboard-bottom-tabs' aria-label='Guild data'>
                     {tabs.map((tab) => (
                         <button key={tab.type} type='button' aria-pressed={selectedTab === tab.type}

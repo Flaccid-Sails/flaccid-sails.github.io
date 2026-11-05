@@ -15,12 +15,19 @@ test('fresh and inactive profiles are deferred while overdue profiles are queued
     const roster = ['Fresh', 'Active', 'Inactive', 'Stale'].map(n => player(n));
     const cache = {
         'Preview/Fresh': { fetchedAt: now - hour, lastLogin: now },
-        'Preview/Active': { fetchedAt: now - 6 * hour, lastLogin: now },
+        'Preview/Active': { fetchedAt: now - 3 * hour, lastLogin: now },
         'Preview/Inactive': { fetchedAt: now - 48 * hour, lastLogin: now - 30 * 24 * hour },
         'Preview/Stale': { fetchedAt: now - 168 * hour, lastLogin: now - 30 * 24 * hour },
     };
     assert.deepEqual(planCharacterRefresh(roster, cache, policy, now).map(p => p.name), ['Stale', 'Active']);
     assert.equal(planCharacterRefresh(roster, cache, { ...policy, maxCharactersPerRun: 1 }, now).length, 1);
+});
+
+test('active details become due at the three-hour boundary', () => {
+    const roster = [player('Ready')];
+    const cache = { 'Preview/Ready': { fetchedAt: now - 3 * hour + 1, lastLogin: now } };
+    assert.deepEqual(planCharacterRefresh(roster, cache, policy, now), []);
+    assert.deepEqual(planCharacterRefresh(roster, cache, policy, now + 1), roster);
 });
 
 test('only new or updated reports are requested, with a per-run cap', () => {

@@ -303,13 +303,17 @@ function sortLog(a: PlayerDTO, b: PlayerDTO): number {
     return getScore(b) - getScore(a);
 }
 
+function getItemLevel(player: PlayerDTO): number {
+    return Number.isFinite(player.itemLevel) && player.itemLevel >= 0 ? player.itemLevel : -1;
+}
+
 export const sortComparers: Record<string, (a: PlayerDTO, b: PlayerDTO, order: 'ASC' | 'DESC') => number> = {
     'LOG': (a, b, order) => {
         const result = sortLog(a, b);
         return order === 'ASC' ? -result : result;
     },
     'ITEM LEVEL': (a, b, order) => {
-        const result = (b.itemLevel || 0) - (a.itemLevel || 0);
+        const result = b.level - a.level || getItemLevel(b) - getItemLevel(a);
         return order === 'ASC' ? -result : result;
     },
     'LOGGED IN': (a, b, order) => {
