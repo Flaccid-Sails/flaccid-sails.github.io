@@ -2,8 +2,13 @@ name: Refresh data and deploy site
 
 on:
   schedule:
-    - cron: '17 */3 * * *'
+    - cron: '17 * * * *'
   workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: Build and deploy even when the content is unchanged
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -20,6 +25,9 @@ jobs:
     permissions:
       contents: write
       pages: read
+    outputs:
+      deploy: ${{ steps.changes.outputs.deploy }}
+      fingerprint: ${{ steps.changes.outputs.fingerprint }}
     steps:
       - uses: actions/checkout@v7.0.1
         with:
@@ -53,7 +61,21 @@ jobs:
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v6.0.0
+      - name: Restore the last successful deployment fingerprint
+        uses: actions/cache/restore@v6.1.0
+        with:
+          path: .cache/site-deployment/fingerprint
+          key: forever-site-deployed-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: forever-site-deployed-v1-
+      - name: Check whether the published content changed
+        id: changes
+        run: node scripts/deployment-plan.mjs
+        env:
+          SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
+          ARTWORK_BASE_URL: https://flaccid-sails.github.io/site-assets/v1/
+          FORCE_DEPLOY: ${{ inputs.force_deploy == true }}
       - name: Build the live site with static JSON
+        if: steps.changes.outputs.deploy == 'true'
         run: npm run build
         env:
           SITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
@@ -62,6 +84,7 @@ jobs:
         shell: bash
         run: bash scripts/save-talents.sh
       - name: Upload site
+        if: steps.changes.outputs.deploy == 'true'
         uses: actions/upload-pages-artifact@v5.0.0
         with:
           path: site/dist
@@ -72,6 +95,7 @@ jobs:
           key: ${{ steps.guild-cache.outputs.cache-primary-key }}
   deploy:
     needs: build
+    if: needs.build.outputs.deploy == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -84,3 +108,14 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v5.0.1
+      - name: Record the successful deployment fingerprint
+        env:
+          DEPLOYED_FINGERPRINT: ${{ needs.build.outputs.fingerprint }}
+        run: |
+          mkdir -p .cache/site-deployment
+          printf '%s\n' "$DEPLOYED_FINGERPRINT" > .cache/site-deployment/fingerprint
+      - name: Save the successful deployment fingerprint
+        uses: actions/cache/save@v6.1.0
+        with:
+          path: .cache/site-deployment/fingerprint
+          key: forever-site-deployed-v1-${{ github.run_id }}-${{ github.run_attempt }}

@@ -3,6 +3,7 @@ site/node_modules/
 site/dist/
 site-assets/
 site/public/data/
+.cache/site-deployment/
 .env
 .env.*
 !.env.example

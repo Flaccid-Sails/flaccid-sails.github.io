@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createBlizzardClient } from './blizzard-client.mjs';
 import { collectForever, sameGuild } from './forever-data.mjs';
+import { guildContentHash } from './deployment-plan.mjs';
 
 export async function publishForever(data, catalog, output) {
     async function dataset(directory, value) {
@@ -18,6 +19,7 @@ export async function publishForever(data, catalog, output) {
     for (const [key, profile] of Object.entries(data.profiles)) characterIndex[key] = await dataset('characters', profile);
     const snapshot = {
         schemaVersion: 2, mode: 'live', generatedAt: new Date().toISOString(),
+        contentHash: guildContentHash(data, catalog),
         guild: data.guild, players: data.players, parameters: data.parameters, sources: data.sources,
         logs: {}, zones: [],
         characterIndexFile: await dataset('indexes', characterIndex),
