@@ -1,5 +1,4 @@
 import { ParametersDTO } from '@src/models/ParametersDTO';
-import type { Snapshot } from '@src/models/Snapshot';
 import { Theme } from '@src/models/Theme';
 import { EventEmitter } from '@src/utils/event-emitter';
 import { calculateTimeDifference, themeToImage } from '@src/utils/helpers';
@@ -11,13 +10,11 @@ interface Props {
     parameters: ParametersDTO;
     theme: Theme;
     requestFailed: boolean;
-    guild?: Snapshot['guild'];
-    isDemo: boolean;
 }
 
-export function Header({ parameters, theme, requestFailed, guild, isDemo }: Props): React.ReactNode {
+export function Header({ parameters, theme, requestFailed }: Props): React.ReactNode {
     const [time, setTime] = useState<string>();
-    const [, setLastUpdated] = useState<string>();
+    const [lastUpdated, setLastUpdated] = useState<string>();
     const [hasTabFocus, setHasTabFocus] = useState<boolean>(true);
 
     const changeTime = () => {
@@ -29,9 +26,8 @@ export function Header({ parameters, theme, requestFailed, guild, isDemo }: Prop
     };
 
     const changeLastUpdate = useCallback((): void => {
-        if (parameters.lastUpdate && parameters.lastLogsUpdate) {
-            setLastUpdated(calculateTimeDifference(Math.max(parameters.lastUpdate, parameters.lastLogsUpdate) * 1000));
-        }
+        const lastUpdate = Math.max(parameters.lastUpdate ?? 0, parameters.lastLogsUpdate ?? 0);
+        setLastUpdated(lastUpdate ? calculateTimeDifference(lastUpdate * 1000) : undefined);
     }, [parameters]);
 
     const changeTheme = (theme: Theme): void => {
@@ -55,8 +51,8 @@ export function Header({ parameters, theme, requestFailed, guild, isDemo }: Prop
     }, []);
 
     useEffect(() => {
-        if (parameters.lastUpdate && hasTabFocus) {
-            changeLastUpdate();
+        changeLastUpdate();
+        if ((parameters.lastUpdate || parameters.lastLogsUpdate) && hasTabFocus) {
             const interval = setInterval(changeLastUpdate, 1000);
 
             return () => clearInterval(interval);
@@ -346,9 +342,9 @@ export function Header({ parameters, theme, requestFailed, guild, isDemo }: Prop
                         <span className='header-theme-caption' style={{ textShadow }}>Theme</span>
                     </HoverElement>
                     {!requestFailed && (
-                        <div className='header-guild-info'>
-                            <span className='header-guild-name' style={{ textShadow }}>{isDemo ? 'Demo roster' : guild?.name ?? 'Guild roster'}</span>
-                            <p className='header-guild-subtitle' style={{ textShadow }}>{isDemo ? 'WoW Forever preview' : `${guild?.region.toUpperCase() ?? ''} · ${guild?.ruleset ?? ''} · WoW Forever`}</p>
+                        <div className='header-update-info'>
+                            <span className='header-last-updated' style={{ textShadow }}>{lastUpdated || 'Loading...'}</span>
+                            <p className='header-update-caption' style={{ textShadow }}>Last Updated</p>
                         </div>
                     )}
                     <div className='header-time-info'>

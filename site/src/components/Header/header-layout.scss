@@ -194,7 +194,7 @@
     transform: translateY(-5.12px);
 }
 
-.header-guild-info {
+.header-update-info {
     display: none;
     text-align: center;
 
@@ -203,11 +203,11 @@
     }
 }
 
-.header-guild-name {
+.header-last-updated {
     color: var(--title-color);
 }
 
-.header-guild-subtitle {
+.header-update-caption {
     font-size: 0.8rem;
     color: var(--muted-color);
 }

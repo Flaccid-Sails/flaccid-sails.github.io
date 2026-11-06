@@ -102,8 +102,7 @@ export function App() {
 
         <Frame theme={theme} className='app-frame'
             contentClassName='app-frame-content'>
-            <Header parameters={parameters} theme={theme} requestFailed={requestFailed}
-                guild={snapshot?.guild} isDemo={snapshot?.mode !== 'live'} />
+            <Header parameters={parameters} theme={theme} requestFailed={requestFailed} />
             {snapshot?.sources?.blizzard.roster === 'unavailable'
                 ? <p role='status' className='app-status'>Blizzard has not made the guild roster available yet.</p>
                 : snapshot?.sources?.blizzard.roster === 'cached'
