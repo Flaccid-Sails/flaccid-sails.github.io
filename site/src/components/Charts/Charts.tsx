@@ -10,11 +10,10 @@ import { HighestLog } from './HighestLog';
 interface Props {
     players?: PlayerDTO[];
     maxLevel?: number;
-    minimumRaidItemLevel?: number;
     theme: Theme;
 }
 
-export function Charts({ players, maxLevel, minimumRaidItemLevel, theme }: Props): ReactNode {
+export function Charts({ players, maxLevel, theme }: Props): ReactNode {
     const image = useMemo(() => themeToBackgroundImage(theme), [theme]);
 
     return (
@@ -24,8 +23,7 @@ export function Charts({ players, maxLevel, minimumRaidItemLevel, theme }: Props
                     <div className='charts-content'>
                         {players && <>
                             <ClassDistribution players={players}
-                                maxLevel={maxLevel}
-                                minimumRaidItemLevel={minimumRaidItemLevel} />
+                                maxLevel={maxLevel} />
                             <HighestLog players={players}
                                 label='Top DPS parses'
                                 selector={a => a.dps!}

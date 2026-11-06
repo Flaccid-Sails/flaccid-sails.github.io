@@ -29,7 +29,6 @@ interface Props {
     players?: PlayerDTO[];
     zones?: ZoneDTO[];
     maxLevel?: number;
-    minimumRaidItemLevel?: number;
     theme: Theme;
     snapshot: Snapshot;
     hasLoaded: boolean;
@@ -39,7 +38,6 @@ export function Leaderboard({
     players: globalPlayers,
     snapshot,
     zones,
-    minimumRaidItemLevel,
     hasLoaded,
     maxLevel,
     theme
@@ -225,7 +223,6 @@ export function Leaderboard({
                         {logsAvailable && dashboardBosses && globalPlayers && (
                             <Suspense fallback={<p className='leaderboard-dashboard-loading'>Loading dashboard...</p>}><Dashboard
                                 maxLevel={maxLevel}
-                                minimumRaidItemLevel={minimumRaidItemLevel}
                                 players={globalPlayers}
                                 bosses={dashboardBosses}
                                 searchText={searchQuery} /></Suspense>

@@ -120,13 +120,11 @@ export function App() {
                         snapshot={snapshot}
                         zones={snapshot?.zones}
                         maxLevel={parameters.maxLevel}
-                        minimumRaidItemLevel={parameters.minimumRaidItemLevel}
                         theme={theme}
                         hasLoaded={Boolean(parameters.lastUpdate)} />
 
                     {wide && snapshot.sources?.blizzard.roster !== 'unavailable' && <Suspense fallback={null}><Charts players={transformedPlayers}
                         maxLevel={parameters.maxLevel}
-                        minimumRaidItemLevel={parameters.minimumRaidItemLevel}
                         theme={theme} /></Suspense>}
                 </>}
             </main>

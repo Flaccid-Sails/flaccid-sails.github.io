@@ -14,7 +14,6 @@ interface Props {
     players: PlayerDTO[];
     bosses: DashboardBossDTO[];
     maxLevel?: number;
-    minimumRaidItemLevel?: number;
     searchText?: string;
 }
 
@@ -22,7 +21,6 @@ export function Dashboard({
     players,
     bosses: dashboardBosses,
     maxLevel,
-    minimumRaidItemLevel,
     searchText,
 }: Props): React.ReactNode {
     const bossesWithHighestDifficultyLogs = useMemo(() => {
@@ -107,8 +105,7 @@ export function Dashboard({
             </div>
             <div className='dashboard-charts'>
                 <ClassDistribution players={players}
-                    maxLevel={maxLevel}
-                    minimumRaidItemLevel={minimumRaidItemLevel} />
+                    maxLevel={maxLevel} />
                 <HighestLog players={players}
                     label='Top DPS parses'
                     selector={a => a.dps!}

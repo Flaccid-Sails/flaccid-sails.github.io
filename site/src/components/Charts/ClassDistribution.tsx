@@ -4,22 +4,20 @@ import { Button } from '../Button/Button';
 import { ChartBar } from './ChartBar';
 
 const classes = ['Warrior', 'Mage', 'Rogue', 'Priest', 'Hunter', 'Warlock', 'Druid', 'Paladin', 'Shaman'];
-const filters = ['ALL', 'MAX LEVEL', 'RAID READY'] as const;
+const filters = ['ALL', 'MAX LEVEL'] as const;
 type Filter = typeof filters[number];
 
 interface Props {
     players: PlayerDTO[];
     maxLevel?: number;
-    minimumRaidItemLevel?: number;
 }
 
-export function ClassDistribution({ players, maxLevel, minimumRaidItemLevel }: Props) {
+export function ClassDistribution({ players, maxLevel }: Props) {
     const [filter, setFilter] = useState<Filter>('ALL');
     const filteredPlayers = useMemo(() => players.filter(player => {
         if (filter === 'MAX LEVEL') return player.level === maxLevel;
-        if (filter === 'RAID READY') return player.itemLevel >= (minimumRaidItemLevel ?? 0);
         return true;
-    }), [players, filter, maxLevel, minimumRaidItemLevel]);
+    }), [players, filter, maxLevel]);
 
     const distribution = useMemo(() => {
         const counts = new Map<string, number>();
