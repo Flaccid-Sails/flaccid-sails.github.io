@@ -12,18 +12,18 @@ interface Props {
     requestFailed: boolean;
 }
 
+const realmClock = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Paris',
+    hourCycle: 'h23',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+});
+
 export function Header({ parameters, theme, requestFailed }: Props): React.ReactNode {
-    const [time, setTime] = useState<string>();
+    const [time, setTime] = useState(() => realmClock.format());
     const [lastUpdated, setLastUpdated] = useState<string>();
     const [hasTabFocus, setHasTabFocus] = useState<boolean>(true);
-
-    const changeTime = () => {
-        const dateTimeString = new Date().toUTCString();
-        const timeString = dateTimeString.split(' ')[4];
-        const timeParts = timeString.split(':');
-        timeParts[0] = String((parseInt(timeParts[0]) + 2) % 24);
-        setTime(timeParts.join(':'));
-    };
 
     const changeLastUpdate = useCallback((): void => {
         const lastUpdate = Math.max(parameters.lastUpdate ?? 0, parameters.lastLogsUpdate ?? 0);
@@ -35,8 +35,7 @@ export function Header({ parameters, theme, requestFailed }: Props): React.React
     };
 
     useEffect(() => {
-        changeTime();
-        const interval = setInterval(changeTime, 1000);
+        const interval = setInterval(() => setTime(realmClock.format()), 1000);
 
         return () => clearInterval(interval);
     }, []);
