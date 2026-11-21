@@ -15,6 +15,7 @@ interface Props {
     bosses: DashboardBossDTO[];
     maxLevel?: number;
     searchText?: string;
+    logsAvailable: boolean;
 }
 
 export function Dashboard({
@@ -22,6 +23,7 @@ export function Dashboard({
     bosses: dashboardBosses,
     maxLevel,
     searchText,
+    logsAvailable,
 }: Props): React.ReactNode {
     const bossesWithHighestDifficultyLogs = useMemo(() => {
         const search = searchText?.trim().toLowerCase();
@@ -42,16 +44,17 @@ export function Dashboard({
     }, [dashboardBosses, players, searchText]);
 
     const averageItemLevel = useMemo(() => {
-        let filteredPlayers = players.filter(f => f.killedBosses);
+        const withGear = players.filter(player => player.itemLevel > 0);
+        let filteredPlayers = withGear.filter(f => f.killedBosses);
 
         if (filteredPlayers.length === 0) {
-            filteredPlayers = players.filter(f => f.level === maxLevel && f.itemLevel);
+            filteredPlayers = withGear.filter(f => f.level === maxLevel);
         }
 
         const totalItemLevel = filteredPlayers
             .reduce((sum, player) => sum + (player.itemLevel || 0), 0);
 
-        return totalItemLevel / filteredPlayers.length;
+        return filteredPlayers.length ? totalItemLevel / filteredPlayers.length : 0;
     }, [players, maxLevel]);
 
     const topDps = useMemo(() => {
@@ -73,7 +76,7 @@ export function Dashboard({
         <div className='dashboard-content'>
             <div className='dashboard-summary'>
                 <div className={statisticsPanelClass}>
-                    <span className='dashboard-stat-label'>Total Active Characters</span>
+                    <span className='dashboard-stat-label'>Guild Characters</span>
                     <span className='dashboard-stat-value'>{players.length}</span>
                 </div>
                 <div className={statisticsPanelClass}>
@@ -82,26 +85,18 @@ export function Dashboard({
                         {averageItemLevel > 0 ? averageItemLevel.toFixed(0) : 'N/A'}
                     </span>
                 </div>
-                <div className={statisticsPanelClass}>
-                    <span className='dashboard-stat-label'>Top DPS</span>
-                    <span className='dashboard-stat-value'>
-                        {topDps ? (
-                            <span style={{ color: `var(--${topDps.class.toLowerCase().replaceAll(' ', '-')}-color)` }}>
-                                {topDps.name}
-                            </span>
-                        ) : 'N/A'}
-                    </span>
-                </div>
-                <div className={statisticsPanelClass}>
-                    <span className='dashboard-stat-label'>Top Healer</span>
-                    <span className='dashboard-stat-value'>
-                        {topHealer ? (
-                            <span style={{ color: `var(--${topHealer.class.toLowerCase().replaceAll(' ', '-')}-color)` }}>
-                                {topHealer.name}
-                            </span>
-                        ) : 'N/A'}
-                    </span>
-                </div>
+                {logsAvailable && ([
+                    ['Top DPS', topDps], ['Top Healer', topHealer],
+                ] as const).map(([label, player]) => (
+                    <div key={label} className={statisticsPanelClass}>
+                        <span className='dashboard-stat-label'>{label}</span>
+                        <span className='dashboard-stat-value'>
+                            {player ? <span style={{ color: `var(--${player.class.toLowerCase().replaceAll(' ', '-')}-color)` }}>
+                                {player.name}
+                            </span> : 'N/A'}
+                        </span>
+                    </div>
+                ))}
             </div>
             <div className='dashboard-charts'>
                 <ClassDistribution players={players}
@@ -121,7 +116,7 @@ export function Dashboard({
                     showOnlyIfFull
                     filterKilledBosses />
             </div>
-            <h1 className='dashboard-heading'>Boss Parses</h1>
+            {logsAvailable && <h1 className='dashboard-heading'>Boss Parses</h1>}
             <div className='dashboard-boss-list'>
                 {bossesWithHighestDifficultyLogs.map(boss => (
                     <section key={boss.id} className='dashboard-boss-panel' aria-labelledby={`dashboard-boss-${boss.id}`}>
@@ -145,7 +140,9 @@ export function Dashboard({
                         </div>
                     </section>
                 ))}
-                {bossesWithHighestDifficultyLogs.length === 0 && <p className='dashboard-empty'>No boss parses yet</p>}
+                {bossesWithHighestDifficultyLogs.length === 0 && <p className='dashboard-empty'>
+                    {logsAvailable ? 'No boss parses yet' : 'This guild’s raid logs are not connected.'}
+                </p>}
             </div>
         </div>
     );

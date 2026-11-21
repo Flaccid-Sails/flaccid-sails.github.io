@@ -6,6 +6,7 @@ const number = (value, fallback = 0) => {
 };
 const classNames = { 1: 'Warrior', 2: 'Paladin', 3: 'Hunter', 4: 'Rogue', 5: 'Priest', 7: 'Shaman', 8: 'Mage', 9: 'Warlock', 11: 'Druid' };
 const classIcons = { Warrior: 'class_warrior', Paladin: 'class_paladin', Hunter: 'class_hunter', Rogue: 'class_rogue', Priest: 'class_priest', Shaman: 'class_shaman', Mage: 'class_mage', Warlock: 'class_warlock', Druid: 'class_druid' };
+const detailsVersion = 2;
 
 export function characterName(character) {
     return [character.name, character.surname].filter(Boolean).join(' ');
@@ -13,8 +14,6 @@ export function characterName(character) {
 
 export function characterSlug(character) {
     if (character.slug) return character.slug;
-    // Prefer Blizzard's canonical spelling, as the old worker did, while keeping
-    // Forever's realmless route rather than extracting a Classic realm segment.
     if (character.key?.href) {
         const path = new URL(character.key.href).pathname;
         const match = /^\/profile\/wow\/character\/([^/]+)$/.exec(path);
@@ -50,8 +49,52 @@ export function mapStatistics(data) {
         'parry', 'block', 'ranged_crit', 'ranged_haste', 'spell_haste', 'spirit'];
     return {
         ...Object.fromEntries(fields.map(field => [field.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase()), number(data[field])])),
+        ...Object.fromEntries(['movement_speed', 'ranged_attack_power', 'expertise', 'melee_hit', 'spell_hit', 'ranged_hit']
+            .filter(field => data[field] != null)
+            .map(field => [field.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase()), number(data[field])])),
         powerType: data.power_type?.name,
     };
+}
+
+export function characterRender(media, playerId, raceId) {
+    if (media?.character?.id !== playerId || !Array.isArray(media.assets)) return undefined;
+    const keys = raceId === 5 ? ['main-sd-raw', 'main-raw', 'main'] : ['main-raw', 'main-sd-raw', 'main'];
+    for (const key of keys) {
+        const value = media.assets.find(asset => asset.key === key)?.value;
+        if (typeof value === 'string' && /^https:\/\/render\.worldofwarcraft\.com\/[\w./-]+\.(png|jpe?g|webp)$/i.test(value))
+            return value;
+    }
+}
+
+export function characterTalents(data, playerId) {
+    if (data?.character?.id !== playerId || !Array.isArray(data.specialization_groups)) return undefined;
+    const builds = [];
+    for (const group of data.specialization_groups) {
+        if (!Array.isArray(group?.specializations) || !group.specializations.length) continue;
+        const ranks = {};
+        let complete = true;
+        for (const spec of group.specializations) {
+            const tree = spec?.specialization_name || spec?.specialization?.name;
+            if (typeof tree !== 'string' || (spec.talents != null && !Array.isArray(spec.talents))) {
+                complete = false;
+                break;
+            }
+            let points = 0;
+            for (const entry of spec.talents ?? []) {
+                const name = entry?.talent?.name ?? entry?.spell_tooltip?.spell?.name;
+                const rank = entry?.talent_rank;
+                if (typeof name !== 'string' || !name || !Number.isInteger(rank) || rank < 1 || ranks[`${tree}/${name}`]) {
+                    complete = false;
+                    break;
+                }
+                ranks[`${tree}/${name}`] = rank;
+                points += rank;
+            }
+            if (points !== spec.spent_points) complete = false;
+        }
+        if (complete) builds.push({ name: group.is_active ? 'Active' : 'Alternate', ranks });
+    }
+    return builds.length ? builds.sort((a, b) => Number(b.name === 'Active') - Number(a.name === 'Active')) : undefined;
 }
 
 export function mapEquipment(data, media = new Map()) {
@@ -67,7 +110,7 @@ export function mapEquipment(data, media = new Map()) {
             itemClass: item.item_class?.name ?? '', itemSubclass: item.item_subclass?.name ?? '',
             inventoryType: item.inventory_type?.name ?? item.slot.name,
             stats: [item.weapon?.damage?.display_string, item.weapon?.attack_speed?.display_string,
-                item.weapon?.dps?.display_string, ...(item.stats ?? []).map(stat => stat.display?.display_string)].filter(Boolean),
+            item.weapon?.dps?.display_string, ...(item.stats ?? []).map(stat => stat.display?.display_string)].filter(Boolean),
             bonusStats: [], requirements: Object.values(item.requirements ?? {}).map(value => value.display_string).filter(Boolean),
             spells: (item.spells ?? []).map(spell => spell.description).filter(Boolean),
             enchant: enchant?.display_string.slice('Enchanted: '.length),
@@ -106,22 +149,31 @@ export async function collectForever({ client, configuration, policy, previous, 
         const key = `${player.realm}/${player.name}`;
         if (matchingPrevious && profiles[key]) characterProfiles[key] = profiles[key];
         player.equipmentAvailable = Boolean(characterProfiles[key]?.equipment && characterProfiles[key]?.statistics);
+        player.talentsAvailable = Boolean(characterProfiles[key]?.talentBuilds?.length);
     }
     const cache = Object.fromEntries(players.flatMap(player => {
         const key = `${player.realm}/${player.name}`;
         const saved = characterProfiles[key];
-        return saved ? [[key, { fetchedAt: saved.fetchedAt, lastLogin: player.lastLogin > 0 ? player.lastLogin : now }]] : [];
+        return saved?.detailsVersion === detailsVersion
+            ? [[key, { fetchedAt: saved.fetchedAt, lastLogin: player.lastLogin > 0 ? player.lastLogin : now }]] : [];
     }));
     const refreshCandidates = planCharacterRefresh(players, cache, policy, now);
-    // Never guess another game's API or call Warcraft Logs. Missing Blizzard
-    // character endpoints only defer that character; an absent guild roster is not empty membership.
     for (const player of refreshCandidates) {
         const characterPath = `/profile/wow/character/${encodeURIComponent(player.slug)}`;
         const summary = await optional(characterPath);
         if (!summary || summary.id !== player.id || summary.guild?.id !== configuration.guildId) continue;
         Object.assign(player, mapPlayer(summary, { rank: player.rank, ruleset: configuration.ruleset, previous: player }));
+        const key = `${player.realm}/${player.name}`;
+        const saved = characterProfiles[key];
+        const talentBuilds = characterTalents(await optional(summary.specializations?.href ?? `${characterPath}/specializations`), player.id);
+        const render = characterRender(await optional(summary.media?.href ?? `${characterPath}/character-media`), player.id, summary.race?.id);
+        if (render) player.characterRender = render;
+        else delete player.characterRender;
+        player.talentsAvailable = Boolean(talentBuilds?.length);
         const equipment = await optional(summary.equipment?.href ?? `${characterPath}/equipment`);
         const statistics = await optional(summary.statistics?.href ?? `${characterPath}/statistics`);
+        const profile = { ...saved, talentBuilds, logHistory: saved?.logHistory ?? [], fetchedAt: now, detailsVersion };
+        characterProfiles[key] = profile;
         if (!equipment || !statistics) continue;
         const media = new Map();
         for (const item of equipment.equipped_items ?? []) {
@@ -130,20 +182,24 @@ export async function collectForever({ client, configuration, policy, previous, 
             const icon = result?.assets?.find(asset => asset.key === 'icon')?.value;
             if (icon && /^https:\/\/(?:[^/]+\.blizzard\.com|render\.worldofwarcraft\.com)\//.test(icon)) media.set(item.item.id, icon);
         }
-        characterProfiles[`${player.realm}/${player.name}`] = {
-            equipment: mapEquipment(equipment, media), statistics: mapStatistics(statistics),
-            logHistory: [], fetchedAt: now,
-        };
+        profile.equipment = mapEquipment(equipment, media);
+        profile.statistics = mapStatistics(statistics);
         player.equipmentAvailable = true;
     }
     return {
         players, profiles: characterProfiles,
-        guild: { id: configuration.guildId, slug: configuration.guildSlug,
+        guild: {
+            id: configuration.guildId, slug: configuration.guildSlug,
             name: guild?.name ?? (matchingPrevious ? previous.guild.name : configuration.guildName),
-            region: configuration.region, ruleset: configuration.ruleset },
-        parameters: { maxLevel: 60, minimumRaidItemLevel: 60,
-            lastUpdate: roster ? now / 1000 : hasSavedRoster ? previous.parameters.lastUpdate : undefined },
-        sources: { blizzard: { roster: roster ? 'available' : hasSavedRoster ? 'cached' : 'unavailable', checkedAt: new Date(now).toISOString() },
-            warcraftLogs: { status: 'unavailable' } },
+            region: configuration.region, ruleset: configuration.ruleset
+        },
+        parameters: {
+            maxLevel: 60, minimumRaidItemLevel: 60,
+            lastUpdate: roster ? now / 1000 : hasSavedRoster ? previous.parameters.lastUpdate : undefined
+        },
+        sources: {
+            blizzard: { roster: roster ? 'available' : hasSavedRoster ? 'cached' : 'unavailable', checkedAt: new Date(now).toISOString() },
+            warcraftLogs: { status: 'unavailable' }
+        },
     };
 }

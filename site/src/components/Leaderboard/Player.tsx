@@ -24,7 +24,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable 
         { type: 'HEAL' as const, label: 'Heal', value: player.healer },
         { type: 'TANK' as const, label: 'Tank DPS', value: player.tank },
     ].filter(score => logsAvailable && player.level === maxLevel && score.value !== undefined && score.value !== -1 && score.value !== 0);
-    const showLastLogin = player.lastLogin > 0 && player.itemLevel !== -1 && lastLogin !== 'Today' && (sortedCriteria === 'LOGGED IN' || !scores.length);
+    const showLastLogin = player.lastLogin > 0 && lastLogin !== 'Today' && (sortedCriteria === 'LOGGED IN' || !scores.length);
     const showProgress = player.level === maxLevel && player.difficulty !== undefined && player.difficulty !== -1 && scores.length > 0;
     const canViewEquipment = player.equipmentAvailable ?? player.level === maxLevel;
     const canViewTalents = player.talentsAvailable ?? player.level === 60;
@@ -96,7 +96,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable 
             </div>
 
             <div className='player-metrics'>
-                {player.level !== maxLevel && <div className='player-stat'>
+                {player.level !== (maxLevel ?? 60) && <div className='player-stat'>
                     <span className='player-stat-label'>Level</span>
                     <span className='player-stat-value'>{player.level}</span>
                 </div>}

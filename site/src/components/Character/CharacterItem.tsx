@@ -4,11 +4,11 @@ import { CSSProperties } from 'react';
 import { HoverElement } from '../Popups/HoverElement';
 import { characterAsset, EquipmentSlot } from './equipment-slots';
 
-function CharacterItemTooltip({ item, label }: { item: EquipmentDTO; label: string }) {
+export function CharacterItemTooltip({ item, label }: { item: EquipmentDTO; label: string }) {
     return <div className='character-item-tooltip'>
         <p className='character-item-name' style={{ color: `var(--quality-${item.quality.toLowerCase()}-color)` }}>
             {item.id > 0
-                ? <a href={`https://www.wowhead.com/classic/item=${item.id}`} target='_blank' rel='noreferrer'>{item.name}</a>
+                ? <a href={`https://www.wowhead.com/forever/item=${item.id}`} target='_blank' rel='noreferrer'>{item.name}</a>
                 : item.name}
         </p>
         <p className='item-level'>Item Level {item.itemLevel}</p>
@@ -31,20 +31,26 @@ interface Props {
     item?: EquipmentDTO;
     slot: EquipmentSlot;
     side: 'LEFT' | 'UP' | 'RIGHT';
+    onInspect(item: EquipmentDTO, label: string): void;
 }
 
-export function CharacterItem({ item, slot, side }: Props) {
-    const icon = <div className={`character-equipment-frame ${item ? '' : 'character-equipment-empty'}`}
-        data-equipment-slot={slot.key} role='img' aria-label={`${slot.label}: ${item?.name ?? 'Empty'}`}
-        style={{ '--item-quality': `var(--quality-${item?.quality.toLowerCase() ?? 'common'}-color, #fff)` } as CSSProperties}>
+export function CharacterItem({ item, slot, side, onInspect }: Props) {
+    const frame = {
+        className: `character-equipment-frame ${item ? '' : 'character-equipment-empty'}`,
+        'data-equipment-slot': slot.key, 'aria-label': `${slot.label}: ${item?.name ?? 'Empty'}`,
+        style: { '--item-quality': `var(--quality-${item?.quality.toLowerCase() ?? 'common'}-color, #fff)` } as CSSProperties,
+    };
+    const icon = <>
         {item && <span className='character-equipment-quality' aria-hidden='true' />}
         <img className='character-equipment-icon'
             src={item ? item.media || Images.wowIcon : characterAsset(`empty-slots/ui-paperdoll-slot-${slot.emptyIcon}.webp`)} alt='' />
-    </div>;
+    </>;
 
     return <div className={`character-equipment-slot character-equipment-info-${side.toLowerCase()}`}>
         {item ? <HoverElement className='character-equipment-hover' side={side} hoverWithin
-            content={() => <CharacterItemTooltip item={item} label={slot.label} />}>{icon}</HoverElement> : icon}
+            content={() => <CharacterItemTooltip item={item} label={slot.label} />}>
+            <button type='button' {...frame} aria-haspopup='dialog' onClick={() => onInspect(item, slot.label)}>{icon}</button>
+        </HoverElement> : <div {...frame} role='img'>{icon}</div>}
         {item && <div className='character-equipment-info'>
             <div className='character-equipment-info-line'>
                 {item.itemLevel > 1 && <span className='character-equipment-level' aria-label={`Item level ${item.itemLevel}`}

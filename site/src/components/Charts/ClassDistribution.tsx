@@ -30,7 +30,7 @@ export function ClassDistribution({ players, maxLevel }: Props) {
     return <section className='wow-chart-panel class-distribution' aria-label='Class distribution'>
         <div className='wow-chart-heading'>
             <h2>Class distribution</h2>
-            <span>{filteredPlayers.length} players</span>
+            <span>{filteredPlayers.length} {filteredPlayers.length === 1 ? 'player' : 'players'}</span>
         </div>
         <div className='wow-chart-rows'>
             {distribution.map(entry => <ChartBar key={entry.name}

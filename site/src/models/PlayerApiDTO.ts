@@ -7,6 +7,7 @@ export interface PlayerApiDTO {
     talentsAvailable?: boolean;
     warcraftLogsUrl?: string;
     appearance?: CharacterAppearance;
+    characterRender?: string;
     name: string;
     realm: string;
     equippedItemLevel: number;

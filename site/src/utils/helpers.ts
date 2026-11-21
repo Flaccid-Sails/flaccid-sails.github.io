@@ -262,13 +262,6 @@ export function themeToBackgroundImage(theme: Theme): string {
     }
 }
 
-function getLoginDate(date: number): number {
-    if (date === -1) {
-        return Number.MAX_SAFE_INTEGER;
-    }
-    return date;
-}
-
 function getScore(obj: PlayerDTO): number {
     const d = (typeof obj.dps === 'number' && obj.dps >= 0) ? obj.dps : -1;
     const h = (typeof obj.healer === 'number' && obj.healer >= 0) ? obj.healer : -1;
@@ -317,8 +310,8 @@ export const sortComparers: Record<string, (a: PlayerDTO, b: PlayerDTO, order: '
         return order === 'ASC' ? -result : result;
     },
     'LOGGED IN': (a, b, order) => {
-        const result = getLoginDate(a.lastLogin) - getLoginDate(b.lastLogin);
-        return order === 'ASC' ? -result : result;
+        if (a.lastLogin <= 0 || b.lastLogin <= 0) return Number(b.lastLogin > 0) - Number(a.lastLogin > 0);
+        return order === 'ASC' ? a.lastLogin - b.lastLogin : b.lastLogin - a.lastLogin;
     }
 };
 

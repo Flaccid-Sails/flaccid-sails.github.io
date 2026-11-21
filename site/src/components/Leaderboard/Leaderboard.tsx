@@ -157,10 +157,10 @@ export function Leaderboard({
     return (
         <section className='leaderboard-root'>
             <div className='leaderboard-toolbar'>
-                <div className='leaderboard-search'>
+                {(selectedTab === 'PLAYERS' || logsAvailable) && <div className='leaderboard-search'>
                     <TextInput placeholder='Search' text={searchQuery} onInput={search} />
 
-                </div>
+                </div>}
                 <div className={`leaderboard-sort-controls${selectedTab === 'PLAYERS' ? '' : ' leaderboard-sort-controls-hidden'}`}
                     aria-hidden={selectedTab !== 'PLAYERS'}>
                     <p className='leaderboard-sort-label'>Sort by</p>
@@ -207,7 +207,9 @@ export function Leaderboard({
                         )}
                     </>}
                     {selectedTab === 'REPORTS' && <>
-                        {!logsAvailable && <p role='status' className='leaderboard-message'>Raid reports will appear when Forever logs are available.</p>}
+                        {!logsAvailable && <p role='status' className='leaderboard-message'>This guild’s raid logs are not connected.{' '}
+                            <a href='https://forever.warcraftlogs.com/' target='_blank' rel='noreferrer'>Browse Warcraft Logs Forever</a>
+                        </p>}
                         {logsAvailable && !reports && (
                             <h1 className='leaderboard-message'>{loadError ? 'Reports are unavailable.' : 'Loading...'}</h1>
                         )}
@@ -216,17 +218,19 @@ export function Leaderboard({
                         )}
                     </>}
                     {selectedTab === 'DASHBOARD' && <>
-                        {!logsAvailable && <p role='status' className='leaderboard-message'>Raid progress will appear when Forever logs are available.</p>}
                         {logsAvailable && (!dashboardBosses || !globalPlayers) && (
                             <h1 className='leaderboard-message'>{loadError ? 'Dashboard is unavailable.' : 'Loading...'}</h1>
                         )}
-                        {logsAvailable && dashboardBosses && globalPlayers && (
-                            <Suspense fallback={<p className='leaderboard-dashboard-loading'>Loading dashboard...</p>}><Dashboard
-                                maxLevel={maxLevel}
-                                players={globalPlayers}
-                                bosses={dashboardBosses}
-                                searchText={searchQuery} /></Suspense>
-                        )}
+                        {snapshot.sources?.blizzard.roster === 'unavailable' && !logsAvailable
+                            ? <p className='leaderboard-message'>Waiting for the guild roster</p>
+                            : globalPlayers && (!logsAvailable || dashboardBosses) && (
+                                <Suspense fallback={<p className='leaderboard-dashboard-loading'>Loading dashboard...</p>}><Dashboard
+                                    maxLevel={maxLevel}
+                                    players={globalPlayers}
+                                    bosses={dashboardBosses ?? []}
+                                    logsAvailable={logsAvailable}
+                                    searchText={searchQuery} /></Suspense>
+                            )}
                     </>}
                 </ScrollView>
             </Frame>

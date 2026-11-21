@@ -117,16 +117,45 @@
     cursor: grab;
 }
 
-.character-model-stage:active { cursor: grabbing; }
+.character-model-stage:active {
+    cursor: grabbing;
+}
 
-.character-model-canvas, .character-model-canvas canvas {
+.character-model-canvas,
+.character-model-canvas canvas {
     width: 100%;
     height: 100%;
     display: block;
 }
 
-.character-model-status { margin: 5px 0; }
-.character-model-controls { display: flex; justify-content: center; gap: 6px; }
+.character-model-status {
+    margin: 5px 0;
+}
+
+.character-render {
+    inset-inline: var(--equipment-slot-size);
+    justify-content: center;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.character-render img,
+.character-render svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.character-render button {
+    pointer-events: auto;
+}
+
+.character-model-controls {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
 .character-model-controls button {
     padding: 3px 7px;
     border: 1px solid #6b5736;
@@ -136,8 +165,16 @@
     font: inherit;
     cursor: pointer;
 }
-.character-model-controls button:hover { background: #3c2e18; }
-.character-model-controls button:focus-visible, .character-model-credit a:focus-visible { outline: 2px solid #d9bd77; }
+
+.character-model-controls button:hover {
+    background: #3c2e18;
+}
+
+.character-model-controls button:focus-visible,
+.character-model-credit a:focus-visible {
+    outline: 2px solid #d9bd77;
+}
+
 .character-model-credit {
     position: absolute;
     right: 14px;
@@ -148,7 +185,11 @@
     text-align: right;
     color: #c4b79b;
 }
-.character-model-credit a { color: #d3b972; text-decoration: underline; }
+
+.character-model-credit a {
+    color: #d3b972;
+    text-decoration: underline;
+}
 
 .character-equipment-info-left>.character-equipment-hover,
 .character-equipment-info-left>.character-equipment-frame {
@@ -535,6 +576,35 @@
     padding-right: 14px;
 }
 
+.character-item-details {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    padding: 0;
+    border: 0;
+    color: inherit;
+    background: transparent;
+}
+
+.character-item-details::backdrop {
+    background: #0008;
+}
+
+.character-item-details .wow-close-button {
+    position: absolute;
+    right: 4px;
+    top: 3px;
+}
+
+.character-item-details .character-item-name {
+    padding-right: 26px;
+}
+
+.character-equipment-frame:focus-visible {
+    outline: 2px solid #ffd267;
+    outline-offset: -8px;
+}
+
 .character-item-name a {
     color: inherit;
 }
@@ -571,5 +641,47 @@
     .character-viewport {
         left: 19px;
         right: 19px;
+    }
+}
+
+@media (max-width: 900px) {
+    .character-layout {
+        grid-template-columns: 1fr;
+        min-width: 0;
+        height: auto;
+    }
+
+    .character-paperdoll {
+        --equipment-slot-size: clamp(40px, 9vw, 64px);
+        --equipment-slot-step: var(--equipment-slot-size);
+        min-height: calc(10 * var(--equipment-slot-size) + 42px);
+    }
+
+    .character-equipment-column {
+        top: 10px;
+    }
+
+    .character-equipment-left {
+        left: 0;
+    }
+
+    .character-equipment-right {
+        right: 0;
+    }
+
+    .character-model {
+        inset: 12px var(--equipment-slot-size) calc(2 * var(--equipment-slot-size));
+    }
+
+    .character-equipment-info {
+        font-size: 11px;
+    }
+
+    .character-equipment-level {
+        font-size: 13px;
+    }
+
+    .character-sidebar {
+        height: 650px;
     }
 }

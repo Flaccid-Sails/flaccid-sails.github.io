@@ -4,6 +4,9 @@ export interface StatisticsDTO {
     powerType?: string;
     movementSpeed?: number;
     hitChance?: number;
+    meleeHit?: number;
+    spellHit?: number;
+    rangedHit?: number;
     expertise?: number;
     rangedAttackPower?: number;
     strength: number;

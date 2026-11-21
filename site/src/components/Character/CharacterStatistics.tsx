@@ -36,10 +36,12 @@ export function CharacterStatistics({ player, statistics: s }: { player: PlayerD
             ['Attack Power', formatWithCommas(s.attackPower)],
             ['Ranged Attack Power', s.rangedAttackPower === undefined ? undefined : formatWithCommas(s.rangedAttackPower)],
             ['Damage per Second', s.mainHandDps.toFixed(1)],
-            ['Attack Speed', `${s.mainHandSpeed.toFixed(2)}${s.offHandSpeed > 0 ? ` / ${s.offHandSpeed.toFixed(2)}` : ''}`],
+            ['Attack Speed', `${s.mainHandSpeed.toFixed(2)}${s.offHandDamageMax > 0 && s.offHandSpeed > 0 ? ` / ${s.offHandSpeed.toFixed(2)}` : ''}`],
         ]} />
         <StatSection title='Modifiers' rows={[
-            ['Hit Chance', percent(s.hitChance)],
+            ['Melee Hit Chance', percent(s.meleeHit ?? s.hitChance)],
+            ['Ranged Hit Chance', usesRangedWeapon ? percent(s.rangedHit) : undefined],
+            ['Spell Hit Chance', castsSpells ? percent(s.spellHit) : undefined],
             ['Critical Strike', percent(s.meleeCrit)],
             ['Haste', percent(s.meleeHaste)],
             ['Expertise', percent(s.expertise)],

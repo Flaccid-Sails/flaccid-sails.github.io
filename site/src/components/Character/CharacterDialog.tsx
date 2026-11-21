@@ -3,11 +3,11 @@ import { PlayerDTO } from '@src/models/PlayerDTO';
 import { StatisticsDTO } from '@src/models/StatisticsDTO';
 import { EventEmitter } from '@src/utils/event-emitter';
 import { readData } from '@src/utils/data';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { classPortrait, WindowFrame } from '../Frame/WindowFrame';
 import { useDialogFade } from '../Frame/useDialogFade';
 import { ScrollView } from '../ScrollView/ScrollView';
-import { CharacterItem } from './CharacterItem';
+import { CharacterItem, CharacterItemTooltip } from './CharacterItem';
 import { CharacterStatistics } from './CharacterStatistics';
 import { CharacterModel } from './CharacterModel';
 import { CloseButton } from '../Button/CloseButton';
@@ -16,16 +16,28 @@ import './character.scss';
 
 interface CharacterDetails { equipment: EquipmentDTO[]; statistics: StatisticsDTO }
 
+function ItemDetails({ item, label, onClose }: { item: EquipmentDTO; label: string; onClose(): void }) {
+    const ref = useRef<HTMLDialogElement>(null);
+    useLayoutEffect(() => { ref.current?.showModal(); }, []);
+    return <dialog ref={ref} className='character-item-details' aria-label={item.name} onClose={onClose}
+        onClick={event => { if (event.target === ref.current) ref.current?.close(); }}>
+        <CharacterItemTooltip item={item} label={label} />
+        <CloseButton aria-label='Close item details' onClick={() => ref.current?.close()} />
+    </dialog>;
+}
+
 export function CharacterDialog() {
     const [player, setPlayer] = useState<PlayerDTO>();
     const [details, setDetails] = useState<CharacterDetails>();
     const [failed, setFailed] = useState(false);
+    const [inspected, setInspected] = useState<{ item: EquipmentDTO; label: string }>();
     const windowRef = useRef<HTMLDivElement>(null);
     const requestRef = useRef(0);
     const { isClosing, cancelClose, fadeOut } = useDialogFade();
     const isOpen = Boolean(player) && !isClosing;
     const close = useCallback(() => {
         requestRef.current++;
+        setInspected(undefined);
         EventEmitter.emit('CLOSE_POPUPS');
         fadeOut(() => {
             setPlayer(undefined);
@@ -41,6 +53,7 @@ export function CharacterDialog() {
             setPlayer(character);
             setDetails(undefined);
             setFailed(false);
+            setInspected(undefined);
             void Promise.all([
                 readData<EquipmentDTO[]>(`/equipment/${character.realm}/${character.name}`),
                 readData<StatisticsDTO>(`/statistics/${character.realm}/${character.name}`),
@@ -61,6 +74,7 @@ export function CharacterDialog() {
         const frame = windowRef.current!;
         frame.querySelector<HTMLButtonElement>('.wow-window-close')?.focus({ preventScroll: true });
         const onKeyDown = (event: KeyboardEvent) => {
+            if (frame.querySelector('dialog[open]')) return;
             if (event.key === 'Escape') { close(); event.preventDefault(); }
             if (event.key !== 'Tab') return;
             const controls = Array.from(frame.querySelectorAll<HTMLElement>('button:not(:disabled), a[href], [tabindex="0"]'));
@@ -78,7 +92,8 @@ export function CharacterDialog() {
     const portrait = classPortrait(player.class);
     const renderSlot = (slot: EquipmentSlot, side: 'LEFT' | 'RIGHT' | 'UP') => {
         const item = details?.equipment.find(item => item.slot === slot.key || slot.aliases?.includes(item.slot));
-        return <CharacterItem key={slot.key} item={item} slot={slot} side={side} />;
+        return <CharacterItem key={slot.key} item={item} slot={slot} side={side}
+            onInspect={(item, label) => { EventEmitter.emit('CLOSE_POPUPS'); setInspected({ item, label }); }} />;
     };
 
     return <div className={`character-overlay dialog-fade${isClosing ? ' dialog-fade-out' : ''}`} aria-hidden={isClosing}>
@@ -87,6 +102,7 @@ export function CharacterDialog() {
             <WindowFrame portrait={portrait} />
             <h1 id='character-heading' className='wow-window-title'>{player.name}</h1>
             <CloseButton className='wow-window-close' onClick={close} aria-label='Close character details' />
+            {inspected && <ItemDetails {...inspected} onClose={() => setInspected(undefined)} />}
             <div className='character-viewport' tabIndex={0} aria-label='Equipment and character statistics'
                 onScroll={() => EventEmitter.emit('CLOSE_POPUPS')}>
                 <div className='character-layout' aria-busy={!details && !failed}>

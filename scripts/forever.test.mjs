@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createBlizzardClient, BlizzardError } from './blizzard-client.mjs';
-import { collectForever, mapPlayer, mapEquipment, mapStatistics } from './forever-data.mjs';
+import { characterRender, characterTalents, collectForever, mapPlayer, mapEquipment, mapStatistics } from './forever-data.mjs';
 import { publishForever } from './refresh-forever.mjs';
 
 const configuration = { region: 'eu', ruleset: 'PvE', guildId: 42, guildSlug: 'test-guild', guildName: 'Test Guild' };
@@ -118,9 +118,44 @@ test('fresh cached details are reused within policy limits', async () => {
     const previous = { mode: 'live', guild: { ...configuration, id: 42, name: 'Test Guild' }, players: [player], parameters: { lastUpdate: 100 } };
     const client = mockClient({ '/data/wow/guild/test-guild/roster': roster });
     const data = await collectForever({ client, configuration, policy, previous,
-        profiles: { 'PvE/First Last': { equipment: [], statistics: {}, fetchedAt: Date.now() } } });
+        profiles: { 'PvE/First Last': { equipment: [], statistics: {}, fetchedAt: Date.now(), detailsVersion: 2 } } });
     assert.equal(data.players[0].equipmentAvailable, true);
     assert.ok(!client.calls.some(path => path.startsWith('/profile/')));
+});
+
+test('a level-60 profile backfills Blizzard media and talents, then serves both from cache', async () => {
+    const path = '/profile/wow/character/first-last';
+    const key = 'PvE/First Last';
+    const group = { is_active: true, specializations: [{ specialization: { name: 'Holy' }, spent_points: 2,
+        talents: [{ talent: { name: 'Divine Strength' }, talent_rank: 2 }] }] };
+    const specs = { character: { id: 11 }, specialization_groups: [group] };
+    const render = 'https://render.worldofwarcraft.com/forever-eu/character/1/11-main-raw.png';
+    const media = { character: { id: 11 }, assets: [{ key: 'main-raw', value: render }] };
+    const previous = { mode: 'live', guild: { id: 42, region: 'eu', ruleset: 'PvE' },
+        players: [mapPlayer(summary)], parameters: { lastUpdate: 1 } };
+    const routes = { '/data/wow/guild/test-guild/roster': roster, [path]: summary,
+        [path + '/specializations']: specs, [path + '/character-media']: media,
+        [path + '/statistics']: statistics, [path + '/equipment']: equipment };
+    const collected = await collectForever({ client: mockClient(routes), configuration, policy, previous,
+        profiles: { [key]: { fetchedAt: Date.now(), equipment: [], statistics: {} } } });
+    assert.equal(collected.players[0].characterRender, render);
+    assert.equal(collected.players[0].talentsAvailable, true);
+    assert.deepEqual(collected.profiles[key].talentBuilds, [{ name: 'Active', ranks: { 'Holy/Divine Strength': 2 } }]);
+    const cachedClient = mockClient(routes);
+    const cached = await collectForever({ client: cachedClient, configuration, policy,
+        previous: { ...collected, mode: 'live' }, profiles: collected.profiles });
+    assert.equal(cached.players[0].talentsAvailable, true);
+    assert.equal(cached.players[0].characterRender, render);
+    assert.ok(cachedClient.calls.every(call => !call.startsWith('/profile/')));
+    const partial = await collectForever({ client: mockClient({ ...routes, [path + '/equipment']: new BlizzardError(404) }),
+        configuration, policy });
+    assert.equal(partial.players[0].equipmentAvailable, false);
+    assert.equal(partial.players[0].talentsAvailable, true);
+    assert.equal(characterRender(media, 12), undefined);
+    assert.equal(characterRender({ ...media, assets: [{ key: 'main-raw', value: render + '?token=fixture' }] }, 11), undefined);
+    assert.equal(characterTalents(specs, 12), undefined);
+    group.specializations[0].spent_points = 5;
+    assert.equal(characterTalents(specs, 11), undefined);
 });
 
 test('Forever equipment and statistics normalize nested values without inventing a model or talent build', () => {
@@ -130,6 +165,33 @@ test('Forever equipment and statistics normalize nested values without inventing
     assert.equal(item.appearance, undefined);
     assert.equal(mapStatistics(statistics).meleeCrit, 4.616);
     assert.equal(mapStatistics(statistics).powerType, 'Mana');
+});
+
+test('Undead characters use the standard model when Blizzard provides both renders', () => {
+    const base = 'https://render.worldofwarcraft.com/forever-eu/character/1/11';
+    const hd = { key: 'main-raw', value: base + '-main-raw.png' };
+    const sd = { key: 'main-sd-raw', value: base + '-main-sd-raw.png' };
+    const media = { character: { id: 11 }, assets: [hd, sd] };
+    assert.equal(characterRender(media, 11, 5), sd.value);
+    assert.equal(characterRender(media, 11, 1), hd.value);
+    assert.equal(characterRender({ ...media, assets: [hd] }, 11, 5), hd.value);
+});
+
+test('specializations keep alternate builds, unspent points, and the active group first', () => {
+    const group = (is_active, spent_points) => ({ is_active, specializations: [{ specialization_name: 'Holy',
+        spent_points, talents: spent_points ? [{ talent: { name: 'Divine Strength' }, talent_rank: spent_points }] : [] }] });
+    assert.deepEqual(characterTalents({ character: { id: 11 },
+        specialization_groups: [group(false, 0), group(true, 3)] }, 11), [
+        { name: 'Active', ranks: { 'Holy/Divine Strength': 3 } }, { name: 'Alternate', ranks: {} },
+    ]);
+});
+
+test('additional Forever modifiers preserve zero and distinguish melee, ranged and spell hit', () => {
+    const stats = mapStatistics({ movement_speed: 100, melee_hit: { value: 4 }, ranged_hit: { value: 3 },
+        spell_hit: { value: 5 }, expertise: 0 });
+    assert.deepEqual([stats.movementSpeed, stats.meleeHit, stats.rangedHit, stats.spellHit, stats.expertise],
+        [100, 4, 3, 5, 0]);
+    assert.equal(stats.rangedAttackPower, undefined);
 });
 
 test('canonical character URLs and legacy equipment tooltip details survive normalization', () => {

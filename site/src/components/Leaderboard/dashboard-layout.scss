@@ -27,6 +27,10 @@
     text-align: center;
 }
 
+.dashboard-summary:has(> :last-child:nth-child(2)) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .dashboard-stat-panel::before {
     position: absolute;
     inset: 0;

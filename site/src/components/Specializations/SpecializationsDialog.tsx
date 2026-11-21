@@ -99,6 +99,7 @@ export function SpecializationsDialog({ players }: Props) {
     const [catalog, setCatalog] = useState<TalentCatalog>();
     const [catalogFailed, setCatalogFailed] = useState(false);
     const [builds, setBuilds] = useState<TalentBuild[]>();
+    const [buildFailed, setBuildFailed] = useState(false);
     const [className, setClassName] = useState('Warrior');
     const [player, setPlayer] = useState<PlayerApiDTO>();
     const [activeBuild, setActiveBuild] = useState(0);
@@ -122,6 +123,7 @@ export function SpecializationsDialog({ players }: Props) {
             setCatalog(undefined);
             setCatalogFailed(false);
             setBuilds(undefined);
+            setBuildFailed(false);
             setClassName(next?.class ?? 'Warrior');
             setActiveBuild(0);
             setInspected(undefined);
@@ -135,7 +137,7 @@ export function SpecializationsDialog({ players }: Props) {
             if (next?.level === 60) {
                 void readData<TalentBuild[]>(`/talentBuilds/${next.realm}/${next.name}`).then(data => {
                     if (request === requestRef.current) setBuilds(data);
-                }).catch(() => { });
+                }).catch(() => { if (request === requestRef.current) setBuildFailed(true); });
             }
         };
         const unsubscribe = EventEmitter.subscribe('OPEN_SPECIALIZATIONS_DIALOG', open);
@@ -185,11 +187,11 @@ export function SpecializationsDialog({ players }: Props) {
             <div className='talents-content'>
                 <div className='talents-toolbar'>
                     <div className='talents-build-tabs' role='tablist' aria-label='Talent builds'>
-                        {[0, 1].map(index => <button key={index} type='button' role='tab'
+                        {Array.from({ length: Math.max(2, builds?.length ?? 0) }, (_, index) => <button key={index} type='button' role='tab'
                             aria-selected={activeBuild === index} disabled={index === 1 && !builds?.[1]}
                             className={`talents-build-tab ${activeBuild === index ? 'active' : ''}`}
                             onClick={() => { EventEmitter.emit('CLOSE_POPUPS'); setActiveBuild(index); setInspected(undefined); }}>
-                            {index === 0 ? 'Primary' : 'Secondary'}
+                            {builds?.[index]?.name ?? (index === 0 ? 'Primary' : 'Secondary')}
                             {activeBuild === index
                                 ? <img src={asset('tabs/talents-checkmark-c60-2x.webp')} alt='' />
                                 : !builds?.[index] && <img src={asset('tabs/talents-lock-c60-2x.webp')} alt='' />}
@@ -206,7 +208,8 @@ export function SpecializationsDialog({ players }: Props) {
                         <div className='talents-unspent'>Unspent Talents <strong>{builds ? Math.max(0, pointBudget - pointTotal) : '?'}</strong></div>
                     </div>
                     {!catalog && <p className='talents-loading'>{catalogFailed ? 'Talents are unavailable.' : 'Loading talents…'}</p>}
-                    {current && <div className='talents-tree-panel'>
+                    {buildFailed && <p role='status' className='talents-loading'>This character’s talent build is unavailable.</p>}
+                    {current && (!player?.talentsAvailable || build) && <div className='talents-tree-panel'>
                         <div className='talents-tree-scroll' aria-label='Talent trees'>
                             <div className='talents-trees' style={{ backgroundImage: `url(${asset(`backgrounds/talent-background-${classSlug}.webp`)})` }}>
                                 {current.trees.map((tree, treeIndex) => {
