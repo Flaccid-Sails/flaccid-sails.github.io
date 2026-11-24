@@ -250,7 +250,7 @@ export function LogProgressDialog({ player, zones, isDemo, onClose }: {
             if (event.key === 'Escape') { close(); event.preventDefault(); }
             if (event.key !== 'Tab') return;
             const controls = Array.from(frame.current!.querySelectorAll<HTMLElement>(
-                'button:not(:disabled), input:not(:disabled), [tabindex="0"]')).filter(control => !control.closest('[aria-hidden="true"]'));
+                'button:not(:disabled), input:not(:disabled), a[href], [tabindex="0"]')).filter(control => !control.closest('[aria-hidden="true"]'));
             const first = controls[0], last = controls[controls.length - 1];
             if (event.shiftKey && document.activeElement === first) { last?.focus(); event.preventDefault(); }
             else if (!event.shiftKey && document.activeElement === last) { first?.focus(); event.preventDefault(); }

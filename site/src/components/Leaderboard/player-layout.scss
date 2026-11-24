@@ -94,7 +94,7 @@
     outline-offset: 2px;
 }
 
-.player-avatar {
+.player-avatar-link > img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -261,7 +261,7 @@
         width: 52px;
     }
 
-    .player-avatar {
+    .player-avatar-link > img {
         width: 32px;
         height: 32px;
     }

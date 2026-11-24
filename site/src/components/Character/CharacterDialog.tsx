@@ -128,10 +128,9 @@ export function CharacterDialog({ players }: Props) {
                     </section>
                     <section className='character-sidebar' aria-label='Character statistics'>
                         <header className='character-sidebar-header'>
-                            <div className='character-stat-portrait' aria-hidden='true'>
-                                <PlayerPortrait player={player} fallback={player.image || portrait} />
+                            <PlayerPortrait className='character-stat-portrait' player={player} fallback={player.image || portrait}>
                                 <img className='character-stat-portrait-frame' src={characterAsset('character-details/ui-character-info-stattab-selected-c60-2x.webp')} alt='' />
-                            </div>
+                            </PlayerPortrait>
                             <p>Level {player.level} <span style={{ color: `var(--${classSlug}-color)` }}>{player.class}</span></p>
                         </header>
                         <div className='character-stats-panel'

@@ -321,20 +321,18 @@ export function Header({ parameters, theme, requestFailed }: Props): React.React
                 <div className='header-right-decoration' style={rightStyle} />
             </div>
             <div className='header-content'>
-                <a className='header-brand'
-                    href={import.meta.env.BASE_URL}
-
-                    rel='noreferrer'
-                    title='Flaccid Sails home'
-                >
-                    <div className='header-logo'>
-                        <img className='header-logo-image' src={Images.logo} alt='logo' />
-                        <img className='header-logo-border' src={Images.logoBorder} alt='logo' />
-                    </div>
-                    <h1 className='header-title' style={{ textShadow }}>
-                        Flaccid Sails
-                    </h1>
-                </a>
+                <div className='header-brand'>
+                    <a className='header-logo' href='https://forever.warcraftlogs.com/guild/id/834136'
+                        target='_blank' rel='noreferrer' title='Flaccid Sails on Warcraft Logs'>
+                        <img className='header-logo-image' src={Images.logo} alt='Flaccid Sails on Warcraft Logs' />
+                        <img className='header-logo-border' src={Images.logoBorder} alt='' />
+                    </a>
+                    <a href={import.meta.env.BASE_URL} title='Flaccid Sails home'>
+                        <h1 className='header-title' style={{ textShadow }}>
+                            Flaccid Sails
+                        </h1>
+                    </a>
+                </div>
                 <div className='header-tools'>
                     <HoverElement className='header-theme-trigger' side='DOWN' content={tooltip} hoverWithin>
                         <img className='header-theme-icon' src={Images.theme} alt='logo' />

@@ -18,7 +18,6 @@ interface Props {
 export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable = true }: Props): ReactNode {
     const lastLogin = calculateTimeDifference(player.lastLogin, true);
     const classSlug = player.class.toLowerCase().replaceAll(' ', '-');
-    const href = logsAvailable && player.warcraftLogsUrl?.startsWith('https://') ? player.warcraftLogsUrl : undefined;
     const rankTitle = player.rank === 0 ? 'Guild master' : player.rank > 0 && player.rank <= 2 ? 'Captain' : player.class;
     const scores = [
         { type: 'DPS' as const, label: 'DPS', value: player.dps },
@@ -63,16 +62,11 @@ export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable 
         </div>
     );
 
-    const portrait = <PlayerPortrait className='player-avatar' player={player} fallback={player.image || Images.wowIcon}
-        alt={`${player.name}, ${player.class}`} />;
-
     return (
         <article className='player-card'>
             <div className='player-avatar-column'>
-                {href ? (
-                    <a className='player-avatar-link' href={href} target='_blank' rel='noreferrer'
-                        aria-label={`View ${player.name} on Warcraft Logs`}>{portrait}</a>
-                ) : <span className='player-avatar-link'>{portrait}</span>}
+                <PlayerPortrait className='player-avatar-link' player={player} fallback={player.image || Images.wowIcon}
+                    alt={`${player.name}, ${player.class}`} />
                 <span className='player-avatar-rank' style={{ color: `var(--rank-${player.rank}-color)` }}>
                     {player.rank < 0 ? 'Member' : `Rank ${toRoman(player.rank)}`}
                 </span>

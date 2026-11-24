@@ -11,7 +11,7 @@ interface Props {
 }
 
 export function WindowFrame({ portrait, player }: Props) {
-    return <div className='wow-window-decoration' aria-hidden='true'>
+    return <div className='wow-window-decoration'>
         {['top', 'bottom', 'left', 'right', 'top-left', 'top-right', 'bottom-left', 'bottom-right'].map(part =>
             <div key={part} className={`wow-window-frame wow-window-${part}`} />)}
         <PlayerPortrait player={player} fallback={portrait} className='wow-window-portrait' />
