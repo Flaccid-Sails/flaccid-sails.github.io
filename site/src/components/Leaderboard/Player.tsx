@@ -5,6 +5,7 @@ import { Images } from '@src/utils/images';
 import { ReactNode } from 'react';
 import { EventEmitter } from '@src/utils/event-emitter';
 import { HoverElement } from '../Popups/HoverElement';
+import { PlayerPortrait } from '../Portrait/PlayerPortrait';
 
 interface Props {
     player: PlayerDTO;
@@ -62,7 +63,8 @@ export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable 
         </div>
     );
 
-    const portrait = <img className='player-avatar' src={player.image || Images.wowIcon} alt={`${player.class} portrait`} />;
+    const portrait = <PlayerPortrait className='player-avatar' player={player} fallback={player.image || Images.wowIcon}
+        alt={`${player.name}, ${player.class}`} />;
 
     return (
         <article className='player-card'>

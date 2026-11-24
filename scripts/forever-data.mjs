@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { planCharacterRefresh } from './collection-policy.mjs';
 
 const number = (value, fallback = 0) => {
@@ -6,7 +7,7 @@ const number = (value, fallback = 0) => {
 };
 const classNames = { 1: 'Warrior', 2: 'Paladin', 3: 'Hunter', 4: 'Rogue', 5: 'Priest', 7: 'Shaman', 8: 'Mage', 9: 'Warlock', 11: 'Druid' };
 const classIcons = { Warrior: 'class_warrior', Paladin: 'class_paladin', Hunter: 'class_hunter', Rogue: 'class_rogue', Priest: 'class_priest', Shaman: 'class_shaman', Mage: 'class_mage', Warlock: 'class_warlock', Druid: 'class_druid' };
-const detailsVersion = 2;
+const detailsVersion = 3;
 
 export function characterName(character) {
     return [character.name, character.surname].filter(Boolean).join(' ');
@@ -56,14 +57,18 @@ export function mapStatistics(data) {
     };
 }
 
-export function characterRender(media, playerId, raceId) {
+function characterAsset(media, playerId, keys) {
     if (media?.character?.id !== playerId || !Array.isArray(media.assets)) return undefined;
-    const keys = raceId === 5 ? ['main-sd-raw', 'main-raw', 'main'] : ['main-raw', 'main-sd-raw', 'main'];
     for (const key of keys) {
         const value = media.assets.find(asset => asset.key === key)?.value;
         if (typeof value === 'string' && /^https:\/\/render\.worldofwarcraft\.com\/[\w./-]+\.(png|jpe?g|webp)$/i.test(value))
             return value;
     }
+}
+
+export function characterRender(media, playerId, raceId) {
+    const keys = raceId === 5 ? ['main-sd-raw', 'main-raw', 'main'] : ['main-raw', 'main-sd-raw', 'main'];
+    return characterAsset(media, playerId, keys);
 }
 
 export function characterTalents(data, playerId) {
@@ -121,6 +126,19 @@ export function mapEquipment(data, media = new Map()) {
     });
 }
 
+function gearFingerprint(items) {
+    if (!Array.isArray(items)) throw new Error('Blizzard returned invalid equipment.');
+    const slots = items.map(item => [
+        item.slot.type, item.item.id, number(item.level), item.modified_appearance_id,
+        item.transmog?.item?.id, item.transmog?.appearance?.id, item.transmog?.item_modified_appearance_id, item.transmog?.display_string,
+        (item.bonus_list ?? []).toSorted((a, b) => a - b),
+        (item.sockets ?? []).map(socket => [socket.socket_type?.type, socket.item?.id]),
+        (item.enchantments ?? []).map(enchant => [enchant.enchantment_slot?.id, enchant.enchantment_id,
+            enchant.source_item?.id, enchant.display_string]).sort(),
+    ]).sort(([a], [b]) => a.localeCompare(b));
+    return createHash('sha256').update(JSON.stringify(slots)).digest('hex');
+}
+
 export function sameGuild(snapshot, configuration) {
     return snapshot?.mode === 'live' && snapshot.guild?.id === configuration.guildId &&
         snapshot.guild.region === configuration.region && snapshot.guild.ruleset === configuration.ruleset;
@@ -166,14 +184,25 @@ export async function collectForever({ client, configuration, policy, previous, 
         const key = `${player.realm}/${player.name}`;
         const saved = characterProfiles[key];
         const talentBuilds = characterTalents(await optional(summary.specializations?.href ?? `${characterPath}/specializations`), player.id);
-        const render = characterRender(await optional(summary.media?.href ?? `${characterPath}/character-media`), player.id, summary.race?.id);
+        const characterMedia = await optional(summary.media?.href ?? `${characterPath}/character-media`);
+        const render = characterRender(characterMedia, player.id, summary.race?.id);
         if (render) player.characterRender = render;
         else delete player.characterRender;
+        const portrait = characterAsset(characterMedia, player.id, ['avatar', 'avatar-sd']);
+        if (portrait) player.characterPortrait = portrait;
+        else delete player.characterPortrait;
         player.talentsAvailable = Boolean(talentBuilds?.length);
         const equipment = await optional(summary.equipment?.href ?? `${characterPath}/equipment`);
         const statistics = await optional(summary.statistics?.href ?? `${characterPath}/statistics`);
         const profile = { ...saved, talentBuilds, logHistory: saved?.logHistory ?? [], fetchedAt: now, detailsVersion };
         characterProfiles[key] = profile;
+        if (equipment) {
+            const fingerprint = gearFingerprint(equipment.equipped_items);
+            if (fingerprint !== saved?.gearFingerprint) profile.gearChangedAt = now;
+            profile.gearFingerprint = fingerprint;
+        } else if (saved?.equipment) {
+            profile.gearChangedAt ??= saved.fetchedAt;
+        }
         if (!equipment || !statistics) continue;
         const media = new Map();
         for (const item of equipment.equipped_items ?? []) {

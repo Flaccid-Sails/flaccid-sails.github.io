@@ -1,6 +1,7 @@
 import { Theme } from "@src/models/Theme";
 import { Images } from "./images";
 import { PlayerDTO } from "@src/models/PlayerDTO";
+import type { PlayerApiDTO } from "@src/models/PlayerApiDTO";
 import { readData } from "./data";
 import { EventEmitter } from "./event-emitter";
 
@@ -11,6 +12,11 @@ const romanMap = [
     { value: 4, symbol: 'IV' },
     { value: 1, symbol: 'I' },
 ];
+
+export function currentRosterPlayer<T extends PlayerApiDTO>(selected: T, players?: T[]): T {
+    return players?.find(player => player.realm === selected.realm && (selected.id !== undefined
+        ? player.id === selected.id : player.name === selected.name)) ?? selected;
+}
 
 export function toRoman(num: number): string {
     if (num === 0) {

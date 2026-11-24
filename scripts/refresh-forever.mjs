@@ -7,6 +7,19 @@ import { createBlizzardClient } from './blizzard-client.mjs';
 import { collectForever, sameGuild } from './forever-data.mjs';
 import { guildContentHash } from './deployment-plan.mjs';
 
+function versionCharacterImages(player, profile) {
+    const version = profile?.gearChangedAt ?? (profile?.equipment && profile.fetchedAt);
+    if (version == null) return player;
+    const result = { ...player };
+    for (const field of ['characterRender', 'characterPortrait']) {
+        if (!player[field]) continue;
+        const url = new URL(player[field]);
+        url.searchParams.set('gear', String(version));
+        result[field] = url.href;
+    }
+    return result;
+}
+
 export async function publishForever(data, catalog, output) {
     async function dataset(directory, value) {
         const contents = JSON.stringify(value);
@@ -17,10 +30,11 @@ export async function publishForever(data, catalog, output) {
     }
     const characterIndex = {};
     for (const [key, profile] of Object.entries(data.profiles)) characterIndex[key] = await dataset('characters', profile);
+    const players = data.players.map(player => versionCharacterImages(player, data.profiles[`${player.realm}/${player.name}`]));
     const snapshot = {
         schemaVersion: 2, mode: 'live', generatedAt: new Date().toISOString(),
-        contentHash: guildContentHash(data, catalog),
-        guild: data.guild, players: data.players, parameters: data.parameters, sources: data.sources,
+        contentHash: guildContentHash({ ...data, players }, catalog),
+        guild: data.guild, players, parameters: data.parameters, sources: data.sources,
         logs: {}, zones: [],
         characterIndexFile: await dataset('indexes', characterIndex),
         reportIndexFile: await dataset('indexes', []), dashboardFile: await dataset('indexes', []),

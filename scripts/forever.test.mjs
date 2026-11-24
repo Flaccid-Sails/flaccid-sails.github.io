@@ -118,7 +118,7 @@ test('fresh cached details are reused within policy limits', async () => {
     const previous = { mode: 'live', guild: { ...configuration, id: 42, name: 'Test Guild' }, players: [player], parameters: { lastUpdate: 100 } };
     const client = mockClient({ '/data/wow/guild/test-guild/roster': roster });
     const data = await collectForever({ client, configuration, policy, previous,
-        profiles: { 'PvE/First Last': { equipment: [], statistics: {}, fetchedAt: Date.now(), detailsVersion: 2 } } });
+        profiles: { 'PvE/First Last': { equipment: [], statistics: {}, fetchedAt: Date.now(), detailsVersion: 3 } } });
     assert.equal(data.players[0].equipmentAvailable, true);
     assert.ok(!client.calls.some(path => path.startsWith('/profile/')));
 });
@@ -130,15 +130,20 @@ test('a level-60 profile backfills Blizzard media and talents, then serves both 
         talents: [{ talent: { name: 'Divine Strength' }, talent_rank: 2 }] }] };
     const specs = { character: { id: 11 }, specialization_groups: [group] };
     const render = 'https://render.worldofwarcraft.com/forever-eu/character/1/11-main-raw.png';
-    const media = { character: { id: 11 }, assets: [{ key: 'main-raw', value: render }] };
+    const portrait = 'https://render.worldofwarcraft.com/forever-eu/character/1/11-avatar.jpg';
+    const media = { character: { id: 11 }, assets: [
+        { key: 'avatar-sd', value: portrait.replace('avatar.jpg', 'avatar-sd.jpg') },
+        { key: 'main-raw', value: render }, { key: 'avatar', value: portrait },
+    ] };
     const previous = { mode: 'live', guild: { id: 42, region: 'eu', ruleset: 'PvE' },
         players: [mapPlayer(summary)], parameters: { lastUpdate: 1 } };
     const routes = { '/data/wow/guild/test-guild/roster': roster, [path]: summary,
         [path + '/specializations']: specs, [path + '/character-media']: media,
         [path + '/statistics']: statistics, [path + '/equipment']: equipment };
     const collected = await collectForever({ client: mockClient(routes), configuration, policy, previous,
-        profiles: { [key]: { fetchedAt: Date.now(), equipment: [], statistics: {} } } });
+        profiles: { [key]: { fetchedAt: Date.now(), detailsVersion: 2, equipment: [], statistics: {} } } });
     assert.equal(collected.players[0].characterRender, render);
+    assert.equal(collected.players[0].characterPortrait, portrait);
     assert.equal(collected.players[0].talentsAvailable, true);
     assert.deepEqual(collected.profiles[key].talentBuilds, [{ name: 'Active', ranks: { 'Holy/Divine Strength': 2 } }]);
     const cachedClient = mockClient(routes);
@@ -146,6 +151,7 @@ test('a level-60 profile backfills Blizzard media and talents, then serves both 
         previous: { ...collected, mode: 'live' }, profiles: collected.profiles });
     assert.equal(cached.players[0].talentsAvailable, true);
     assert.equal(cached.players[0].characterRender, render);
+    assert.equal(cached.players[0].characterPortrait, portrait);
     assert.ok(cachedClient.calls.every(call => !call.startsWith('/profile/')));
     const partial = await collectForever({ client: mockClient({ ...routes, [path + '/equipment']: new BlizzardError(404) }),
         configuration, policy });
@@ -156,6 +162,62 @@ test('a level-60 profile backfills Blizzard media and talents, then serves both 
     assert.equal(characterTalents(specs, 12), undefined);
     group.specializations[0].spent_points = 5;
     assert.equal(characterTalents(specs, 11), undefined);
+});
+
+test('a refreshed portrait uses the SD avatar if needed and drops unavailable or mismatched avatars', async () => {
+    const path = '/profile/wow/character/first-last';
+    const base = 'https://render.worldofwarcraft.com/forever-eu/character/1/11';
+    const sd = { key: 'avatar-sd', value: base + '-avatar-sd.jpg' };
+    const previous = { mode: 'live', guild: { id: 42, region: 'eu', ruleset: 'PvE' }, parameters: { lastUpdate: 1 },
+        players: [{ ...mapPlayer(summary), characterPortrait: base + '-avatar.jpg' }] };
+    for (const [media, expected] of [
+        [{ character: { id: 11 }, assets: [sd] }, sd.value],
+        [{ character: { id: 12 }, assets: [sd] }, undefined],
+        [{ character: { id: 11 }, assets: [{ key: 'avatar', value: base + '-avatar.jpg?token=fixture' }] }, undefined],
+        [{ character: { id: 11 }, assets: [{ key: 'main-raw', value: base + '-main-raw.png' }] }, undefined],
+    ]) {
+        const client = mockClient({ '/data/wow/guild/test-guild/roster': roster, [path]: summary, [path + '/character-media']: media });
+        const { players } = await collectForever({ client, configuration, policy, previous });
+        assert.equal(players[0].characterPortrait, expected);
+        assert.equal(players[0].image, 'icons/class_paladin.webp');
+        assert.equal(client.calls.filter(url => url.endsWith('/character-media')).length, 1);
+    }
+});
+
+test('both published image URLs follow gear changes even when Blizzard reuses its URLs and item level', async t => {
+    const directory = await mkdtemp(join(tmpdir(), 'forever-gear-'));
+    t.after(() => rm(directory, { recursive: true, force: true }));
+    const path = '/profile/wow/character/first-last';
+    const base = 'https://render.worldofwarcraft.com/forever-eu/character/1/11';
+    const originals = [base + '-main-raw.png', base + '-avatar.jpg'];
+    const media = { character: { id: 11 }, assets: [
+        { key: 'main-raw', value: originals[0] }, { key: 'avatar', value: originals[1] },
+    ] };
+    const sword = equipment.equipped_items[0];
+    const helm = { ...sword, slot: { type: 'HEAD' }, item: { id: 6 } };
+    const otherHelm = { ...helm, item: { id: 7 } };
+    let now = Date.now(), previous, profiles;
+    async function refresh(items, stats = statistics) {
+        now += 7 * 3_600_000;
+        const client = mockClient({ '/data/wow/guild/test-guild/roster': roster, [path]: summary,
+            [path + '/character-media']: media, [path + '/statistics']: stats,
+            [path + '/equipment']: items ? { equipped_items: items } : new BlizzardError(404) });
+        const data = await collectForever({ client, configuration, policy, now, previous, profiles });
+        profiles = data.profiles;
+        previous = await publishForever(data, {}, directory);
+        return [previous.players[0].characterRender, previous.players[0].characterPortrait];
+    }
+    const initial = await refresh([sword, helm]);
+    assert.deepEqual(initial, originals.map(url => url + '?gear=' + now));
+    assert.deepEqual(await refresh([helm, sword]), initial);
+    assert.deepEqual(await refresh(undefined), initial);
+    const swapped = await refresh([sword, otherHelm], new BlizzardError(404));
+    assert.deepEqual(swapped, originals.map(url => url + '?gear=' + now));
+    assert.deepEqual(await refresh([sword, otherHelm]), swapped);
+    assert.deepEqual(await refresh([sword, { ...otherHelm, transmog: { item: { id: 8 } } }]),
+        originals.map(url => url + '?gear=' + now));
+    assert.deepEqual(await refresh([sword, helm]), originals.map(url => url + '?gear=' + now));
+    assert.deepEqual(await refresh([]), originals.map(url => url + '?gear=' + now));
 });
 
 test('Forever equipment and statistics normalize nested values without inventing a model or talent build', () => {

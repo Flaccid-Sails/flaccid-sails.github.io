@@ -8,6 +8,7 @@ export interface PlayerApiDTO {
     warcraftLogsUrl?: string;
     appearance?: CharacterAppearance;
     characterRender?: string;
+    characterPortrait?: string;
     name: string;
     realm: string;
     equippedItemLevel: number;

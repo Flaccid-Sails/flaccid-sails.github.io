@@ -3,6 +3,7 @@ import { PlayerDTO } from '@src/models/PlayerDTO';
 import { StatisticsDTO } from '@src/models/StatisticsDTO';
 import { EventEmitter } from '@src/utils/event-emitter';
 import { readData } from '@src/utils/data';
+import { currentRosterPlayer } from '@src/utils/helpers';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { classPortrait, WindowFrame } from '../Frame/WindowFrame';
 import { useDialogFade } from '../Frame/useDialogFade';
@@ -11,10 +12,12 @@ import { CharacterItem, CharacterItemTooltip } from './CharacterItem';
 import { CharacterStatistics } from './CharacterStatistics';
 import { CharacterModel } from './CharacterModel';
 import { CloseButton } from '../Button/CloseButton';
+import { PlayerPortrait } from '../Portrait/PlayerPortrait';
 import { characterAsset, EquipmentSlot, leftEquipmentSlots, rightEquipmentSlots, weaponEquipmentSlots } from './equipment-slots';
 import './character.scss';
 
 interface CharacterDetails { equipment: EquipmentDTO[]; statistics: StatisticsDTO }
+interface Props { players?: PlayerDTO[] }
 
 function ItemDetails({ item, label, onClose }: { item: EquipmentDTO; label: string; onClose(): void }) {
     const ref = useRef<HTMLDialogElement>(null);
@@ -26,47 +29,52 @@ function ItemDetails({ item, label, onClose }: { item: EquipmentDTO; label: stri
     </dialog>;
 }
 
-export function CharacterDialog() {
-    const [player, setPlayer] = useState<PlayerDTO>();
+export function CharacterDialog({ players }: Props) {
+    const [selected, setSelected] = useState<PlayerDTO>();
+    const player = selected && currentRosterPlayer(selected, players);
     const [details, setDetails] = useState<CharacterDetails>();
     const [failed, setFailed] = useState(false);
     const [inspected, setInspected] = useState<{ item: EquipmentDTO; label: string }>();
     const windowRef = useRef<HTMLDivElement>(null);
-    const requestRef = useRef(0);
     const { isClosing, cancelClose, fadeOut } = useDialogFade();
     const isOpen = Boolean(player) && !isClosing;
     const close = useCallback(() => {
-        requestRef.current++;
         setInspected(undefined);
         EventEmitter.emit('CLOSE_POPUPS');
         fadeOut(() => {
-            setPlayer(undefined);
+            setSelected(undefined);
             setDetails(undefined);
         });
     }, [fadeOut]);
 
     useEffect(() => {
-        const unsubscribe = EventEmitter.subscribe('OPEN_CHARACTER_DIALOG', character => {
-            const request = ++requestRef.current;
+        return EventEmitter.subscribe('OPEN_CHARACTER_DIALOG', character => {
             EventEmitter.emit('CLOSE_POPUPS');
             cancelClose();
-            setPlayer(character);
-            setDetails(undefined);
-            setFailed(false);
-            setInspected(undefined);
-            void Promise.all([
-                readData<EquipmentDTO[]>(`/equipment/${character.realm}/${character.name}`),
-                readData<StatisticsDTO>(`/statistics/${character.realm}/${character.name}`),
-            ]).then(([equipment, statistics]) => {
-                if (request !== requestRef.current) return;
-                if (!equipment || !statistics) throw new Error('Missing character details');
-                setDetails({ equipment, statistics });
-            }).catch(() => {
-                if (request === requestRef.current) setFailed(true);
-            });
+            setSelected(character);
         });
-        return () => { requestRef.current++; unsubscribe(); };
     }, [cancelClose]);
+
+    const realm = player?.realm;
+    const name = player?.name;
+    useEffect(() => {
+        if (!realm || !name) return;
+        let active = true;
+        setDetails(undefined);
+        setFailed(false);
+        setInspected(undefined);
+        void Promise.all([
+            readData<EquipmentDTO[]>(`/equipment/${realm}/${name}`),
+            readData<StatisticsDTO>(`/statistics/${realm}/${name}`),
+        ]).then(([equipment, statistics]) => {
+            if (!active) return;
+            if (!equipment || !statistics) throw new Error('Missing character details');
+            setDetails({ equipment, statistics });
+        }).catch(() => {
+            if (active) setFailed(true);
+        });
+        return () => { active = false; };
+    }, [selected, realm, name, player?.characterRender, player?.characterPortrait]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -99,7 +107,7 @@ export function CharacterDialog() {
     return <div className={`character-overlay dialog-fade${isClosing ? ' dialog-fade-out' : ''}`} aria-hidden={isClosing}>
         <div className='character-backdrop' onClick={close} />
         <div ref={windowRef} className='character-window' role='dialog' aria-modal='true' aria-labelledby='character-heading'>
-            <WindowFrame portrait={portrait} />
+            <WindowFrame player={player} portrait={portrait} />
             <h1 id='character-heading' className='wow-window-title'>{player.name}</h1>
             <CloseButton className='wow-window-close' onClick={close} aria-label='Close character details' />
             {inspected && <ItemDetails {...inspected} onClose={() => setInspected(undefined)} />}
@@ -121,7 +129,7 @@ export function CharacterDialog() {
                     <section className='character-sidebar' aria-label='Character statistics'>
                         <header className='character-sidebar-header'>
                             <div className='character-stat-portrait' aria-hidden='true'>
-                                <img src={player.image || portrait} alt='' />
+                                <PlayerPortrait player={player} fallback={player.image || portrait} />
                                 <img className='character-stat-portrait-frame' src={characterAsset('character-details/ui-character-info-stattab-selected-c60-2x.webp')} alt='' />
                             </div>
                             <p>Level {player.level} <span style={{ color: `var(--${classSlug}-color)` }}>{player.class}</span></p>

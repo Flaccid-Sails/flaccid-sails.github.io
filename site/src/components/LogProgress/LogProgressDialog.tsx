@@ -265,7 +265,7 @@ export function LogProgressDialog({ player, zones, isDemo, onClose }: {
     return <div className={`log-progress-overlay dialog-fade${isClosing ? ' dialog-fade-out' : ''}`} aria-hidden={isClosing}>
         <div className='log-progress-backdrop' onClick={close} />
         <div ref={frame} className='log-progress-window' role='dialog' aria-modal='true' aria-labelledby='log-progress-heading'>
-            <WindowFrame portrait={classPortrait(player.class)} />
+            <WindowFrame player={player} portrait={classPortrait(player.class)} />
             <h1 id='log-progress-heading' className='wow-window-title'>Log progress</h1>
             <CloseButton className='wow-window-close' onClick={close} aria-label='Close log progress' />
             <div className='log-progress-content legacy-challenges-surface' aria-busy={!history && !failed}>

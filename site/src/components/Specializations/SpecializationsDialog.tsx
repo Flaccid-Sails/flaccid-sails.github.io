@@ -6,6 +6,7 @@ import { loadTalentCatalog, readData } from '@src/utils/data';
 import { CloseButton } from '../Button/CloseButton';
 import { HoverElement } from '../Popups/HoverElement';
 import { classPortrait, WindowFrame } from '../Frame/WindowFrame';
+import { currentRosterPlayer } from '@src/utils/helpers';
 import { useDialogFade } from '../Frame/useDialogFade';
 import './specializations.scss';
 
@@ -181,7 +182,7 @@ export function SpecializationsDialog({ players }: Props) {
     return <div className={`talents-overlay dialog-fade${isClosing ? ' dialog-fade-out' : ''}`} aria-hidden={isClosing}>
         <div className='talents-backdrop' onClick={close} />
         <div ref={windowRef} className='talents-window' role='dialog' aria-modal='true' aria-labelledby='talents-heading'>
-            <WindowFrame portrait={classPortrait(className)} />
+            <WindowFrame player={player && currentRosterPlayer(player, players)} portrait={classPortrait(className)} />
             <h1 id='talents-heading' className='wow-window-title'>Talents</h1>
             <CloseButton className='wow-window-close' onClick={close} aria-label='Close talents' />
             <div className='talents-content'>

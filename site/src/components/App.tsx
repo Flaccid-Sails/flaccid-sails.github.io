@@ -3,7 +3,7 @@ import { Snapshot } from '@src/models/Snapshot';
 import { Theme } from '@src/models/Theme';
 import { PlayerDTO } from '@src/models/PlayerDTO';
 import { loadSnapshot } from '@src/utils/data';
-import { realmToSlug } from '@src/utils/helpers';
+import { currentRosterPlayer, realmToSlug } from '@src/utils/helpers';
 import { EventEmitter } from '@src/utils/event-emitter';
 import { Images } from '@src/utils/images';
 import { CharacterDialog } from './Character/CharacterDialog';
@@ -131,11 +131,11 @@ export function App() {
         </Frame>
 
         <JoinInfo theme={theme} color={color} />
-        <CharacterDialog />
+        <CharacterDialog players={transformedPlayers} />
         <SpecializationsDialog players={snapshot?.players} />
         {logProgressPlayer && snapshot && <Suspense fallback={null}>
             <LogProgressDialog key={`${logProgressPlayer.realm}/${logProgressPlayer.name}`}
-                player={logProgressPlayer} zones={snapshot.zones} isDemo={snapshot.mode === 'demo'}
+                player={currentRosterPlayer(logProgressPlayer, transformedPlayers)} zones={snapshot.zones} isDemo={snapshot.mode === 'demo'}
                 onClose={() => setLogProgressPlayer(undefined)} />
         </Suspense>}
         <Popups />
