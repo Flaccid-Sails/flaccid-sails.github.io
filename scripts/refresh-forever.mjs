@@ -92,7 +92,7 @@ export async function refreshForever({ args = process.argv.slice(2), environment
     if (args.includes('--require-roster') && data.sources.blizzard.roster !== 'available')
         throw new RefreshError('A fresh guild roster is required for deployment.');
     const snapshot = await publishForever(data, catalog, output);
-    console.log(`Saved Blizzard-only snapshot: ${snapshot.players.length} players; guild roster ${snapshot.sources.blizzard.roster}; Warcraft Logs not connected.`);
+    console.log(`Saved guild snapshot: ${snapshot.players.length} players; guild roster ${snapshot.sources.blizzard.roster}; Warcraft Logs not connected.`);
     return snapshot;
 }
 

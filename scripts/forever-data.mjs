@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { BlizzardError } from './blizzard-client.mjs';
+import { createCatalogItemLookup } from './item-levels.mjs';
 import { planCharacterRefresh } from './collection-policy.mjs';
 
 const number = (value, fallback = 0) => {
@@ -8,7 +9,7 @@ const number = (value, fallback = 0) => {
 };
 const classNames = { 1: 'Warrior', 2: 'Paladin', 3: 'Hunter', 4: 'Rogue', 5: 'Priest', 7: 'Shaman', 8: 'Mage', 9: 'Warlock', 11: 'Druid' };
 const classIcons = { Warrior: 'class_warrior', Paladin: 'class_paladin', Hunter: 'class_hunter', Rogue: 'class_rogue', Priest: 'class_priest', Shaman: 'class_shaman', Mage: 'class_mage', Warlock: 'class_warlock', Druid: 'class_druid' };
-const detailsVersion = 3;
+const detailsVersion = 4;
 
 export function characterName(character) {
     return [character.name, character.surname].filter(Boolean).join(' ');
@@ -145,7 +146,7 @@ export function sameGuild(snapshot, configuration) {
         snapshot.guild.region === configuration.region && snapshot.guild.ruleset === configuration.ruleset;
 }
 
-async function refreshCharacter(rosterPlayer, characterProfiles, optional, configuration, now) {
+async function refreshCharacter(rosterPlayer, characterProfiles, optional, lookupItemLevel, configuration, now) {
     const characterPath = `/profile/wow/character/${encodeURIComponent(rosterPlayer.slug)}`;
     const summary = await optional(characterPath);
     if (!summary || summary.id !== rosterPlayer.id || summary.guild?.id !== configuration.guildId) return;
@@ -176,6 +177,11 @@ async function refreshCharacter(rosterPlayer, characterProfiles, optional, confi
             if (icon && /^https:\/\/(?:[^/]+\.blizzard\.com|render\.worldofwarcraft\.com)\//.test(icon)) media.set(item.item.id, icon);
         }
         profile.equipment = mapEquipment(equipment, media);
+        for (const [index, item] of profile.equipment.entries()) {
+            if (item.itemLevel > 0) continue;
+            const fallback = await lookupItemLevel(equipment.equipped_items[index].item);
+            if (fallback) Object.assign(item, fallback);
+        }
         profile.statistics = mapStatistics(statistics);
         player.equipmentAvailable = true;
     }
@@ -216,10 +222,11 @@ export async function collectForever({ client, configuration, policy, previous, 
         return saved?.detailsVersion === detailsVersion
             ? [[key, { fetchedAt: saved.fetchedAt, lastLogin: player.lastLogin > 0 ? player.lastLogin : now }]] : [];
     }));
+    const lookupItemLevel = createCatalogItemLookup({ region: configuration.region, optional, useWowhead: policy.wowheadItemLevelFallback });
     const refreshCandidates = planCharacterRefresh(players, cache, policy, now);
     for (const player of refreshCandidates) {
         try {
-            const refreshed = await refreshCharacter(player, characterProfiles, optional, configuration, now);
+            const refreshed = await refreshCharacter(player, characterProfiles, optional, lookupItemLevel, configuration, now);
             if (refreshed) {
                 Object.assign(player, refreshed.player);
                 characterProfiles[refreshed.key] = refreshed.profile;

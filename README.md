@@ -20,6 +20,8 @@ npm run build
 npm run preview
 ```
 
+When Blizzard omits an equipped item's level, the collector looks up its base level in the Forever item catalog. Set `wowheadItemLevelFallback` in `config/collection-policy.json` to `true` to also consult public Wowhead Forever tooltips for missing values. The gear tooltip labels catalog values “Base Item Level”.
+
 ## Talent updates
 
 Source: [Talents Forever](https://talentsforever.com/), [public JSON](https://talentsforever.com/data.json), by Chris Baldwin. Game text and artwork belong to Blizzard Entertainment.

@@ -6,6 +6,7 @@
     "maxCharactersPerRun": 40,
     "maxReportsPerRun": 8,
     "blizzardRequestIntervalMs": 500,
+    "wowheadItemLevelFallback": false,
     "warcraftLogsRequestIntervalMs": 1000,
     "maxRetries": 3
 }

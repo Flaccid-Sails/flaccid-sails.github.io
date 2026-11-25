@@ -20,5 +20,6 @@ export interface EquipmentDTO {
     enchant?: string;
     sockets: SocketDTO[];
     itemLevel: number;
+    itemLevelSource?: 'blizzard-catalog' | 'wowhead';
     media: string;
 }

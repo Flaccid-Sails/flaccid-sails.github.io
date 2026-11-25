@@ -7,6 +7,7 @@ import { spawnSync } from 'node:child_process';
 import { createBlizzardClient, BlizzardError } from './blizzard-client.mjs';
 import { characterRender, characterTalents, collectForever, mapPlayer, mapEquipment, mapStatistics } from './forever-data.mjs';
 import { publishForever } from './refresh-forever.mjs';
+import { createCatalogItemLookup } from './item-levels.mjs';
 
 const configuration = { region: 'eu', ruleset: 'PvE', guildId: 42, guildSlug: 'test-guild', guildName: 'Test Guild' };
 const policy = { detailedLevel: 60, maxCharactersPerRun: 2, detailsRefreshHours: 6, inactiveAfterDays: 14, inactiveRefreshHours: 168 };
@@ -118,7 +119,7 @@ test('fresh cached details are reused within policy limits', async () => {
     const previous = { mode: 'live', guild: { ...configuration, id: 42, name: 'Test Guild' }, players: [player], parameters: { lastUpdate: 100 } };
     const client = mockClient({ '/data/wow/guild/test-guild/roster': roster });
     const data = await collectForever({ client, configuration, policy, previous,
-        profiles: { 'PvE/First Last': { equipment: [], statistics: {}, fetchedAt: Date.now(), detailsVersion: 3 } } });
+        profiles: { 'PvE/First Last': { equipment: [], statistics: {}, fetchedAt: Date.now(), detailsVersion: 4 } } });
     assert.equal(data.players[0].equipmentAvailable, true);
     assert.ok(!client.calls.some(path => path.startsWith('/profile/')));
 });
@@ -142,7 +143,7 @@ test('an exhausted character request preserves its last complete details and the
     const previous = { mode: 'live', guild: { id: 42, region: 'eu', ruleset: 'PvE' },
         players: [player], parameters: { lastUpdate: 1 } };
     const saved = { equipment: [{ id: 9 }], statistics: { health: 100 }, talentBuilds: [{ name: 'Active' }],
-        detailsVersion: 3, fetchedAt: 0 };
+        detailsVersion: 4, fetchedAt: 0 };
     const failed = mockClient(routes);
     const data = await collectForever({ client: failed, configuration, policy, previous, profiles: { [key]: saved } });
     assert.ok(failed.calls.indexOf('/data/wow/media/item/5') < failed.calls.indexOf('/profile/wow/character/second-last'));
@@ -277,6 +278,63 @@ test('Forever equipment and statistics normalize nested values without inventing
     assert.equal(mapStatistics(statistics).powerType, 'Mana');
 });
 
+test('missing item levels use the matching Forever catalog record once and keep equipped levels authoritative', async () => {
+    const path = '/profile/wow/character/first-last';
+    const href = 'https://eu.api.blizzard.com/data/wow/item/8?namespace=static-1.60.1_70399-forever-eu';
+    const ring = { item: { id: 8, key: { href } }, name: 'Ring', slot: { type: 'FINGER_1' } };
+    const client = mockClient({
+        '/data/wow/guild/test-guild/roster': roster, [path]: summary,
+        [path + '/equipment']: { equipped_items: [
+            equipment.equipped_items[0], ring, { ...ring, slot: { type: 'FINGER_2' } },
+            { ...ring, level: { value: 62 }, slot: { type: 'TRINKET_1' } },
+        ] }, [path + '/statistics']: statistics, [href]: { id: 8, level: 51, required_level: 46 },
+    });
+    const previous = { mode: 'live', guild: { id: 42, region: 'eu', ruleset: 'PvE' },
+        players: [mapPlayer(summary)], parameters: { lastUpdate: 1 } };
+    const key = 'PvE/First Last';
+    const { players, profiles } = await collectForever({ client, configuration, policy, previous,
+        profiles: { [key]: { fetchedAt: Date.now(), detailsVersion: 3 } } });
+    assert.deepEqual(profiles[key].equipment.map(item => [item.itemLevel, item.itemLevelSource]), [
+        [9, undefined], [51, 'blizzard-catalog'], [51, 'blizzard-catalog'], [62, undefined],
+    ]);
+    assert.deepEqual(client.calls.filter(p => p.includes('/data/wow/item/')), [href]);
+    assert.equal(players[0].itemLevel, -1);
+});
+
+test('an incomplete or unavailable item catalog still publishes the character equipment', async () => {
+    const path = '/profile/wow/character/first-last';
+    const items = [1, 2, 3, 4, 5].map(id => ({ ...equipment.equipped_items[0], item: { id }, level: undefined }));
+    const client = mockClient({ '/data/wow/guild/test-guild/roster': roster, [path]: summary,
+        [path + '/equipment']: { equipped_items: items }, [path + '/statistics']: statistics,
+        '/data/wow/item/1': { id: 99, level: 10 }, '/data/wow/item/2': { id: 2, required_level: 20 },
+        '/data/wow/item/4': new BlizzardError(503, 'item catalog'),
+    });
+    const data = await collectForever({ client, configuration, policy });
+    assert.equal(data.players[0].equipmentAvailable, true);
+    assert.deepEqual(data.profiles['PvE/First Last'].equipment.map(i => i.itemLevel), [-1, -1, -1, -1, -1]);
+    assert.ok(!client.calls.includes('/data/wow/item/5'));
+});
+
+test('the public fallback reads Forever base levels by ID and ignores required levels', async () => {
+    const requested = [];
+    const lookup = createCatalogItemLookup({ region: 'eu', useWowhead: true,
+        optional: async path => path.endsWith('/6') ? { id: 6, level: 52 } : undefined,
+        fetchImpl: async (url, options) => {
+            requested.push(url);
+            assert.equal(options.credentials, 'omit');
+            assert.equal(options.redirect, 'error');
+            assert.equal(options.headers, undefined);
+            if (url.endsWith('/7')) return Response.json({ tooltip: '<br>Requires Level <!--rlvl-->45' });
+            if (url.endsWith('/8')) return new Response(null, { status: 429 });
+            return Response.json({ tooltip: 'Item Level <!--ilvl-->53</span><br>Requires Level <!--rlvl-->45' });
+        },
+    });
+    assert.deepEqual(await lookup({ id: 6 }), { itemLevel: 52, itemLevelSource: 'blizzard-catalog' });
+    for (let i = 0; i < 2; i++) assert.deepEqual(await lookup({ id: 5 }), { itemLevel: 53, itemLevelSource: 'wowhead' });
+    for (const id of [7, 8, 9, '../other']) assert.equal(await lookup({ id }), undefined);
+    assert.deepEqual(requested, [5, 7, 8].map(id => `https://nether.wowhead.com/forever/tooltip/item/${id}`));
+});
+
 test('Undead characters use the standard model when Blizzard provides both renders', () => {
     const base = 'https://render.worldofwarcraft.com/forever-eu/character/1/11';
     const hd = { key: 'main-raw', value: base + '-main-raw.png' };
@@ -329,7 +387,9 @@ test('transport never forwards authentication to an untrusted URL, redirect or w
         } });
     for (const path of ['https://example.com/data/wow/guild/test',
         'https://us.api.blizzard.com/data/wow/guild/test', '/data/wow/guild/test?access_token=anything',
-        '/data/wow/guild/test?namespace=profile-eu']) await assert.rejects(client.get(path));
+        '/data/wow/guild/test?namespace=profile-eu', '/data/wow/item/index', '/data/wow/item/42/extra',
+        '/data/wow/item/42?namespace=static-forever-us', '/data/wow/item/42?namespace=profile-forever-eu',
+        'https://example.com/data/wow/item/42']) await assert.rejects(client.get(path));
     assert.equal(calls.length, 0);
     await client.get('/data/wow/guild/test');
     assert.equal(calls.length, 2);
@@ -337,6 +397,8 @@ test('transport never forwards authentication to an untrusted URL, redirect or w
     assert.ok(calls.every(call => !call.url.includes('fixture-secret') && !call.url.includes('fixture-token')));
     assert.ok(calls[1].url.includes('namespace=profile-forever-eu'));
     assert.ok(calls[1].options.headers.Authorization === 'Bearer fixture-token');
+    await client.get('/data/wow/item/42');
+    assert.equal(new URL(calls[2].url).searchParams.get('namespace'), 'static-forever-eu');
 });
 
 test('authentication, remote and network errors cannot echo fixture secrets or tokens', async () => {

@@ -4,6 +4,10 @@ import { CSSProperties } from 'react';
 import { HoverElement } from '../Popups/HoverElement';
 import { characterAsset, EquipmentSlot } from './equipment-slots';
 
+function itemLevelLabel(item: EquipmentDTO) {
+    return `${item.itemLevelSource ? 'Base Item Level' : 'Item Level'} ${item.itemLevel}`;
+}
+
 export function CharacterItemTooltip({ item, label }: { item: EquipmentDTO; label: string }) {
     return <div className='character-item-tooltip'>
         <p className='character-item-name' style={{ color: `var(--quality-${item.quality.toLowerCase()}-color)` }}>
@@ -11,7 +15,7 @@ export function CharacterItemTooltip({ item, label }: { item: EquipmentDTO; labe
                 ? <a href={`https://www.wowhead.com/forever/item=${item.id}`} target='_blank' rel='noreferrer'>{item.name}</a>
                 : item.name}
         </p>
-        <p className='item-level'>Item Level {item.itemLevel}</p>
+        {item.itemLevel > 0 && <p className='item-level'>{itemLevelLabel(item)}</p>}
         {item.transmog && <p className='item-transmog'>{item.transmog}</p>}
         <div className='character-item-type'><span>{label}</span><span>{item.itemSubclass !== 'Miscellaneous' ? item.itemSubclass : item.inventoryType}</span></div>
         {Boolean(item.armor) && <p>{item.armor} Armor</p>}
@@ -53,7 +57,7 @@ export function CharacterItem({ item, slot, side, onInspect }: Props) {
         </HoverElement> : <div {...frame} role='img'>{icon}</div>}
         {item && <div className='character-equipment-info'>
             <div className='character-equipment-info-line'>
-                {item.itemLevel > 1 && <span className='character-equipment-level' aria-label={`Item level ${item.itemLevel}`}
+                {item.itemLevel > 0 && <span className='character-equipment-level' aria-label={itemLevelLabel(item)}
                     style={{ color: `var(--quality-${item.quality.toLowerCase()}-color)` }}>{item.itemLevel}</span>}
                 {item.sockets.map((socket, index) => <img key={index} className='character-equipment-gem'
                     src={socket.media || Images.wowIcon} alt={socket.display} title={socket.display} />)}

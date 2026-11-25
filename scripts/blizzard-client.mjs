@@ -13,6 +13,7 @@ export class BlizzardError extends Error {
 
 function apiOperation(url) {
     if (url.pathname.startsWith('/data/wow/media/item/')) return 'item media';
+    if (url.pathname.startsWith('/data/wow/item/')) return 'item catalog';
     if (url.pathname.startsWith('/profile/wow/character/')) return 'character details';
     return url.pathname.endsWith('/roster') ? 'guild roster' : 'guild summary';
 }
@@ -29,12 +30,14 @@ export function createBlizzardClient({ clientId, clientSecret, region, fetchImpl
 
     function apiUrl(path) {
         const url = new URL(path, origin);
+        const catalogItem = /^\/data\/wow\/item\/[1-9]\d*$/.test(url.pathname);
         if (url.origin !== origin || url.username || url.password || url.hash ||
-            !/^\/(?:data\/wow\/(?:guild|media\/item)\/|profile\/wow\/character\/)/.test(url.pathname) ||
+            (!catalogItem && !/^\/(?:data\/wow\/(?:guild|media\/item)\/|profile\/wow\/character\/)/.test(url.pathname)) ||
             [...url.searchParams.keys()].some(key => !['namespace', 'locale'].includes(key)))
             throw new Error('Refusing an unexpected Blizzard API URL.');
-        const requestedNamespace = url.searchParams.get('namespace') ?? namespace;
-        if (requestedNamespace !== namespace &&
+        const defaultNamespace = catalogItem ? `static-forever-${region}` : namespace;
+        const requestedNamespace = url.searchParams.get('namespace') ?? defaultNamespace;
+        if (requestedNamespace !== defaultNamespace &&
             !new RegExp(`^static-[a-zA-Z0-9_.]+-forever-${region}$`).test(requestedNamespace))
             throw new Error('Refusing a namespace outside WoW Forever.');
         url.searchParams.set('namespace', requestedNamespace);
