@@ -3,9 +3,12 @@ import { createHash } from 'node:crypto';
 import { parseEnv } from 'node:util';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { createBlizzardClient } from './blizzard-client.mjs';
+import { BlizzardError, createBlizzardClient } from './blizzard-client.mjs';
 import { collectForever, sameGuild } from './forever-data.mjs';
 import { guildContentHash } from './deployment-plan.mjs';
+
+// Use only fixed local messages here. These errors are shown in Actions logs.
+class RefreshError extends Error {}
 
 function versionCharacterImages(player, profile) {
     const version = profile?.gearChangedAt ?? (profile?.equipment && profile.fetchedAt);
@@ -52,7 +55,7 @@ export async function refreshForever({ args = process.argv.slice(2), environment
     // Building and importing these modules never reads credentials or authenticates.
     // The caller must obtain human consent before invoking this explicit command.
     if (!args.includes('--allow-authenticated-blizzard'))
-        throw new Error('Explicit consent is required. Run with --allow-authenticated-blizzard only after authorization.');
+        throw new RefreshError('Explicit consent is required. Run with --allow-authenticated-blizzard only after authorization.');
     // CI injects the two approved Actions secrets into this step's environment.
     // Never write them to a file or fall back to a different credential source.
     const env = args.includes('--from-env') ? environment : parseEnv(await readFile(resolve(directory, '.env.local'), 'utf8'));
@@ -63,20 +66,20 @@ export async function refreshForever({ args = process.argv.slice(2), environment
     };
     if (!configuration.guildSlug || !/^[\p{L}\p{N}-]+$/u.test(configuration.guildSlug) ||
         !Number.isSafeInteger(configuration.guildId) || configuration.guildId <= 0)
-        throw new Error('Configure BLIZZARD_GUILD_ID and BLIZZARD_GUILD_SLUG first.');
+        throw new RefreshError('Configure BLIZZARD_GUILD_ID and BLIZZARD_GUILD_SLUG first.');
     if (!env.BLIZZARD_CLIENT_ID || !env.BLIZZARD_CLIENT_SECRET)
-        throw new Error('Blizzard client credentials are required from the selected source.');
+        throw new RefreshError('Blizzard client credentials are required from the selected source.');
     const output = resolve(directory, 'site/public/data');
     let previous;
     try { previous = JSON.parse(await readFile(resolve(output, 'snapshot.json'), 'utf8')); }
-    catch (error) { if (error.code !== 'ENOENT') throw new Error('The current snapshot could not be read.'); }
+    catch (error) { if (error.code !== 'ENOENT') throw new RefreshError('The current snapshot could not be read.'); }
     const profiles = {};
     if (sameGuild(previous, configuration)) {
         const validIndex = /^indexes\/[a-f0-9]{64}\.json$/;
-        if (!validIndex.test(previous.characterIndexFile)) throw new Error('Invalid saved character index.');
+        if (!validIndex.test(previous.characterIndexFile)) throw new RefreshError('Invalid saved character index.');
         const index = JSON.parse(await readFile(resolve(output, previous.characterIndexFile), 'utf8'));
         for (const [key, file] of Object.entries(index)) {
-            if (!/^characters\/[a-f0-9]{64}\.json$/.test(file)) throw new Error('Invalid saved character file.');
+            if (!/^characters\/[a-f0-9]{64}\.json$/.test(file)) throw new RefreshError('Invalid saved character file.');
             profiles[key] = JSON.parse(await readFile(resolve(output, file), 'utf8'));
         }
     }
@@ -87,16 +90,18 @@ export async function refreshForever({ args = process.argv.slice(2), environment
         intervalMs: policy.blizzardRequestIntervalMs, maxRetries: policy.maxRetries });
     const data = await collectForever({ client, configuration, policy, previous, profiles });
     if (args.includes('--require-roster') && data.sources.blizzard.roster !== 'available')
-        throw new Error('A fresh guild roster is required for deployment. The previous snapshot was retained.');
+        throw new RefreshError('A fresh guild roster is required for deployment.');
     const snapshot = await publishForever(data, catalog, output);
     console.log(`Saved Blizzard-only snapshot: ${snapshot.players.length} players; guild roster ${snapshot.sources.blizzard.roster}; Warcraft Logs not connected.`);
     return snapshot;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
-    refreshForever().catch(() => {
+    refreshForever().catch(error => {
         // Do not print arbitrary exceptions from filesystem, fetch, or remote JSON.
-        console.error('Forever refresh failed. Check consent, configuration, and Blizzard availability. The previous snapshot was retained.');
+        const reason = error instanceof BlizzardError || error instanceof RefreshError
+            ? error.message : 'Check the configuration, saved data, and Blizzard response format.';
+        console.error(`Forever refresh failed. ${reason} The previous snapshot was retained.`);
         process.exitCode = 1;
     });
 }

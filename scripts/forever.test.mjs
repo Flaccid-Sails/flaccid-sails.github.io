@@ -123,6 +123,54 @@ test('fresh cached details are reused within policy limits', async () => {
     assert.ok(!client.calls.some(path => path.startsWith('/profile/')));
 });
 
+test('an exhausted character request preserves its last complete details and the next run retries it', async () => {
+    const path = '/profile/wow/character/first-last';
+    const key = 'PvE/First Last';
+    const second = { ...summary, name: 'Second', id: 12 };
+    const routes = {
+        '/data/wow/guild/test-guild/roster': { ...roster, members: [
+            { character: summary, rank: 1 }, { character: second, rank: 2 },
+        ] },
+        [path]: { ...summary, average_item_level: 60 },
+        [path + '/equipment']: { equipped_items: [{ ...equipment.equipped_items[0],
+            media: { key: { href: '/data/wow/media/item/5' } } }] },
+        [path + '/statistics']: statistics,
+        '/data/wow/media/item/5': new BlizzardError(503),
+        '/profile/wow/character/second-last': { ...second, average_item_level: 55 },
+    };
+    const player = { ...mapPlayer(summary), itemLevel: 50, characterPortrait: 'https://render.worldofwarcraft.com/old.jpg' };
+    const previous = { mode: 'live', guild: { id: 42, region: 'eu', ruleset: 'PvE' },
+        players: [player], parameters: { lastUpdate: 1 } };
+    const saved = { equipment: [{ id: 9 }], statistics: { health: 100 }, talentBuilds: [{ name: 'Active' }],
+        detailsVersion: 3, fetchedAt: 0 };
+    const failed = mockClient(routes);
+    const data = await collectForever({ client: failed, configuration, policy, previous, profiles: { [key]: saved } });
+    assert.ok(failed.calls.indexOf('/data/wow/media/item/5') < failed.calls.indexOf('/profile/wow/character/second-last'));
+    assert.equal(data.sources.blizzard.roster, 'available');
+    assert.deepEqual(data.profiles[key], saved);
+    assert.deepEqual(data.players[0], { ...player, rank: 1, equipmentAvailable: true, talentsAvailable: true });
+    assert.equal(data.players[1].itemLevel, 55);
+
+    const client = mockClient({ ...routes, '/data/wow/media/item/5': { assets: [] } });
+    const recovered = await collectForever({ client, configuration, policy, previous: { ...data, mode: 'live' }, profiles: data.profiles });
+    assert.equal(recovered.players[0].itemLevel, 60);
+    assert.equal(recovered.profiles[key].equipment[0].id, 5);
+    assert.ok(recovered.profiles[key].fetchedAt > saved.fetchedAt);
+    assert.ok(!client.calls.includes('/profile/wow/character/second-last'));
+});
+
+test('a new character with a timed-out profile remains on the roster and eligible for details', async () => {
+    const path = '/profile/wow/character/first-last';
+    const routes = { '/data/wow/guild/test-guild/roster': roster, [path]: new BlizzardError(408) };
+    const partial = await collectForever({ client: mockClient(routes), configuration, policy });
+    assert.deepEqual(partial.profiles, {});
+    assert.equal(partial.players[0].itemLevel, -1);
+    assert.equal(partial.players[0].equipmentAvailable, false);
+    const recovered = await collectForever({ client: mockClient({ ...routes, [path]: { ...summary, average_item_level: 52 } }),
+        configuration, policy, previous: { ...partial, mode: 'live' }, profiles: partial.profiles });
+    assert.equal(recovered.players[0].itemLevel, 52);
+});
+
 test('a level-60 profile backfills Blizzard media and talents, then serves both from cache', async () => {
     const path = '/profile/wow/character/first-last';
     const key = 'PvE/First Last';
@@ -318,6 +366,24 @@ test('rate limiting retries are bounded', async () => {
     await assert.rejects(client.get('/data/wow/guild/test'), /429/);
     assert.equal(count, 2);
     assert.ok(delays.every(ms => ms <= 30_000));
+});
+
+test('the client recovers from a temporary token failure, a timeout and an interrupted API response', async () => {
+    const replies = [
+        Response.json({}, { status: 503 }), Response.json({ access_token: 'fixture-token' }),
+        new Error('fixture network failure'), new Response('{"members":'), Response.json(roster),
+    ];
+    const calls = [];
+    const client = createBlizzardClient({ clientId: 'fixture-id', clientSecret: 'fixture-secret', region: 'eu',
+        sleep: async () => {}, maxRetries: 2, fetchImpl: async url => {
+            calls.push(new URL(url).pathname);
+            const reply = replies.shift();
+            if (reply instanceof Error) throw reply;
+            return reply;
+        } });
+    const path = '/data/wow/guild/test-guild/roster';
+    assert.deepEqual(await client.get(path), roster);
+    assert.deepEqual(calls, ['/token', '/token', path, path, path]);
 });
 
 test('offline preparation preserves live data and a credential-free invocation requires consent', async () => {

@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { BlizzardError } from './blizzard-client.mjs';
 import { refreshForever } from './refresh-forever.mjs';
 
@@ -93,6 +95,23 @@ test('deployment requires a fresh roster and never replaces the saved snapshot o
             else await assert.rejects(readFile(path), { code: 'ENOENT' });
         });
     }
+});
+
+test('the CLI reports a rejected token request safely and keeps the published snapshot', async t => {
+    const directory = await fixture(t);
+    await refreshForever({ args, environment, directory, clientFactory });
+    const pointer = join(directory, 'site/public/data/snapshot.json');
+    const before = await readFile(pointer, 'utf8');
+    const preload = join(directory, 'mock-fetch.mjs');
+    await writeFile(preload, `globalThis.fetch = async () => Response.json(
+        { error: 'synthetic-private-response' }, { status: 403 });`);
+    const script = fileURLToPath(new URL('./refresh-forever.mjs', import.meta.url));
+    const result = spawnSync(process.execPath, ['--import', preload, script, ...args], { cwd: directory, env: environment, encoding: 'utf8' });
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /Blizzard authentication returned HTTP 403/);
+    for (const secret of [environment.BLIZZARD_CLIENT_ID, environment.BLIZZARD_CLIENT_SECRET, 'synthetic-private-response'])
+        assert.ok(!(result.stdout + result.stderr).includes(secret));
+    assert.equal(await readFile(pointer, 'utf8'), before);
 });
 
 test('a fresh empty guild roster is a valid deployment', async t => {

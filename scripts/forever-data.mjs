@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { BlizzardError } from './blizzard-client.mjs';
 import { planCharacterRefresh } from './collection-policy.mjs';
 
 const number = (value, fallback = 0) => {
@@ -144,11 +145,51 @@ export function sameGuild(snapshot, configuration) {
         snapshot.guild.region === configuration.region && snapshot.guild.ruleset === configuration.ruleset;
 }
 
+async function refreshCharacter(rosterPlayer, characterProfiles, optional, configuration, now) {
+    const characterPath = `/profile/wow/character/${encodeURIComponent(rosterPlayer.slug)}`;
+    const summary = await optional(characterPath);
+    if (!summary || summary.id !== rosterPlayer.id || summary.guild?.id !== configuration.guildId) return;
+    const player = mapPlayer(summary, { rank: rosterPlayer.rank, ruleset: configuration.ruleset, previous: rosterPlayer });
+    const key = `${player.realm}/${player.name}`;
+    const saved = characterProfiles[key];
+    const talentBuilds = characterTalents(await optional(summary.specializations?.href ?? `${characterPath}/specializations`), player.id);
+    const characterMedia = await optional(summary.media?.href ?? `${characterPath}/character-media`);
+    player.characterRender = characterRender(characterMedia, player.id, summary.race?.id);
+    player.characterPortrait = characterAsset(characterMedia, player.id, ['avatar', 'avatar-sd']);
+    player.talentsAvailable = Boolean(talentBuilds?.length);
+    const equipment = await optional(summary.equipment?.href ?? `${characterPath}/equipment`);
+    const statistics = await optional(summary.statistics?.href ?? `${characterPath}/statistics`);
+    const profile = { ...saved, talentBuilds, logHistory: saved?.logHistory ?? [], fetchedAt: now, detailsVersion };
+    if (equipment) {
+        const fingerprint = gearFingerprint(equipment.equipped_items);
+        if (fingerprint !== saved?.gearFingerprint) profile.gearChangedAt = now;
+        profile.gearFingerprint = fingerprint;
+    } else if (saved?.equipment) {
+        profile.gearChangedAt ??= saved.fetchedAt;
+    }
+    if (equipment && statistics) {
+        const media = new Map();
+        for (const item of equipment.equipped_items ?? []) {
+            if (!item.media?.key?.href || media.has(item.item.id)) continue;
+            const result = await optional(item.media.key.href);
+            const icon = result?.assets?.find(asset => asset.key === 'icon')?.value;
+            if (icon && /^https:\/\/(?:[^/]+\.blizzard\.com|render\.worldofwarcraft\.com)\//.test(icon)) media.set(item.item.id, icon);
+        }
+        profile.equipment = mapEquipment(equipment, media);
+        profile.statistics = mapStatistics(statistics);
+        player.equipmentAvailable = true;
+    }
+    return { key, player, profile };
+}
+
 export async function collectForever({ client, configuration, policy, previous, profiles = {}, now = Date.now() }) {
     const path = `/data/wow/guild/${encodeURIComponent(configuration.guildSlug)}`;
     const optional = async url => {
         try { return await client.get(url); }
-        catch (error) { if ([403, 404].includes(error.status)) return undefined; throw error; }
+        catch (error) {
+            if (error instanceof BlizzardError && error.operation !== 'authentication' && [403, 404].includes(error.status)) return undefined;
+            throw error;
+        }
     };
     const guild = await optional(path);
     if (guild && guild.id !== configuration.guildId) throw new Error('The configured guild ID does not match Blizzard.');
@@ -177,43 +218,16 @@ export async function collectForever({ client, configuration, policy, previous, 
     }));
     const refreshCandidates = planCharacterRefresh(players, cache, policy, now);
     for (const player of refreshCandidates) {
-        const characterPath = `/profile/wow/character/${encodeURIComponent(player.slug)}`;
-        const summary = await optional(characterPath);
-        if (!summary || summary.id !== player.id || summary.guild?.id !== configuration.guildId) continue;
-        Object.assign(player, mapPlayer(summary, { rank: player.rank, ruleset: configuration.ruleset, previous: player }));
-        const key = `${player.realm}/${player.name}`;
-        const saved = characterProfiles[key];
-        const talentBuilds = characterTalents(await optional(summary.specializations?.href ?? `${characterPath}/specializations`), player.id);
-        const characterMedia = await optional(summary.media?.href ?? `${characterPath}/character-media`);
-        const render = characterRender(characterMedia, player.id, summary.race?.id);
-        if (render) player.characterRender = render;
-        else delete player.characterRender;
-        const portrait = characterAsset(characterMedia, player.id, ['avatar', 'avatar-sd']);
-        if (portrait) player.characterPortrait = portrait;
-        else delete player.characterPortrait;
-        player.talentsAvailable = Boolean(talentBuilds?.length);
-        const equipment = await optional(summary.equipment?.href ?? `${characterPath}/equipment`);
-        const statistics = await optional(summary.statistics?.href ?? `${characterPath}/statistics`);
-        const profile = { ...saved, talentBuilds, logHistory: saved?.logHistory ?? [], fetchedAt: now, detailsVersion };
-        characterProfiles[key] = profile;
-        if (equipment) {
-            const fingerprint = gearFingerprint(equipment.equipped_items);
-            if (fingerprint !== saved?.gearFingerprint) profile.gearChangedAt = now;
-            profile.gearFingerprint = fingerprint;
-        } else if (saved?.equipment) {
-            profile.gearChangedAt ??= saved.fetchedAt;
+        try {
+            const refreshed = await refreshCharacter(player, characterProfiles, optional, configuration, now);
+            if (refreshed) {
+                Object.assign(player, refreshed.player);
+                characterProfiles[refreshed.key] = refreshed.profile;
+            }
+        } catch (error) {
+            if (!(error instanceof BlizzardError && error.transient && error.operation !== 'authentication')) throw error;
+            console.warn(`Deferred details for character ${player.id}. ${error.message}`);
         }
-        if (!equipment || !statistics) continue;
-        const media = new Map();
-        for (const item of equipment.equipped_items ?? []) {
-            if (!item.media?.key?.href || media.has(item.item.id)) continue;
-            const result = await optional(item.media.key.href);
-            const icon = result?.assets?.find(asset => asset.key === 'icon')?.value;
-            if (icon && /^https:\/\/(?:[^/]+\.blizzard\.com|render\.worldofwarcraft\.com)\//.test(icon)) media.set(item.item.id, icon);
-        }
-        profile.equipment = mapEquipment(equipment, media);
-        profile.statistics = mapStatistics(statistics);
-        player.equipmentAvailable = true;
     }
     return {
         players, profiles: characterProfiles,

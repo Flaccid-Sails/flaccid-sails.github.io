@@ -1,10 +1,20 @@
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export class BlizzardError extends Error {
-    constructor(status, message = `Blizzard API returned HTTP ${status}.`) {
-        super(message);
+    constructor(status, operation = 'API request') {
+        super(status ? `Blizzard ${operation} returned HTTP ${status}.`
+            : `Blizzard ${operation} did not return a complete, valid response.`);
         this.status = status;
+        this.operation = operation;
     }
+
+    get transient() { return [0, 408, 429, 500, 502, 503, 504].includes(this.status); }
+}
+
+function apiOperation(url) {
+    if (url.pathname.startsWith('/data/wow/media/item/')) return 'item media';
+    if (url.pathname.startsWith('/profile/wow/character/')) return 'character details';
+    return url.pathname.endsWith('/roster') ? 'guild roster' : 'guild summary';
 }
 
 // Tokens remain inside this closure. Never include remote bodies or transport errors
@@ -32,46 +42,48 @@ export function createBlizzardClient({ clientId, clientSecret, region, fetchImpl
         return url;
     }
 
-    async function request(url, options) {
-        try {
-            return await fetchImpl(url, { ...options, redirect: 'error', signal: AbortSignal.timeout(20_000) });
-        } catch {
-            throw new BlizzardError(0, 'Blizzard request failed or timed out.');
+    async function requestJson(url, options, operation) {
+        for (let attempt = 0; ; attempt++) {
+            if (operation !== 'authentication') await sleep(intervalMs);
+            let response;
+            let status = 0;
+            try {
+                response = await fetchImpl(url, { ...options, redirect: 'error', signal: AbortSignal.timeout(20_000) });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && typeof data === 'object') return data;
+                } else {
+                    status = response.status;
+                    await response.body?.cancel();
+                }
+            } catch {
+                // Fetch can also time out or lose the connection while reading the body.
+            }
+            const error = new BlizzardError(status, operation);
+            if (!error.transient || attempt >= maxRetries) throw error;
+            const retryAfterMs = Number(response?.headers.get('retry-after')) * 1000;
+            await sleep(Math.min(30_000, Math.max(1000 * 2 ** attempt, Number.isFinite(retryAfterMs) ? retryAfterMs : 0)));
         }
     }
 
     async function authenticate() {
-        const response = await request('https://oauth.battle.net/token', {
+        const result = await requestJson('https://oauth.battle.net/token', {
             method: 'POST',
             headers: {
                 Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: new URLSearchParams({ grant_type: 'client_credentials' }),
-        });
-        if (!response.ok) throw new BlizzardError(response.status, `Blizzard authentication failed (HTTP ${response.status}).`);
-        const result = await response.json().catch(() => ({}));
+        }, 'authentication');
         if (typeof result.access_token !== 'string' || !result.access_token)
-            throw new BlizzardError(0, 'Blizzard authentication returned no token.');
+            throw new BlizzardError(0, 'authentication');
         token = result.access_token;
     }
 
     async function get(path) {
         const url = apiUrl(path);
         if (!token) await authenticate();
-        for (let attempt = 0; ; attempt++) {
-            await sleep(intervalMs);
-            const response = await request(url, { headers: { Authorization: `Bearer ${token}` } });
-            if (response.ok) {
-                const data = await response.json().catch(() => undefined);
-                if (!data || typeof data !== 'object') throw new BlizzardError(0, 'Blizzard returned invalid JSON.');
-                return data;
-            }
-            if (attempt >= maxRetries || ![429, 500, 502, 503, 504].includes(response.status))
-                throw new BlizzardError(response.status);
-            const retryAfter = Number(response.headers.get('retry-after'));
-            await sleep(Math.min(30_000, Math.max(1000 * 2 ** attempt, Number.isFinite(retryAfter) ? retryAfter * 1000 : 0)));
-        }
+        return requestJson(url, { headers: { Authorization: `Bearer ${token}` } }, apiOperation(url));
     }
 
     return { get };
