@@ -302,8 +302,9 @@ function sortLog(a: PlayerDTO, b: PlayerDTO): number {
     return getScore(b) - getScore(a);
 }
 
-function getItemLevel(player: PlayerDTO): number {
-    return Number.isFinite(player.itemLevel) && player.itemLevel >= 0 ? player.itemLevel : -1;
+export function getItemLevel(player: PlayerApiDTO): number {
+    return [player.itemLevel, player.equippedItemLevel, player.estimatedEquippedItemLevel]
+        .find(level => typeof level === 'number' && Number.isFinite(level) && level >= 0) ?? -1;
 }
 
 export const sortComparers: Record<string, (a: PlayerDTO, b: PlayerDTO, order: 'ASC' | 'DESC') => number> = {

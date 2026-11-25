@@ -1,6 +1,20 @@
 import { BlizzardError } from './blizzard-client.mjs';
 
-export function createCatalogItemLookup({ region, optional, useWowhead, fetchImpl = fetch }) {
+const combatSlots = new Set([
+    'HEAD', 'NECK', 'SHOULDER', 'BACK', 'CHEST', 'WRIST', 'HANDS', 'WAIST', 'LEGS', 'FEET',
+    'FINGER_1', 'FINGER_2', 'TRINKET_1', 'TRINKET_2', 'MAIN_HAND', 'OFF_HAND', 'RANGED', 'RELIC',
+]);
+
+export function estimateEquippedItemLevel(equipment) {
+    const gear = equipment?.filter(item => combatSlots.has(item.slot));
+    if (!gear?.length || gear.some(item => !Number.isSafeInteger(item.itemLevel) || item.itemLevel <= 0)) return;
+    const twoHander = gear.find(item => item.slot === 'MAIN_HAND' && item.inventoryType === 'Two-Hand');
+    const twoHanded = twoHander && !gear.some(item => item.slot === 'OFF_HAND');
+    const total = gear.reduce((sum, item) => sum + item.itemLevel, 0);
+    return Math.floor(twoHanded ? (total + twoHander.itemLevel) / (gear.length + 1) : total / gear.length);
+}
+
+export function createCatalogItemLookup({ region, optional, useWowhead = true, fetchImpl = fetch }) {
     const levels = new Map();
     let blizzardAvailable = true;
     let wowheadAvailable = useWowhead;

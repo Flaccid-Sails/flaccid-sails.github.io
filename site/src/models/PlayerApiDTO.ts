@@ -12,6 +12,7 @@ export interface PlayerApiDTO {
     name: string;
     realm: string;
     equippedItemLevel: number;
+    estimatedEquippedItemLevel?: number;
     itemLevel: number;
     class: string;
     rank: number;

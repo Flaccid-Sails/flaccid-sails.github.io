@@ -20,7 +20,9 @@ npm run build
 npm run preview
 ```
 
-When Blizzard omits an equipped item's level, the collector looks up its base level in the Forever item catalog. Set `wowheadItemLevelFallback` in `config/collection-policy.json` to `true` to also consult public Wowhead Forever tooltips for missing values. The gear tooltip labels catalog values “Base Item Level”.
+When Blizzard omits an equipped item's level, the collector checks the Blizzard Forever item catalog, then public Wowhead Forever tooltips. Set `wowheadItemLevelFallback` in `config/collection-policy.json` to `false` for Blizzard-only lookups. The gear tooltip labels catalog values “Base Item Level”.
+
+The roster uses Blizzard’s average item level when available, followed by its equipped item level. If both are missing and every equipped combat item has a known level, the roster shows “Est. item level”. This is the average of equipped combat gear, rounded down. A two-handed weapon counts for both hands when the off hand is empty. Shirts, tabards and ammunition are excluded.
 
 ## Talent updates
 

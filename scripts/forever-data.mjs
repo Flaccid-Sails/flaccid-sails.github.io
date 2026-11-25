@@ -9,7 +9,7 @@ const number = (value, fallback = 0) => {
 };
 const classNames = { 1: 'Warrior', 2: 'Paladin', 3: 'Hunter', 4: 'Rogue', 5: 'Priest', 7: 'Shaman', 8: 'Mage', 9: 'Warlock', 11: 'Druid' };
 const classIcons = { Warrior: 'class_warrior', Paladin: 'class_paladin', Hunter: 'class_hunter', Rogue: 'class_rogue', Priest: 'class_priest', Shaman: 'class_shaman', Mage: 'class_mage', Warlock: 'class_warlock', Druid: 'class_druid' };
-const detailsVersion = 4;
+const detailsVersion = 5;
 
 export function characterName(character) {
     return [character.name, character.surname].filter(Boolean).join(' ');

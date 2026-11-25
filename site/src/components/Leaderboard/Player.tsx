@@ -1,6 +1,6 @@
 import { PlayerDTO } from '@src/models/PlayerDTO';
 import { ZoneDTO } from '@src/models/ZoneDTO';
-import { calculateTimeDifference, colorParse, sortComparers, toRoman, transformParse } from '@src/utils/helpers';
+import { calculateTimeDifference, colorParse, getItemLevel, sortComparers, toRoman, transformParse } from '@src/utils/helpers';
 import { Images } from '@src/utils/images';
 import { ReactNode } from 'react';
 import { EventEmitter } from '@src/utils/event-emitter';
@@ -17,6 +17,7 @@ interface Props {
 
 export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable = true }: Props): ReactNode {
     const lastLogin = calculateTimeDifference(player.lastLogin, true);
+    const itemLevel = getItemLevel(player);
     const classSlug = player.class.toLowerCase().replaceAll(' ', '-');
     const rankTitle = player.rank === 0 ? 'Guild master' : player.rank > 0 && player.rank <= 2 ? 'Captain' : player.class;
     const scores = [
@@ -96,9 +97,9 @@ export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable 
                     <span className='player-stat-label'>Level</span>
                     <span className='player-stat-value'>{player.level}</span>
                 </div>}
-                {player.itemLevel !== -1 && <div className='player-stat'>
-                    <span className='player-stat-label'>Item level</span>
-                    <span className='player-stat-value'>{player.itemLevel}</span>
+                {itemLevel >= 0 && <div className='player-stat'>
+                    <span className='player-stat-label'>{player.estimatedEquippedItemLevel != null ? 'Est. item level' : 'Item level'}</span>
+                    <span className='player-stat-value'>{itemLevel}</span>
                 </div>}
                 {scores.map(score => <div key={score.type} className='player-stat'>
                     <span className='player-stat-label'>{score.label}</span>

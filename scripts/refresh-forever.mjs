@@ -6,6 +6,7 @@ import { pathToFileURL } from 'node:url';
 import { BlizzardError, createBlizzardClient } from './blizzard-client.mjs';
 import { collectForever, sameGuild } from './forever-data.mjs';
 import { guildContentHash } from './deployment-plan.mjs';
+import { estimateEquippedItemLevel } from './item-levels.mjs';
 
 // Use only fixed local messages here. These errors are shown in Actions logs.
 class RefreshError extends Error {}
@@ -33,7 +34,14 @@ export async function publishForever(data, catalog, output) {
     }
     const characterIndex = {};
     for (const [key, profile] of Object.entries(data.profiles)) characterIndex[key] = await dataset('characters', profile);
-    const players = data.players.map(player => versionCharacterImages(player, data.profiles[`${player.realm}/${player.name}`]));
+    const players = data.players.map(player => {
+        const profile = data.profiles[`${player.realm}/${player.name}`];
+        return {
+            ...versionCharacterImages(player, profile),
+            estimatedEquippedItemLevel: player.itemLevel >= 0 || player.equippedItemLevel >= 0
+                ? undefined : estimateEquippedItemLevel(profile?.equipment),
+        };
+    });
     const snapshot = {
         schemaVersion: 2, mode: 'live', generatedAt: new Date().toISOString(),
         contentHash: guildContentHash({ ...data, players }, catalog),

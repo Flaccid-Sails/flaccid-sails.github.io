@@ -7,10 +7,11 @@ import { spawnSync } from 'node:child_process';
 import { createBlizzardClient, BlizzardError } from './blizzard-client.mjs';
 import { characterRender, characterTalents, collectForever, mapPlayer, mapEquipment, mapStatistics } from './forever-data.mjs';
 import { publishForever } from './refresh-forever.mjs';
-import { createCatalogItemLookup } from './item-levels.mjs';
+import { createCatalogItemLookup, estimateEquippedItemLevel } from './item-levels.mjs';
 
 const configuration = { region: 'eu', ruleset: 'PvE', guildId: 42, guildSlug: 'test-guild', guildName: 'Test Guild' };
-const policy = { detailedLevel: 60, maxCharactersPerRun: 2, detailsRefreshHours: 6, inactiveAfterDays: 14, inactiveRefreshHours: 168 };
+const policy = { detailedLevel: 60, maxCharactersPerRun: 2, detailsRefreshHours: 6, inactiveAfterDays: 14,
+    inactiveRefreshHours: 168, wowheadItemLevelFallback: false };
 const summary = { id: 11, name: 'First', surname: 'Last', level: 60,
     character_class: { name: 'Paladin' }, guild: { id: 42 }, last_login_timestamp: Date.now(),
     access_token: 'fixture-token', client_secret: 'fixture-secret' };
@@ -119,7 +120,7 @@ test('fresh cached details are reused within policy limits', async () => {
     const previous = { mode: 'live', guild: { ...configuration, id: 42, name: 'Test Guild' }, players: [player], parameters: { lastUpdate: 100 } };
     const client = mockClient({ '/data/wow/guild/test-guild/roster': roster });
     const data = await collectForever({ client, configuration, policy, previous,
-        profiles: { 'PvE/First Last': { equipment: [], statistics: {}, fetchedAt: Date.now(), detailsVersion: 4 } } });
+        profiles: { 'PvE/First Last': { equipment: [], statistics: {}, fetchedAt: Date.now(), detailsVersion: 5 } } });
     assert.equal(data.players[0].equipmentAvailable, true);
     assert.ok(!client.calls.some(path => path.startsWith('/profile/')));
 });
@@ -143,7 +144,7 @@ test('an exhausted character request preserves its last complete details and the
     const previous = { mode: 'live', guild: { id: 42, region: 'eu', ruleset: 'PvE' },
         players: [player], parameters: { lastUpdate: 1 } };
     const saved = { equipment: [{ id: 9 }], statistics: { health: 100 }, talentBuilds: [{ name: 'Active' }],
-        detailsVersion: 4, fetchedAt: 0 };
+        detailsVersion: 5, fetchedAt: 0 };
     const failed = mockClient(routes);
     const data = await collectForever({ client: failed, configuration, policy, previous, profiles: { [key]: saved } });
     assert.ok(failed.calls.indexOf('/data/wow/media/item/5') < failed.calls.indexOf('/profile/wow/character/second-last'));
@@ -293,7 +294,7 @@ test('missing item levels use the matching Forever catalog record once and keep 
         players: [mapPlayer(summary)], parameters: { lastUpdate: 1 } };
     const key = 'PvE/First Last';
     const { players, profiles } = await collectForever({ client, configuration, policy, previous,
-        profiles: { [key]: { fetchedAt: Date.now(), detailsVersion: 3 } } });
+        profiles: { [key]: { fetchedAt: Date.now(), detailsVersion: 4 } } });
     assert.deepEqual(profiles[key].equipment.map(item => [item.itemLevel, item.itemLevelSource]), [
         [9, undefined], [51, 'blizzard-catalog'], [51, 'blizzard-catalog'], [62, undefined],
     ]);
@@ -315,9 +316,40 @@ test('an incomplete or unavailable item catalog still publishes the character eq
     assert.ok(!client.calls.includes('/data/wow/item/5'));
 });
 
-test('the public fallback reads Forever base levels by ID and ignores required levels', async () => {
+test('equipped estimates count combat slots and require a known level for every equipped combat item', () => {
+    const helm = { slot: 'HEAD', itemLevel: 50 };
+    const weapon = { slot: 'MAIN_HAND', inventoryType: 'Two-Hand', itemLevel: 60 };
+    const relic = { slot: 'RELIC', itemLevel: 55 };
+    const cosmetic = ['SHIRT', 'TABARD', 'AMMO'].map(slot => ({ slot, itemLevel: -1 }));
+    assert.equal(estimateEquippedItemLevel([helm, weapon, relic, ...cosmetic]), 56);
+    assert.equal(estimateEquippedItemLevel([helm, weapon, { slot: 'OFF_HAND', itemLevel: 43 }]), 51);
+    assert.equal(estimateEquippedItemLevel([helm, { slot: 'RANGED', itemLevel: -1 }]), undefined);
+    assert.equal(estimateEquippedItemLevel(cosmetic), undefined);
+    assert.equal(estimateEquippedItemLevel(undefined), undefined);
+});
+
+test('publication recalculates the roster estimate from cached gear and clears it when Blizzard reports a level', async t => {
+    const output = await mkdtemp(join(tmpdir(), 'forever-equipped-level-'));
+    t.after(() => rm(output, { recursive: true, force: true }));
+    const player = { ...mapPlayer(summary), estimatedEquippedItemLevel: 30 };
+    const gear = [{ slot: 'HEAD', itemLevel: 52, itemLevelSource: 'wowhead' },
+        { slot: 'CHEST', itemLevel: 55, itemLevelSource: 'blizzard-catalog' }];
+    const data = { players: [player], profiles: { 'PvE/First Last': { equipment: gear } } };
+    const published = async () => (await publishForever(data, {}, output)).players[0];
+    assert.equal((await published()).estimatedEquippedItemLevel, 53);
+    gear[0].itemLevel = -1;
+    assert.equal((await published()).estimatedEquippedItemLevel, undefined);
+    gear[0].itemLevel = 56;
+    player.equippedItemLevel = 54;
+    assert.equal((await published()).estimatedEquippedItemLevel, undefined);
+    player.equippedItemLevel = -1;
+    player.itemLevel = 60;
+    assert.equal((await published()).estimatedEquippedItemLevel, undefined);
+});
+
+test('the default public fallback reads Forever base levels by ID and ignores required levels', async () => {
     const requested = [];
-    const lookup = createCatalogItemLookup({ region: 'eu', useWowhead: true,
+    const lookup = createCatalogItemLookup({ region: 'eu',
         optional: async path => path.endsWith('/6') ? { id: 6, level: 52 } : undefined,
         fetchImpl: async (url, options) => {
             requested.push(url);

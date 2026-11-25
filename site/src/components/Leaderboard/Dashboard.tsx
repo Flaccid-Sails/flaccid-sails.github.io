@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { ClassDistribution } from '../Charts/ClassDistribution';
 import { HighestLog } from '../Charts/HighestLog';
 import { DashboardLogDTO } from '@src/models/DashboardLogDTO';
+import { getItemLevel } from '@src/utils/helpers';
 
 interface BossWithLogs extends DashboardBossDTO {
     players: PlayerDTO[];
@@ -44,7 +45,7 @@ export function Dashboard({
     }, [dashboardBosses, players, searchText]);
 
     const averageItemLevel = useMemo(() => {
-        const withGear = players.filter(player => player.itemLevel > 0);
+        const withGear = players.filter(player => getItemLevel(player) > 0);
         let filteredPlayers = withGear.filter(f => f.killedBosses);
 
         if (filteredPlayers.length === 0) {
@@ -52,7 +53,7 @@ export function Dashboard({
         }
 
         const totalItemLevel = filteredPlayers
-            .reduce((sum, player) => sum + (player.itemLevel || 0), 0);
+            .reduce((sum, player) => sum + getItemLevel(player), 0);
 
         return filteredPlayers.length ? totalItemLevel / filteredPlayers.length : 0;
     }, [players, maxLevel]);

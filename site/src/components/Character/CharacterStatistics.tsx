@@ -18,12 +18,14 @@ function StatSection({ title, rows }: { title: string; rows: StatRow[] }) {
 export function CharacterStatistics({ player, statistics: s }: { player: PlayerDTO; statistics: StatisticsDTO }) {
     const castsSpells = !['Warrior', 'Rogue', 'Hunter'].includes(player.class);
     const usesRangedWeapon = ['Warrior', 'Rogue', 'Hunter'].includes(player.class);
+    const reportedLevels = [player.equippedItemLevel, player.itemLevel].filter(value => value >= 0);
     return <div>
         <StatSection title='General' rows={[
             ['Health', formatWithCommas(s.health)],
             [s.powerType ?? 'Power', s.powerType ? formatWithCommas(s.power) : undefined],
             ['Movement Speed', s.movementSpeed === undefined ? undefined : `${s.movementSpeed}%`],
-            ['Item Level', player.equippedItemLevel >= 0 ? `${player.equippedItemLevel} / ${player.itemLevel}` : undefined],
+            ['Item Level', reportedLevels.length ? reportedLevels.join(' / ') : undefined],
+            ['Estimated Equipped Item Level', player.estimatedEquippedItemLevel],
         ]} />
         <StatSection title='Primary Attributes' rows={[
             ['Strength', formatWithCommas(s.strength)], ['Agility', formatWithCommas(s.agility)],
