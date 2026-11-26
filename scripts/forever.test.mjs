@@ -8,6 +8,7 @@ import { createBlizzardClient, BlizzardError } from './blizzard-client.mjs';
 import { characterRender, characterTalents, collectForever, mapPlayer, mapEquipment, mapStatistics } from './forever-data.mjs';
 import { publishForever } from './refresh-forever.mjs';
 import { createCatalogItemLookup, estimateEquippedItemLevel } from './item-levels.mjs';
+import { openWowheadCache } from './wowhead-cache.mjs';
 
 const configuration = { region: 'eu', ruleset: 'PvE', guildId: 42, guildSlug: 'test-guild', guildName: 'Test Guild' };
 const policy = { detailedLevel: 60, maxCharactersPerRun: 2, detailsRefreshHours: 6, inactiveAfterDays: 14,
@@ -365,6 +366,42 @@ test('the default public fallback reads Forever base levels by ID and ignores re
     for (let i = 0; i < 2; i++) assert.deepEqual(await lookup({ id: 5 }), { itemLevel: 53, itemLevelSource: 'wowhead' });
     for (const id of [7, 8, 9, '../other']) assert.equal(await lookup({ id }), undefined);
     assert.deepEqual(requested, [5, 7, 8].map(id => `https://nether.wowhead.com/forever/tooltip/item/${id}`));
+});
+
+test('existing Wowhead gear seeds the disk cache and rate-limited runs serve last-known levels across restarts', async t => {
+    const directory = await mkdtemp(join(tmpdir(), 'forever-wowhead-cache-'));
+    t.after(() => rm(directory, { recursive: true, force: true }));
+    const start = Date.UTC(2026, 10, 1);
+    const week = 7 * 24 * 60 * 60 * 1000;
+    t.mock.timers.enable({ apis: ['Date'], now: start });
+    const profiles = { 'PvE/Sailor': { fetchedAt: start, equipment: [
+        { id: 5, itemLevel: 53, itemLevelSource: 'wowhead' },
+        { id: 6, itemLevel: 62, itemLevelSource: 'blizzard-catalog' },
+    ] } };
+    const requested = [];
+    const newLookup = async () => createCatalogItemLookup({
+        region: 'eu', optional: async () => undefined, wowheadCache: await openWowheadCache(directory, profiles),
+        fetchImpl: async url => {
+            requested.push(url);
+            if (requested.length === 1) return new Response(null, { status: 429, headers: { 'retry-after': '7200' } });
+            return Response.json({ tooltip: 'Item Level <!--ilvl-->54</span>' });
+        },
+    });
+    const before = await newLookup();
+    const saved = { itemLevel: 53, itemLevelSource: 'wowhead' };
+    assert.deepEqual(await before({ id: 5 }), saved);
+    assert.equal(requested.length, 0);
+    t.mock.timers.setTime(start + week);
+    assert.deepEqual(await (await newLookup())({ id: 5 }), saved);
+    assert.equal(requested.length, 1);
+    t.mock.timers.setTime(start + week + 7_200_000 - 1);
+    const during = await newLookup();
+    assert.deepEqual(await during({ id: 5 }), saved);
+    assert.equal(await during({ id: 6 }), undefined);
+    assert.equal(requested.length, 1);
+    t.mock.timers.setTime(start + week + 7_200_000);
+    assert.equal((await (await newLookup())({ id: 5 })).itemLevel, 54);
+    assert.equal(requested.length, 2);
 });
 
 test('Undead characters use the standard model when Blizzard provides both renders', () => {

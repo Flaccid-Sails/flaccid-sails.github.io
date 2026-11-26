@@ -188,7 +188,7 @@ async function refreshCharacter(rosterPlayer, characterProfiles, optional, looku
     return { key, player, profile };
 }
 
-export async function collectForever({ client, configuration, policy, previous, profiles = {}, now = Date.now() }) {
+export async function collectForever({ client, configuration, policy, previous, profiles = {}, wowheadCache, now = Date.now() }) {
     const path = `/data/wow/guild/${encodeURIComponent(configuration.guildSlug)}`;
     const optional = async url => {
         try { return await client.get(url); }
@@ -222,7 +222,7 @@ export async function collectForever({ client, configuration, policy, previous, 
         return saved?.detailsVersion === detailsVersion
             ? [[key, { fetchedAt: saved.fetchedAt, lastLogin: player.lastLogin > 0 ? player.lastLogin : now }]] : [];
     }));
-    const lookupItemLevel = createCatalogItemLookup({ region: configuration.region, optional, useWowhead: policy.wowheadItemLevelFallback });
+    const lookupItemLevel = createCatalogItemLookup({ region: configuration.region, optional, useWowhead: policy.wowheadItemLevelFallback, wowheadCache });
     const refreshCandidates = planCharacterRefresh(players, cache, policy, now);
     for (const player of refreshCandidates) {
         try {

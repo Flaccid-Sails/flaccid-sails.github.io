@@ -7,6 +7,7 @@ import { BlizzardError, createBlizzardClient } from './blizzard-client.mjs';
 import { collectForever, sameGuild } from './forever-data.mjs';
 import { guildContentHash } from './deployment-plan.mjs';
 import { estimateEquippedItemLevel } from './item-levels.mjs';
+import { openWowheadCache } from './wowhead-cache.mjs';
 
 // Use only fixed local messages here. These errors are shown in Actions logs.
 class RefreshError extends Error {}
@@ -96,7 +97,8 @@ export async function refreshForever({ args = process.argv.slice(2), environment
     const client = clientFactory({ clientId: env.BLIZZARD_CLIENT_ID,
         clientSecret: env.BLIZZARD_CLIENT_SECRET, region: configuration.region,
         intervalMs: policy.blizzardRequestIntervalMs, maxRetries: policy.maxRetries });
-    const data = await collectForever({ client, configuration, policy, previous, profiles });
+    const wowheadCache = policy.wowheadItemLevelFallback === false ? undefined : await openWowheadCache(directory, profiles);
+    const data = await collectForever({ client, configuration, policy, previous, profiles, wowheadCache });
     if (args.includes('--require-roster') && data.sources.blizzard.roster !== 'available')
         throw new RefreshError('A fresh guild roster is required for deployment.');
     const snapshot = await publishForever(data, catalog, output);

@@ -24,8 +24,7 @@ export function CharacterStatistics({ player, statistics: s }: { player: PlayerD
             ['Health', formatWithCommas(s.health)],
             [s.powerType ?? 'Power', s.powerType ? formatWithCommas(s.power) : undefined],
             ['Movement Speed', s.movementSpeed === undefined ? undefined : `${s.movementSpeed}%`],
-            ['Item Level', reportedLevels.length ? reportedLevels.join(' / ') : undefined],
-            ['Estimated Equipped Item Level', player.estimatedEquippedItemLevel],
+            ['Item Level', reportedLevels.length ? reportedLevels.join(' / ') : player.estimatedEquippedItemLevel],
         ]} />
         <StatSection title='Primary Attributes' rows={[
             ['Strength', formatWithCommas(s.strength)], ['Agility', formatWithCommas(s.agility)],

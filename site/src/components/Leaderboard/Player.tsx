@@ -98,7 +98,7 @@ export function Player({ player, maxLevel, sortedCriteria, zones, logsAvailable 
                     <span className='player-stat-value'>{player.level}</span>
                 </div>}
                 {itemLevel >= 0 && <div className='player-stat'>
-                    <span className='player-stat-label'>{player.estimatedEquippedItemLevel != null ? 'Est. item level' : 'Item level'}</span>
+                    <span className='player-stat-label'>Item level</span>
                     <span className='player-stat-value'>{itemLevel}</span>
                 </div>}
                 {scores.map(score => <div key={score.type} className='player-stat'>

@@ -48,6 +48,13 @@ jobs:
           path: site/public/data
           key: forever-eu-80523-pve-v2-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: forever-eu-80523-pve-v2-
+      - name: Restore Wowhead item levels
+        id: wowhead-cache
+        uses: actions/cache/restore@v6.1.0
+        with:
+          path: .cache/wowhead-forever
+          key: forever-wowhead-items-v1-
+          restore-keys: forever-wowhead-items-v1-
       - name: Refresh the live Forever guild
         run: npm run data:live -- --allow-authenticated-blizzard --from-env --require-roster
         env:
@@ -58,6 +65,15 @@ jobs:
           BLIZZARD_GUILD_ID: '80523'
           BLIZZARD_GUILD_SLUG: flaccid-sails
           BLIZZARD_GUILD_NAME: Flaccid Sails
+      - name: Save changed Wowhead item levels
+        if: >-
+          !cancelled() && steps.wowhead-cache.outcome == 'success' &&
+          hashFiles('.cache/wowhead-forever/*.json') != '' &&
+          steps.wowhead-cache.outputs.cache-matched-key != format('forever-wowhead-items-v1-{0}', hashFiles('.cache/wowhead-forever/*.json'))
+        uses: actions/cache/save@v6.1.0
+        with:
+          path: .cache/wowhead-forever
+          key: forever-wowhead-items-v1-${{ hashFiles('.cache/wowhead-forever/*.json') }}
       - name: Configure Pages
         id: pages
         uses: actions/configure-pages@v6.0.0

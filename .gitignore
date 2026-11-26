@@ -4,6 +4,7 @@ site/dist/
 site-assets/
 site/public/data/
 .cache/site-deployment/
+.cache/wowhead-forever/
 .env
 .env.*
 !.env.example

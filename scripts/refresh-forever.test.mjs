@@ -58,6 +58,43 @@ test('CI collects from injected credentials without an env file and persists onl
     }
 });
 
+test('separate refreshes share one week of Wowhead results across characters, including missing items', async t => {
+    const directory = await fixture(t);
+    const start = Date.UTC(2026, 10, 1);
+    const week = 7 * 24 * 60 * 60 * 1000;
+    t.mock.timers.enable({ apis: ['Date'], now: start });
+    const requested = [];
+    t.mock.method(globalThis, 'fetch', async url => {
+        requested.push(url);
+        return url.endsWith('/9') ? new Response(null, { status: 404 }) :
+            Response.json({ tooltip: `Item Level <!--ilvl-->${Date.now() < start + week ? 53 : 55}</span>` });
+    });
+    let character;
+    const gear = [8, 9].map(id => ({ item: { id }, name: 'Fixture item', slot: { type: id === 8 ? 'HEAD' : 'SHIRT' } }));
+    const policyPath = join(directory, 'config/collection-policy.json');
+    const policy = JSON.parse(await readFile(policyPath, 'utf8'));
+    await writeFile(policyPath, JSON.stringify({ ...policy, detailsRefreshHours: 0 }));
+    const refresh = async (time, id) => {
+        t.mock.timers.setTime(time);
+        character = { id, name: 'Sailor' + id, level: 60, guild: { id: 42 } };
+        const path = '/profile/wow/character/sailor' + id;
+        const snapshot = await refreshForever({ args, environment, directory, clientFactory: () => ({ async get(url) {
+            if (url.endsWith('/roster')) return { guild: character.guild, members: [{ character, rank: 1 }] };
+            if (url === path) return character;
+            if (url === path + '/equipment') return { equipped_items: gear };
+            if (url === path + '/statistics') return { health: 100 };
+            throw new BlizzardError(404);
+        } }) });
+        return snapshot.players[0].estimatedEquippedItemLevel;
+    };
+    assert.equal(await refresh(start, 11), 53);
+    assert.equal(requested.length, 2);
+    assert.equal(await refresh(start + week - 1, 12), 53);
+    assert.equal(requested.length, 2);
+    assert.equal(await refresh(start + week, 12), 55);
+    assert.deepEqual(requested.map(url => url.split('/').at(-1)), ['8', '9', '8', '9']);
+});
+
 test('consent is checked before injected credentials can be read', async () => {
     const unreadable = new Proxy({}, { get() { throw new Error('Credentials were read without consent'); } });
     await assert.rejects(refreshForever({ args: ['--from-env'], environment: unreadable }), /Explicit consent/);

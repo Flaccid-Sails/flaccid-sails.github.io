@@ -14,10 +14,19 @@ export function estimateEquippedItemLevel(equipment) {
     return Math.floor(twoHanded ? (total + twoHander.itemLevel) / (gear.length + 1) : total / gear.length);
 }
 
-export function createCatalogItemLookup({ region, optional, useWowhead = true, fetchImpl = fetch }) {
+const weekMs = 7 * 24 * 60 * 60 * 1000;
+
+function wowheadRetryAt(header) {
+    const now = Date.now();
+    const time = /^\d+$/.test(header) ? now + Number(header) * 1000 : Date.parse(header);
+    return Number.isSafeInteger(time) && time > now ? time : now + 60 * 60 * 1000;
+}
+
+export function createCatalogItemLookup({ region, optional, useWowhead = true, fetchImpl = fetch, wowheadCache = new Map() }) {
     const levels = new Map();
     let blizzardAvailable = true;
-    let wowheadAvailable = useWowhead;
+    let wowheadAvailable = true;
+    let retryAt;
 
     async function fromBlizzard(url, id) {
         if (!blizzardAvailable) return;
@@ -33,25 +42,46 @@ export function createCatalogItemLookup({ region, optional, useWowhead = true, f
         }
     }
 
-    async function fromWowhead(id) {
-        if (!wowheadAvailable) return;
+    async function requestWowheadLevel(id) {
+        let rateLimitedUntil;
         try {
             const response = await fetchImpl(`https://nether.wowhead.com/forever/tooltip/item/${id}`, {
                 credentials: 'omit', redirect: 'error', signal: AbortSignal.timeout(5_000),
             });
             if (response.ok) {
                 const { tooltip } = await response.json();
-                const level = typeof tooltip === 'string' && Number(/Item Level\s*<!--ilvl-->(\d+)</.exec(tooltip)?.[1]);
-                if (Number.isSafeInteger(level) && level > 0) return { itemLevel: level, itemLevelSource: 'wowhead' };
-                return;
+                if (typeof tooltip === 'string') {
+                    const level = Number(/Item Level\s*<!--ilvl-->(\d+)</.exec(tooltip)?.[1]);
+                    return Number.isSafeInteger(level) && level > 0 ? level : null;
+                }
+            } else {
+                if (response.status === 429) rateLimitedUntil = wowheadRetryAt(response.headers.get('retry-after'));
+                await response.body?.cancel();
+                if (response.status === 404) return null;
             }
-            await response.body?.cancel();
-            if (response.status === 404) return;
         } catch {
             // A tooltip service outage must not stop the equipment refresh.
         }
         wowheadAvailable = false;
+        if (rateLimitedUntil !== undefined) await wowheadCache.set('retry-after', rateLimitedUntil);
         console.warn('Wowhead Forever tooltips are unavailable. Skipping further Wowhead lookups this run.');
+    }
+
+    async function fromWowhead(id) {
+        if (!useWowhead) return;
+        const cached = await wowheadCache.get(id);
+        let level = cached?.level;
+        if (wowheadAvailable && (!cached || Date.now() >= cached.checkedAt + weekMs)) {
+            retryAt ??= await wowheadCache.get('retry-after') ?? 0;
+            if (Date.now() >= retryAt) {
+                const result = await requestWowheadLevel(id);
+                if (result !== undefined) {
+                    level = result;
+                    await wowheadCache.set(id, { level, checkedAt: Date.now() });
+                }
+            }
+        }
+        if (Number.isSafeInteger(level) && level > 0) return { itemLevel: level, itemLevelSource: 'wowhead' };
     }
 
     return async ref => {
