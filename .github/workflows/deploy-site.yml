@@ -63,8 +63,8 @@ jobs:
           BLIZZARD_REGION: eu
           BLIZZARD_RULESET: pve
           BLIZZARD_GUILD_ID: '80523'
-          BLIZZARD_GUILD_SLUG: flaccid-sails
-          BLIZZARD_GUILD_NAME: Flaccid Sails
+          BLIZZARD_GUILD_SLUG: the-flaccid-sails
+          BLIZZARD_GUILD_NAME: The Flaccid Sails
       - name: Save changed Wowhead item levels
         if: >-
           !cancelled() && steps.wowhead-cache.outcome == 'success' &&
